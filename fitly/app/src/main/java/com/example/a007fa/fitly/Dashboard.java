@@ -12,9 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
+import android.hardware.SensorManager;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.widget.TextView;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private SensorManager sManager;
+    private Sensor stepSensor;
+    private float stepsFirst;
+    private float steps;
+    private boolean first;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +40,7 @@ public class Dashboard extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                sendMessage(view);
             }
         });
 
@@ -40,6 +52,16 @@ public class Dashboard extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        first = true;
+        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        stepSensor  = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        steps = 0;
+    }
+
+    public void sendMessage(View view)
+    {
+        Intent intent = new Intent(this,pedometer.class);
+        startActivity(intent);
     }
 
     @Override
@@ -98,4 +120,42 @@ public class Dashboard extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (stepSensor != null) {
+            sManager.registerListener(stepListener, stepSensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (stepSensor != null) {
+            sManager.unregisterListener(stepListener);
+        }
+    }
+    private SensorEventListener stepListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if(first) {
+                stepsFirst = event.values[0];
+                ((TextView)findViewById(R.id.StepCountText)).setText("0");
+                first = false;
+            }
+            else {
+                steps = event.values[0] - stepsFirst;
+                ((TextView)findViewById(R.id.StepCountText)).setText(Float.toString(steps));
+
+            }
+            ((TextView)findViewById(R.id.StepCountText)).setText("activates");
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
 }
