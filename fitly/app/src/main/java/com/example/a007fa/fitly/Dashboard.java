@@ -2,7 +2,6 @@ package com.example.a007fa.fitly;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.support.v4.content.LocalBroadcastManager;
+import android.widget.TextView;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,8 +34,7 @@ public class Dashboard extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                sendMessage(view);
             }
         });
 
@@ -40,6 +46,27 @@ public class Dashboard extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_FITLY);
+        bManager.registerReceiver(stepReceiver, intentFilter);
+        serviceStart();
+    }
+
+    protected void serviceStart() {
+        if (isMyServiceRunning(fitlyHandler.class)) {
+
+        } else {
+            Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+            startService(intent);
+        }
+    }
+
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, fitlyHandler.class);
+        startActivity(intent);
     }
 
     @Override
@@ -97,5 +124,34 @@ public class Dashboard extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    protected void onDestroy() {
+        bManager.unregisterReceiver(stepReceiver);
+        super.onDestroy();
+    }
+
+    static final String ACTION_FITLY = "com.fitly.action.FITLY";
+
+    private BroadcastReceiver stepReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ((TextView) findViewById(R.id.StepCountText)).setText("activate");
+            if (intent.getAction().equals(ACTION_FITLY)) {
+                Bundle b = intent.getExtras();
+                ((TextView) findViewById(R.id.StepCountText)).setText(Float.toString(b.getFloat("stepCount")));
+            }
+        }
+    };
+    LocalBroadcastManager bManager;
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
