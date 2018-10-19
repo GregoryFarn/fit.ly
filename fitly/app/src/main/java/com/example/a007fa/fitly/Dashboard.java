@@ -2,7 +2,6 @@ package com.example.a007fa.fitly;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,25 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.hardware.SensorManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.widget.TextView;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import java.util.Calendar;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    static final String ACTION_FITLY = "com.fitly.action.FITLY";
-    private SensorManager sManager;
-    private Sensor stepSensor;
-    private float stepsFirst;
-    private float steps;
-    private boolean first;
-    private AlarmManager alarm;
-    private PendingIntent alarmIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,23 +43,12 @@ public class Dashboard extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        first = true;
-        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        stepSensor  = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-        intent.setAction(ACTION_FITLY);
-        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-        steps = 0;
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 24);
 
-// With setInexactRepeating(), you have to use one of the AlarmManager interval
-// constants--in this case, AlarmManager.INTERVAL_DAY.
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVE_JSON);
+        bManager.registerReceiver(stepReceiver, intentFilter);
     }
 
     public void sendMessage(View view)
@@ -137,41 +114,21 @@ public class Dashboard extends AppCompatActivity
         return true;
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (stepSensor != null) {
-            sManager.registerListener(stepListener, stepSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
-        }
+    protected void onDestroy(){
+        bManager.unregisterReceiver(stepReceiver);
+        super.onDestroy();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (stepSensor != null) {
-            sManager.unregisterListener(stepListener);
-        }
-    }
-    private SensorEventListener stepListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if(first) {
-                stepsFirst = event.values[0];
-                ((TextView)findViewById(R.id.StepCountText)).setText("0");
-                first = false;
-            }
-            else {
-                steps = event.values[0] - stepsFirst;
-                ((TextView)findViewById(R.id.StepCountText)).setText(Float.toString(steps));
+    static final String ACTION_FITLY = "com.fitly.action.FITLY";
 
-            }
-            //((TextView)findViewById(R.id.StepCountText)).setText("activates");
-        }
-
+    private BroadcastReceiver stepReceiver = new BroadcastReceiver() {
         @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(ACTION_FITLY)) {
+                
+            }
         }
     };
+    LocalBroadcastManager bManager;
+
 }
