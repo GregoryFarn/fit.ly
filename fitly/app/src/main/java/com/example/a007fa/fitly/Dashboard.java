@@ -14,11 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.hardware.SensorManager;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.widget.TextView;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,7 +30,8 @@ public class Dashboard extends AppCompatActivity
     private float stepsFirst;
     private float steps;
     private boolean first;
-
+    private AlarmManager alarm;
+    private PendingIntent alarmIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,10 @@ public class Dashboard extends AppCompatActivity
         first = true;
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepSensor  = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(context, Dashboard.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
         steps = 0;
     }
 
@@ -151,7 +158,7 @@ public class Dashboard extends AppCompatActivity
                 ((TextView)findViewById(R.id.StepCountText)).setText(Float.toString(steps));
 
             }
-            ((TextView)findViewById(R.id.StepCountText)).setText("activates");
+            //((TextView)findViewById(R.id.StepCountText)).setText("activates");
         }
 
         @Override
