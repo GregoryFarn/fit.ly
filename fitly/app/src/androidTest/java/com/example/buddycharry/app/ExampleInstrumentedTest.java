@@ -1,4 +1,4 @@
-package com.example.a007fa.fitly;
+package com.example.buddycharry.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.a007fa.fitly", appContext.getPackageName());
+        assertEquals("com.example.buddycharry.app", appContext.getPackageName());
     }
 }
