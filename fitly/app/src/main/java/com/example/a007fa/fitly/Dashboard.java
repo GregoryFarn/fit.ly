@@ -20,11 +20,11 @@ import android.hardware.SensorEventListener;
 import android.widget.TextView;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
+import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    static final String ACTION_FITLY = "com.fitly.action.FITLY";
     private SensorManager sManager;
     private Sensor stepSensor;
     private float stepsFirst;
@@ -59,10 +59,19 @@ public class Dashboard extends AppCompatActivity
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepSensor  = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(context, Dashboard.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.setAction(ACTION_FITLY);
+        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         steps = 0;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 24);
+
+// With setInexactRepeating(), you have to use one of the AlarmManager interval
+// constants--in this case, AlarmManager.INTERVAL_DAY.
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
     public void sendMessage(View view)
