@@ -13,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import com.example.a007fa.fitly.Dashboard;
 import com.example.a007fa.fitly.R;
 
+import java.util.Date;
+
 public class AlarmReceive extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -38,7 +40,7 @@ public class AlarmReceive extends BroadcastReceiver {
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(pendingIntent)
                 .setChannelId(channelId);
-        notiManager.notify(1, mNotification.build());
+        notiManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), mNotification.build());
     }
 
 }

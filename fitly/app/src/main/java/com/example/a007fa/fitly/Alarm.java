@@ -14,9 +14,10 @@ public class Alarm {
     private Context context;
     private long milliTime;
     private String time;
-    public Alarm(Context context, String time) {
+    private int requestCode;
+    public Alarm(Context context, String time, int requestCode) {
         this.context=context;
-        //this.milliTime = milliTime;
+        this.requestCode = requestCode;
         this.time = time;
     }
 
@@ -34,20 +35,21 @@ public class Alarm {
         }
         // long milliTime = date.getTime();
         //       - 3600*3000;
+        //  scheduled time - 3hrs in millisecond
         return date.getTime() - 3600*3000;
     }
 
     public void setAlarm() {
-
-        AlarmManager am = (AlarmManager)this.context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am =  (AlarmManager)this.context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this.context, AlarmReceive.class);
 
-        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(context, this.requestCode, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(calculateTime());
         if (calendar.getTimeInMillis() > System.currentTimeMillis())
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
     }
 
 }
