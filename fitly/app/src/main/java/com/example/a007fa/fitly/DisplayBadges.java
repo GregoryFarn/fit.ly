@@ -27,7 +27,10 @@ public class DisplayBadges extends AppCompatActivity {
 
         for(int i=0; i<10; i++)
         {
-            Badge badgeTest= new Badge("small", true);
+            Badge badgeTest= new Badge("small", false);
+            if(i%7==0)
+                badgeTest.setTypeOfBadge("big");
+            badgeTest.setCompleted(true);
             badgeArraylist.add(badgeTest);
 
         }
@@ -46,7 +49,10 @@ public class DisplayBadges extends AppCompatActivity {
                         TextView badgeMessage=(TextView)convertView.findViewById(R.id.message);
                         ImageView badgeImage=(ImageView)convertView.findViewById(R.id.badge_picture);
                         badgeMessage.setText(currentBadge.getBadgeMessage());
-                        badgeImage.setImageResource(R.drawable.icon);
+                        if(currentBadge.typeOfBadge.equals("small"))
+                            badgeImage.setImageResource(R.drawable.starbadge);
+                        else
+                            badgeImage.setImageResource(R.drawable.bigbadge);
                         return convertView;
 
                     }
@@ -54,26 +60,6 @@ public class DisplayBadges extends AppCompatActivity {
         ListView badgeList = new ListView(this);
         setContentView(badgeList);
         badgeList.setAdapter(badgeAdapter);
-        /*for(int j=0; j <10; j++)
-        {
-            LinearLayout a = new LinearLayout(getApplicationContext());
-            a.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-            a.setOrientation(LinearLayout.HORIZONTAL);
-            ImageView image= new ImageView(getApplicationContext());
-            image.setImageResource(R.drawable.icon);
-            image.getLayoutParams().height=100;
-            image.getLayoutParams().width=100;
-            TextView text= new TextView(getApplicationContext());
-            String test="TESSSTINGGGGGGG";
-            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            text.setText(test);
-            a.addView(text);
-            a.addView(image);
-            parent.addView(a);
-            //parent.addView(text);
-            //parent.addView(text);
-            //parent.addView(text);
 
-        }*/
     }
 }

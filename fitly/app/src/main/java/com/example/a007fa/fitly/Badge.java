@@ -1,25 +1,33 @@
 package com.example.a007fa.fitly;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 public class Badge {
 
     String typeOfBadge;
     Boolean completed;
-    String BadgeMessage;
-    String imageURL;
+    String badgeMessage;
+    Calendar achievedDate;
+    //Badge constructor
     Badge(String type, Boolean comp)
     {
         typeOfBadge=type;
         completed=comp;
+        TimeZone timezone=TimeZone.getTimeZone("PST");
+        achievedDate=Calendar.getInstance(timezone);
         if(typeOfBadge.equals("small"))
-            BadgeMessage="Congratulations on getting a small badge!";
+            badgeMessage="You got a small badge on";
+
 
     }
     public String getBadgeMessage() {
-        return BadgeMessage;
+        return badgeMessage;
     }
 
     public void setBadgeMessage(String badgeMessage) {
-        BadgeMessage = badgeMessage;
+        badgeMessage = badgeMessage;
     }
     public String getTypeOfBadge() {
         return typeOfBadge;
@@ -33,8 +41,13 @@ public class Badge {
         return completed;
     }
 
-    public void setCompleted(Boolean completed) {
-        this.completed = completed;
+    public void setCompleted(Boolean comp) {
+        this.completed = comp;
+        if(typeOfBadge.equals("small") && this.completed==true )
+        {
+            SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
+            badgeMessage="You got a small badge on "+format.format(achievedDate.getTime());
+        }
     }
 
     //is this how we want this function to work?
