@@ -51,7 +51,7 @@ public class Dashboard extends AppCompatActivity
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
-        bManager.registerReceiver(stepReceiver, intentFilter);
+        bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
     }
 
@@ -127,13 +127,13 @@ public class Dashboard extends AppCompatActivity
     }
 
     protected void onDestroy() {
-        bManager.unregisterReceiver(stepReceiver);
+        bManager.unregisterReceiver(bReceiver);
         super.onDestroy();
     }
 
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
 
-    private BroadcastReceiver stepReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             ((TextView) findViewById(R.id.StepCountText)).setText("activate");

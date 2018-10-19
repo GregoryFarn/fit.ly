@@ -4,11 +4,15 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.widget.TextView;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -32,6 +36,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+
+        bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_FITLY);
+        bManager.registerReceiver(bReceiver, intentFilter);
+
+
        /* alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
@@ -47,7 +59,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
     }
 
     public IBinder onBind(Intent intent) {
-
         return null;
     }
 
@@ -71,5 +82,19 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_FITLY)) {
+            }
+        }
+    };
+    LocalBroadcastManager bManager;
+
+    public void onDestroy() {
+        bManager.unregisterReceiver(bReceiver);
+        super.onDestroy();
     }
 }
