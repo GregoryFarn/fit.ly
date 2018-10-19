@@ -16,6 +16,9 @@ import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.TextView;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,13 +50,22 @@ public class Dashboard extends AppCompatActivity
 
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(RECEIVE_JSON);
+        intentFilter.addAction(ACTION_FITLY);
         bManager.registerReceiver(stepReceiver, intentFilter);
+        serviceStart();
     }
 
-    public void sendMessage(View view)
-    {
-        Intent intent = new Intent(this,pedometer.class);
+    protected void serviceStart() {
+        if (isMyServiceRunning(fitlyHandler.class)) {
+
+        } else {
+            Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+            startService(intent);
+        }
+    }
+
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, fitlyHandler.class);
         startActivity(intent);
     }
 
@@ -114,7 +126,7 @@ public class Dashboard extends AppCompatActivity
         return true;
     }
 
-    protected void onDestroy(){
+    protected void onDestroy() {
         bManager.unregisterReceiver(stepReceiver);
         super.onDestroy();
     }
@@ -124,11 +136,22 @@ public class Dashboard extends AppCompatActivity
     private BroadcastReceiver stepReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(ACTION_FITLY)) {
-                
+            ((TextView) findViewById(R.id.StepCountText)).setText("activate");
+            if (intent.getAction().equals(ACTION_FITLY)) {
+                Bundle b = intent.getExtras();
+                ((TextView) findViewById(R.id.StepCountText)).setText(Float.toString(b.getFloat("stepCount")));
             }
         }
     };
     LocalBroadcastManager bManager;
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

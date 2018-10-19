@@ -3,6 +3,7 @@ package com.example.a007fa.fitly;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,9 +11,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.TextView;
 import android.support.v4.content.LocalBroadcastManager;
+
 import java.util.Calendar;
 
-public class fitlyHandler extends IntentService {
+import android.os.IBinder;
+
+public class fitlyHandler extends Service implements SensorEventListener {
     private SensorManager sManager;
     private Sensor stepSensor;
     private float stepsFirst;
@@ -22,14 +26,12 @@ public class fitlyHandler extends IntentService {
     private PendingIntent alarmIntent;
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
 
-    public fitlyHandler(){
-        super("fitlyHandler");
-
+    public void onCreate() {
         first = true;
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        stepSensor  = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
-
+        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
        /* alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
@@ -41,39 +43,33 @@ public class fitlyHandler extends IntentService {
 
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);*/
+        sendMessage();
+    }
+
+    public IBinder onBind(Intent intent) {
+
+        return null;
+    }
+
+
+    protected void sendMessage() {
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.setAction(ACTION_FITLY);
+        intent.putExtra("stepCount", steps);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+        if (first) {
+            stepsFirst = event.values[0];
+            first = false;
+        } else {
+            steps = event.values[0] - stepsFirst;
+            sendMessage();
+        }
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
-
-    protected void sendMessage(){
-        Intent intent = new Intent(getApplicationContext(),Dashboard.class);
-        intent.setAction(ACTION_FITLY);
-        intent.putExtra("stepCount",steps);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-
-    }
-
-    private SensorEventListener stepListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if(first) {
-                stepsFirst = event.values[0];
-                ((TextView)findViewById(R.id.StepCountText)).setText("0");
-                first = false;
-            }
-            else {
-                steps = event.values[0] - stepsFirst;
-                ((TextView)findViewById(R.id.StepCountText)).setText(Float.toString(steps));
-
-            }
-            //((TextView)findViewById(R.id.StepCountText)).setText("activates");
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        }
-    };
 }

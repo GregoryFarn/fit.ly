@@ -19,12 +19,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:label="@string/resolve_edit">\
-                <action android:name="android.intent.action.FITLY" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.google.note" />
-            </intent-filter>
         </activity>
+        <service android:enabled="true" android:name=".fitlyHandler" />
     </application>
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
