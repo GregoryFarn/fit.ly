@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DisplayBadges"></activity>
         <service android:enabled="true" android:name=".fitlyHandler" />
     </application>
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
