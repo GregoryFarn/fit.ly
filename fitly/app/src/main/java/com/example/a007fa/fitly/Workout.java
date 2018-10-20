@@ -1,26 +1,26 @@
 package com.example.a007fa.fitly;
 
 public class Workout {
-    private long startTime;
-    private long endTime;
+    private String startTime; // "MM/DD/YYYY HH:MM"
+    private String endTime;
     private String workoutName;
     private String location;
     private String description = "";
 
-    public Workout(long startTime, long endTime, String workoutName) {
+    public Workout(String startTime, String endTime, String workoutName) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.workoutName = workoutName;
     }
 
-    public Workout(long startTime, long endTime, String workoutName, String location) {
+    public Workout(String startTime, String endTime, String workoutName, String location) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.workoutName = workoutName;
         this.location = location;
     }
 
-    public Workout(long startTime, long endTime, String workoutName, String location, String description) {
+    public Workout(String startTime, String endTime, String workoutName, String location, String description) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.workoutName = workoutName;
@@ -28,9 +28,9 @@ public class Workout {
         this.description = description;
     }
 
-    public long getStartTime() { return this.startTime; }
+    public String getStartTime() { return this.startTime; }
 
-    public long getEndTime() { return this.endTime; }
+    public String getEndTime() { return this.endTime; }
 
     public String getWorkoutName() { return this.workoutName; }
 
