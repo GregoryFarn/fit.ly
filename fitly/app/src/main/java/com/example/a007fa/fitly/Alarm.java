@@ -4,27 +4,30 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class Alarm {
     private Context context;
     private long milliTime;
     private String time;
     private int requestCode;
-    public Alarm(Context context, String time, int requestCode) {
-        this.context=context;
-        this.requestCode = requestCode;
-        this.time = time;
-    }
-
-    private long calculateTime(){
+//    public Alarm(Context context, String time, int requestCode) {
+//        this.context=context;
+//        this.requestCode = requestCode;
+//        this.time = time;
+//    }
+/*
+    private long static calculateTime(){
 
         String myDate = this.time;
-        Date date = null;
+        Date date = new Date();
       //String myDate = "10/18/2018 19:42";
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
 
@@ -33,23 +36,38 @@ public class Alarm {
         }catch(ParseException e){
             e.printStackTrace();
         }
-        // long milliTime = date.getTime();
-        //       - 3600*3000;
-        //  scheduled time - 3hrs in millisecond
-        return date.getTime() - 3600*3000;
-    }
+        long second = ((date.getTime()/1000) % 60) * 1000;
+        //  scheduled time - 3hrs in millisecon
+     //   return date.getTime() - 3600*3000;
+    }*/
 
-    public void setAlarm() {
-        AlarmManager am =  (AlarmManager)this.context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this.context, AlarmReceive.class);
+    public static void setAlarm(Context context, int requestCode, String time) {
 
-        PendingIntent sender = PendingIntent.getBroadcast(context, this.requestCode, intent, 0);
+        String myDate = time;
+        Date date = new Date();
+        //String myDate = "10/18/2018 19:42";
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+
+        try{
+            date = sdf.parse(myDate);
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        long second = ((date.getTime()/1000) % 60) * 1000;
+        //  scheduled time - 3hrs in millisecon
+        //   return date.getTime() - 3600*3000;
+
+        AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent( context, AlarmReceive.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("requestKey", requestCode);
+        intent.putExtras(bundle);
+        PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(calculateTime());
-        if (calendar.getTimeInMillis() > System.currentTimeMillis())
-            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-
+        calendar.setTimeInMillis(date.getTime() - 3600*3000);
+       if (calendar.getTimeInMillis() > System.currentTimeMillis())
+        am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
     }
 
 }
