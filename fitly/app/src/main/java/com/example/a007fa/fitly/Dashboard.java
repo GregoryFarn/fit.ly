@@ -146,8 +146,8 @@ public class Dashboard extends AppCompatActivity
                 Bundle b = intent.getExtras();
                 ((TextView) findViewById(R.id.StepCountText)).setText(Float.toString(b.getFloat("stepCount")));
             }
-            if (intent.getAction().equals(ACTION_ENDDAY)) {
-                ((TextView) findViewById(R.id.StepCountText)).setText("12");
+            else if (intent.getAction().equals(ACTION_ENDDAY)) {
+                ((TextView) findViewById(R.id.testView)).setText("12");
             }
         }
     };

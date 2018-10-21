@@ -12,7 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
+import android.os.SystemClock;
 import android.widget.TextView;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -46,14 +46,16 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
         alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-        intent.setAction(ACTION_ENDDAY);
+        intent.setAction(ACTION_FITLY);
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
-
+       // alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+         //       1, alarmIntent);
+alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + 1,
+                AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
         sendMessage();
     }
 
