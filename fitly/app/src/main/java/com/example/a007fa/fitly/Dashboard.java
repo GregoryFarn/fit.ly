@@ -54,6 +54,7 @@ public class Dashboard extends AppCompatActivity
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
+        intentFilter.addAction(ACTION_ENDDAY);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
     }
@@ -135,6 +136,7 @@ public class Dashboard extends AppCompatActivity
     }
 
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
+    static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
@@ -143,6 +145,9 @@ public class Dashboard extends AppCompatActivity
             if (intent.getAction().equals(ACTION_FITLY)) {
                 Bundle b = intent.getExtras();
                 ((TextView) findViewById(R.id.StepCountText)).setText(Float.toString(b.getFloat("stepCount")));
+            }
+            if (intent.getAction().equals(ACTION_ENDDAY)) {
+                ((TextView) findViewById(R.id.StepCountText)).setText("12");
             }
         }
     };
