@@ -58,7 +58,7 @@ public class Alarm {
         //   return date.getTime() - 3600*3000;
 
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent( context, AlarmReceive.class);
+        Intent intent = new Intent( context, Notifications.class);
         Bundle bundle = new Bundle();
         bundle.putInt("requestKey", requestCode);
         intent.putExtras(bundle);

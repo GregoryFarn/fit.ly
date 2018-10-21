@@ -21,8 +21,8 @@ public class Dashboard extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         //test for notification
-        new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 17:46");
-        new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 17:46");
+        new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 19:35");
+        new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 19:35");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

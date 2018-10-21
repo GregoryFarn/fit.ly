@@ -17,7 +17,7 @@ import com.example.a007fa.fitly.R;
 
 import java.util.Date;
 
-public class AlarmReceive extends BroadcastReceiver {
+public class Notifications extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -41,7 +41,7 @@ public class AlarmReceive extends BroadcastReceiver {
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 requestKey,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(context, Dashboard.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mNotification = new NotificationCompat.Builder(context, channelId)
                 .setContentIntent(pendingIntent)
@@ -50,7 +50,7 @@ public class AlarmReceive extends BroadcastReceiver {
                 .setContentText("You've work out scheduled in 3 hours.")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
                 .setChannelId(channelId);
        // (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)
         notiManager.notify(requestKey,
