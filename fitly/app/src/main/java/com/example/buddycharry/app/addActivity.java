@@ -14,6 +14,7 @@ import android.widget.TimePicker;
 
 import java.util.BitSet;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -26,16 +27,16 @@ public class MainActivity extends AppCompatActivity
     int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal;
     int counter = 0;
 
-    String time = "";
+    String time = "", startData = "", endData = "";
 
+    Calendar startCalendar = Calendar.getInstance(), endCalendar = Calendar.getInstance();
     Calendar c = Calendar.getInstance();
     View view;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addactivity);
+        setContentView(R.layout.activity_main);
 
         //String myDate = this.time;
         //Date date = null;
@@ -88,13 +89,20 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 String workoutName = textData.getText().toString();
-                String startTime = time.substring(0, time.indexOf('M'));
-                String endTime = time.substring(time.indexOf('M'), time.length());
-                startTime = startTime + "M";
-                endTime = endTime.substring(1, endTime.length());
+//                String startTime = time.substring(0, time.indexOf('M'));
+//                String endTime = time.substring(time.indexOf('M'), time.length());
+//                startTime = startTime + "M";
+//                endTime = endTime.substring(1, endTime.length());
+
                 workoutNameView.setText(workoutName);
-                startTimeView.setText(startTime);
-                endTimeView.setText(endTime);
+                Date date = startCalendar.getTime();
+                String time = Long.toString(date.getTime());
+                startTimeView.setText(time);
+                date = endCalendar.getTime();
+                time = Long.toString(date.getTime());
+                endTimeView.setText(time);
+                Workout workout = new Workout(startData, endData, workoutName);
+                workout.addCalendars(startCalendar, endCalendar);
             }
         });
     }
@@ -118,32 +126,19 @@ public class MainActivity extends AppCompatActivity
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         hourFinal = hourOfDay;
         minuteFinal = minute;
-        String period = "N/A", sminute = "N/A", startTime = "N/A", endTime = "N/A";
 
-        if(hourFinal == 0){
-            hourFinal += 12;
-            period = "AM";
-        } else if (hourFinal > 12){
-            hourFinal -= 12;
-            period = "PM";
-        } else if(hourFinal == 12) {
-            period = "PM";
+        if(counter == 0){
+            startData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
+            counter += 1;
+            startCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+        } else if (counter == 1){
+            endData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
+            counter += 1;
+            endCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
         } else {
-            period = "AM";
-        }
-
-        if( minuteFinal == 1 || minuteFinal == 2
-                || minuteFinal == 3 || minuteFinal == 4 || minuteFinal == 5 || minuteFinal == 6 || minuteFinal == 7 || minuteFinal == 8 || minuteFinal == 9){
-            sminute = Integer.toString(minute);
-            sminute = "0" + sminute;
-        } else{
-            sminute = Integer.toString(minute);
-        }
-        if(counter == 2){
-            time = "";
             counter = 0;
+            startData = "";
+            endData = "";
         }
-        time += monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal + ":" + sminute + ":" + period;
-        counter +=1;
     }
 }
