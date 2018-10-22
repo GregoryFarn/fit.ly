@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class DisplayScheduleActivity extends AppCompatActivity {
@@ -39,21 +39,26 @@ public class DisplayScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_schedule);
+        Log.d("tag", "in oncreate for displayscheduleactivity");
 
-        Schedule sched = new Schedule();
+        final Schedule sched = new Schedule();
         sched.initTest();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DisplayScheduleActivity.this,
-                android.R.layout.simple_list_item_1,
-                sched.getStringArray());
+        scheduleDisplay = findViewById(R.id.scheduleDisplay);
 
-        scheduleDisplay = findViewById(R.id.listView);
+        DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(this,
+                R.layout.adapter_view_layout,
+                sched.getWorkouts());
+
         scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(DisplayScheduleActivity.this, DisplayWorkoutDetailsActivity.class);
-                intent.putExtra("Workout", scheduleDisplay.getItemAtPosition(i).toString());
-//                Log.d("tag", scheduleDisplay.getItemAtPosition(i).toString());
+                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                Log.d("name", sched.getWorkouts().get(i).getWorkoutName() );
+                Log.d("location", sched.getWorkouts().get(i).getLocation());
                 startActivity(intent);
             }
         });

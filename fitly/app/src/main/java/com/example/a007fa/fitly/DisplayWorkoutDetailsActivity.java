@@ -3,6 +3,7 @@ package com.example.a007fa.fitly;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 
 public class DisplayWorkoutDetailsActivity extends AppCompatActivity {
@@ -18,7 +19,9 @@ public class DisplayWorkoutDetailsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            toolbar.setTitle(bundle.getString("Workout").trim());
+            toolbar.setTitle(bundle.getString("Name").trim());
+            TextView tvLocation = findViewById(R.id.location);
+            tvLocation.setText(bundle.getString("Location").trim());
         }
     }
 }

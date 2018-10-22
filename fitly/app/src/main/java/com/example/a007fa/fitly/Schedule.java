@@ -1,10 +1,9 @@
 package com.example.a007fa.fitly;
 
-import android.app.Activity;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class Schedule extends Activity {
+public class Schedule {
     ArrayList<Workout> workouts;
 
     public Schedule() {
@@ -25,24 +24,31 @@ public class Schedule extends Activity {
     }
 
     public void initTest() {
-        Workout w1 = new Workout("10/19/2018 12:30", "10/19/2018 1:30", "Test workout 1");
-        Workout w2 = new Workout("10/19/2018 1:30", "10/19/2018 2:30", "Test workout 2");
-        Workout w3 = new Workout("10/19/2018 2:30", "10/19/2018 3:30", "Test workout 3");
+        Calendar start1 = Calendar.getInstance();
+        Calendar end1 = Calendar.getInstance();
+        start1.set(2018, 10, 23, 1, 00);
+        end1.set(2018, 10, 23, 2, 00);
+        Workout w1 = new Workout("Test Workout 1", start1, end1, "Hell");
+
+        Calendar start2 = Calendar.getInstance();
+        Calendar end2 = Calendar.getInstance();
+        start2.set(2018, 10, 23, 2, 00);
+        end2.set(2018, 10, 23, 3, 00);
+        Workout w2 = new Workout("Test Workout 2", start2, end2, "Heaven");
+
+        Calendar start3 = Calendar.getInstance();
+        Calendar end3 = Calendar.getInstance();
+        start3.set(2018, 10, 23, 2, 00);
+        end3.set(2018, 10, 23, 3, 00);
+        Workout w3 = new Workout("Test Workout 3", start3, end3, "Somewhere");
 
         addWorkout(w1);
         addWorkout(w2);
         addWorkout(w3);
     }
 
-    public String stringToDisplay() {
-        initTest();
-
-        String str = "";
-
-        for (Workout w : workouts)
-            str += ("Workout " + w.getWorkoutName() + " from " + w.getStartTime() + " to " + w.getEndTime());
-
-        return str;
+    public ArrayList<Workout> getWorkouts() {
+        return workouts;
     }
 
     public ArrayList<String> getStringArray() {
