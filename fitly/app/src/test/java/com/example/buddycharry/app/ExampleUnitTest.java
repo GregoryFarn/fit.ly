@@ -1,4 +1,4 @@
-package com.example.buddycharry.app;
+package com.example.a007fa.fitly;
 
 import org.junit.Test;
 
