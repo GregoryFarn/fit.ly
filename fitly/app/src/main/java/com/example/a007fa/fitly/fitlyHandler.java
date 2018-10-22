@@ -14,6 +14,7 @@ import android.hardware.SensorManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.Calendar;
+import java.util.ArrayList;
 
 import android.os.IBinder;
 
@@ -27,6 +28,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private PendingIntent alarmIntent;
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
+    static final String ACTION_BADGE = "com.fitly.action.BADGE";
+    static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
+    ArrayList<Badge> badges;
 
     public void onCreate() {
         first = true;
@@ -34,13 +38,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
         bManager.registerReceiver(bReceiver, intentFilter);
 
-        alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
+        /*alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), saveAlarm.class);
         alarmIntent = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
@@ -49,19 +54,43 @@ public class fitlyHandler extends Service implements SensorEventListener {
         // alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         //       1, alarmIntent);
         alarm.setExact(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis() + 1000, alarmIntent);
-        sendMessage();
+                calendar.getTimeInMillis() + 1000, alarmIntent);*/
+
+        badges = new ArrayList<>();
+        populateBadges();
+        startSmallBadge();
+
+        sendStepMessage();
     }
 
+    public void populateBadges(){
+
+    }
+
+    public void startSmallBadge(){
+        badges.add(new Badge("small",false));
+    }
     public IBinder onBind(Intent intent) {
         return null;
     }
 
 
-    protected void sendMessage() {
+    protected void sendStepMessage() {
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
         intent.putExtra("stepCount", steps);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    protected void sendBadgeMessage() {
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.setAction(ACTION_BADGE);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    protected void sendBigBadgeMessage() {
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.setAction(ACTION_BIGBADGE);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
@@ -71,8 +100,25 @@ public class fitlyHandler extends Service implements SensorEventListener {
             first = false;
         } else {
             steps = event.values[0] - stepsFirst;
-            sendMessage();
+            sendStepMessage();
         }
+
+        if(steps>= 10000 && !badges.get(badges.size()-1).completed){
+            badges.get(badges.size()-1).setCompleted(true);
+            int count =0;
+            for(int i = badges.size()-1; i>=badges.size()-6; i--){
+                if(badges.get(i).completed){
+                    count++;
+                }
+            }
+            sendBadgeMessage();
+            if(count ==7){
+                badges.add(new Badge("big",true));
+                sendBigBadgeMessage();
+            }
+
+        }
+
     }
 
     @Override

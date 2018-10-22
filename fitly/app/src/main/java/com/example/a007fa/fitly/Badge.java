@@ -3,8 +3,9 @@ package com.example.a007fa.fitly;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
+import android.os.Parcelable;
 
-public class Badge {
+public class Badge implements Parcelable {
 
     String typeOfBadge;
     Boolean completed;

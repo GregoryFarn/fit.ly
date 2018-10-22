@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -53,6 +52,7 @@ public class Dashboard extends AppCompatActivity
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
+        intentFilter.addAction(ACTION_BADGE);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
     }
@@ -135,19 +135,29 @@ public class Dashboard extends AppCompatActivity
 
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
+    static final String ACTION_BADGE = "com.fitly.action.BADGE";
+    static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_FITLY)) {
                 Bundle b = intent.getExtras();
-                ((TextView) findViewById(R.id.StepCountText)).setText(Float.toString(b.getFloat("stepCount")));
+                ((TextView) findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,000 steps");
+                steps = b.getFloat("stepCount");
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
-                ((TextView) findViewById(R.id.testView)).setText("12");
+                ((TextView) findViewById(R.id.StepCountText)).setText("12");
+            }
+            else if(intent.getAction().equals(ACTION_BADGE)){
+                ((TextView) findViewById(R.id.badgeCompleted)).setText("Badge Completed");
+            }
+            else if(intent.getAction().equals(ACTION_BIGBADGE)){
+                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
             }
         }
     };
+
     LocalBroadcastManager bManager;
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
