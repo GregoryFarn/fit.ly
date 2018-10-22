@@ -48,11 +48,11 @@ public class Dashboard extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        bManager = LocalBroadcastManager.getInstance(this);
+        //bManager = getApplicationContext();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
-        bManager.registerReceiver(bReceiver, intentFilter);
+        getApplicationContext().registerReceiver(bReceiver, intentFilter);
         serviceStart();
     }
 

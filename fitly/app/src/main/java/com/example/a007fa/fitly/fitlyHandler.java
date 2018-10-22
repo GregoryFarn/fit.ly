@@ -38,13 +38,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        bManager = LocalBroadcastManager.getInstance(this);
+        //bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
-        bManager.registerReceiver(bReceiver, intentFilter);
+        getApplicationContext().registerReceiver(bReceiver, intentFilter);
 
-        /*alarm = (AlarmManager)this.getSystemService(ALARM_SERVICE);
+        alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
@@ -55,15 +55,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         //       1, alarmIntent);
         alarm.setExact(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis() + 1000, alarmIntent);
-        //sendMessage();*/
-
-        alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-        intent.setAction(ACTION_ENDDAY);
-        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-        alarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        5 * 1000, alarmIntent);
+        //sendMessage();
     }
 
     public IBinder onBind(Intent intent) {
@@ -75,7 +67,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
         intent.putExtra("stepCount", steps);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        getApplicationContext().sendBroadcast(intent);
     }
 
     public void onSensorChanged(SensorEvent event) {
