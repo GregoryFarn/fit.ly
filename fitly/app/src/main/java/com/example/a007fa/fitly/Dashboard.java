@@ -69,7 +69,7 @@ public class Dashboard extends AppCompatActivity
     }
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, fitlyHandler.class);
+        Intent intent = new Intent(this, DisplayBadges.class);
         startActivity(intent);
     }
 

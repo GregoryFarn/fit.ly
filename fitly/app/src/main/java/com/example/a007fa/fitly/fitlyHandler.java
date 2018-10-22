@@ -37,26 +37,25 @@ public class fitlyHandler extends Service implements SensorEventListener {
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        
+
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
         bManager.registerReceiver(bReceiver, intentFilter);
 
-        alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-       // alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-         //       1, alarmIntent);
-alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + 1,
-                AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
-        sendMessage();
+        // alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+        //       1, alarmIntent);
+        alarm.setExact(AlarmManager.RTC_WAKEUP,
+                SystemClock.elapsedRealtime() + 1000, alarmIntent);
+        //sendMessage();
     }
 
     public IBinder onBind(Intent intent) {
