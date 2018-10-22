@@ -28,6 +28,9 @@ public class Dashboard extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        //test for notification
+        new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 20:10");
+        new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 20:11");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
