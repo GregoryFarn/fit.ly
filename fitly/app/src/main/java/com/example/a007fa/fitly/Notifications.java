@@ -47,7 +47,7 @@ public class Notifications extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle("fit.ly")
-                .setContentText("You've work out scheduled in 3 hours.")
+                .setContentText("You've workout scheduled in 3 hours.")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setAutoCancel(true)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE)

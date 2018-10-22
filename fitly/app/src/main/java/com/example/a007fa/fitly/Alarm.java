@@ -14,10 +14,7 @@ import java.util.Date;
 import static android.content.Context.ALARM_SERVICE;
 
 public class Alarm {
-    private Context context;
-    private long milliTime;
-    private String time;
-    private int requestCode;
+
 //    public Alarm(Context context, String time, int requestCode) {
 //        this.context=context;
 //        this.requestCode = requestCode;
