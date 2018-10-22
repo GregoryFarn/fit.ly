@@ -20,10 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".DisplayBadges">
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
         </activity>
         <service android:enabled="true" android:name=".fitlyHandler" />
     </application>

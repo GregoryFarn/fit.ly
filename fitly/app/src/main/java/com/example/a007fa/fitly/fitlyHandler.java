@@ -44,18 +44,26 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_ENDDAY);
         bManager.registerReceiver(bReceiver, intentFilter);
 
-        alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+        /*alarm = (AlarmManager)this.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        //calendar.set(Calendar.HOUR_OF_DAY, 0);
         // alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         //       1, alarmIntent);
         alarm.setExact(AlarmManager.RTC_WAKEUP,
-                SystemClock.elapsedRealtime() + 1000, alarmIntent);
-        //sendMessage();
+                calendar.getTimeInMillis() + 1000, alarmIntent);
+        //sendMessage();*/
+
+        alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.setAction(ACTION_ENDDAY);
+        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        alarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        5 * 1000, alarmIntent);
     }
 
     public IBinder onBind(Intent intent) {
