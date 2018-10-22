@@ -38,16 +38,16 @@ public class fitlyHandler extends Service implements SensorEventListener {
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        //bManager = LocalBroadcastManager.getInstance(this);
+        bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
-        getApplicationContext().registerReceiver(bReceiver, intentFilter);
+        bManager.registerReceiver(bReceiver, intentFilter);
 
         alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-        intent.setAction(ACTION_FITLY);
-        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+        intent.setAction(ACTION_ENDDAY);
+        alarmIntent = PendingIntent.getBroadcast(, 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         //calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -55,7 +55,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         //       1, alarmIntent);
         alarm.setExact(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis() + 1000, alarmIntent);
-        //sendMessage();
+        sendMessage();
     }
 
     public IBinder onBind(Intent intent) {
@@ -67,7 +67,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.setAction(ACTION_FITLY);
         intent.putExtra("stepCount", steps);
-        getApplicationContext().sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -87,7 +87,11 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ACTION_FITLY)) {
+            if (intent.getAction().equals(ACTION_ENDDAY)) {
+                Intent intent1 = new Intent(getApplicationContext(), Dashboard.class);
+                intent1.setAction(ACTION_FITLY);
+                intent1.putExtra("stepCount", steps);
+                bManager.sendBroadcast(intent);
             }
         }
     };
