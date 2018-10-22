@@ -2,6 +2,8 @@ package com.example.a007fa.fitly;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -16,7 +18,7 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
+public class addActivity extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     Button s_pick, e_pick, show;
@@ -33,10 +35,12 @@ public class MainActivity extends AppCompatActivity
     Calendar c = Calendar.getInstance();
     View view;
 
+    Workout workout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.addactivity);
 
         //String myDate = this.time;
         //Date date = null;
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, MainActivity.this, year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(addActivity.this, addActivity.this, year, month, day);
                 datePickerDialog.show();
             }
         });
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, MainActivity.this, year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(addActivity.this, addActivity.this, year, month, day);
                 datePickerDialog.show();
             }
         });
@@ -94,17 +98,24 @@ public class MainActivity extends AppCompatActivity
 //                startTime = startTime + "M";
 //                endTime = endTime.substring(1, endTime.length());
 
-                workoutNameView.setText(workoutName);
-                Date date = startCalendar.getTime();
-                String time = Long.toString(date.getTime());
-                startTimeView.setText(time);
-                date = endCalendar.getTime();
-                time = Long.toString(date.getTime());
-                endTimeView.setText(time);
-                Workout workout = new Workout(startData, endData, workoutName);
+                //workoutNameView.setText(workoutName);
+                //Date date = startCalendar.getTime();
+                //String time = Long.toString(date.getTime());
+                //startTimeView.setText(time);
+                //date = endCalendar.getTime();
+                //time = Long.toString(date.getTime());
+                //endTimeView.setText(time);
+                workout = new Workout(workoutName);
                 workout.addCalendars(startCalendar, endCalendar);
+                sendMessage();
             }
         });
+    }
+
+    protected void sendMessage() {
+        Intent intent = new Intent(this, test.class);
+        intent.putExtra("Workout", workout);
+        startActivity(intent);
     }
 
     @Override
@@ -118,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         hour = c.get(Calendar.HOUR_OF_DAY);
         minute = c.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, MainActivity.this, hour, minute, DateFormat.is24HourFormat(this));
+        TimePickerDialog timePickerDialog = new TimePickerDialog(addActivity.this, addActivity.this, hour, minute, DateFormat.is24HourFormat(this));
         timePickerDialog.show();
     }
 
@@ -127,18 +138,18 @@ public class MainActivity extends AppCompatActivity
         hourFinal = hourOfDay;
         minuteFinal = minute;
 
-        if(counter == 0){
-            startData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
-            counter += 1;
-            startCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
-        } else if (counter == 1){
-            endData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
-            counter += 1;
-            endCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
-        } else {
-            counter = 0;
-            startData = "";
-            endData = "";
-        }
+//        if(counter == 0){
+//            startData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
+//            counter += 1;
+//            startCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+//        } else if (counter == 1){
+//            endData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
+//            counter += 1;
+//            endCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+//        } else {
+//            counter = 0;
+//            startData = "";
+//            endData = "";
+//        }
     }
 }
