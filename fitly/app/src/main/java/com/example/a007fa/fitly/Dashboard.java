@@ -2,6 +2,7 @@ package com.example.a007fa.fitly;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,8 @@ import android.content.Context;
 import android.support.v4.content.LocalBroadcastManager;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class Dashboard extends AppCompatActivity {
@@ -32,6 +35,30 @@ public class Dashboard extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final Schedule sched = new Schedule();
+        sched.initTest();
+
+        ListView scheduleDisplay = findViewById(R.id.scheduleDisplay);
+
+        DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(this,
+                R.layout.adapter_view_layout,
+                sched.getWorkouts());
+
+        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(Dashboard.this, DisplayWorkoutDetailsActivity.class);
+                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                Log.d("name", sched.getWorkouts().get(i).getWorkoutName() );
+                Log.d("location", sched.getWorkouts().get(i).getLocation());
+                startActivity(intent);
+            }
+        });
+
+        scheduleDisplay.setAdapter(adapter);
 
         bManager = LocalBroadcastManager.getInstance(getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
