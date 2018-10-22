@@ -107,31 +107,16 @@ public class addActivity extends AppCompatActivity
                 //endTimeView.setText(time);
                 workout = new Workout(workoutName);
                 workout.addCalendars(startCalendar, endCalendar);
-<<<<<<< HEAD
-                //sendMessage();
-=======
                 sendMessage();
->>>>>>> bf2156450ba34910cca8291abc61882ce87fcb63
             }
         });
     }
 
-<<<<<<< HEAD
-//    protected void sendMessage() {
-//        Intent intent = new Intent(getApplicationContext(), ActivityDashboard.class);
-//        intent.setAction("ADD ACTIVITY");
-//        intent.putExtra("Workout", workout);
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-//        Intent i = getIntent();
-//        Parcelable myParcelableObject = (Parcelable) i.getParcelableExtra("name_of_extra");
-//    }
-=======
     protected void sendMessage() {
         Intent intent = new Intent(this, test.class);
         intent.putExtra("Workout", workout);
         startActivity(intent);
     }
->>>>>>> bf2156450ba34910cca8291abc61882ce87fcb63
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
