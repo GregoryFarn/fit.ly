@@ -45,9 +45,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
         bManager.registerReceiver(bReceiver, intentFilter);
 
         alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+        Intent intent = new Intent(getApplicationContext(), saveAlarm.class);
         intent.setAction(ACTION_ENDDAY);
-        alarmIntent = PendingIntent.getBroadcast(, 0, intent, 0);
+        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         //calendar.set(Calendar.HOUR_OF_DAY, 0);

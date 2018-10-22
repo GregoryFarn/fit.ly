@@ -22,6 +22,7 @@
         <activity android:name=".DisplayBadges">
         </activity>
         <service android:enabled="true" android:name=".fitlyHandler" />
+        <receiver android:name=".saveAlarm"/>
     </application>
 
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
