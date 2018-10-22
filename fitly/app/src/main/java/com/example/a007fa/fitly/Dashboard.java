@@ -24,6 +24,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    float steps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +139,6 @@ public class Dashboard extends AppCompatActivity
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ((TextView) findViewById(R.id.StepCountText)).setText("activate");
             if (intent.getAction().equals(ACTION_FITLY)) {
                 Bundle b = intent.getExtras();
                 ((TextView) findViewById(R.id.StepCountText)).setText(Float.toString(b.getFloat("stepCount")));

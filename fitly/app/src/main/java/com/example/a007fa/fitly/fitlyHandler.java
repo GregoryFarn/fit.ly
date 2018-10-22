@@ -1,7 +1,6 @@
 package com.example.a007fa.fitly;
 
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -12,8 +11,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.SystemClock;
-import android.widget.TextView;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.Calendar;
@@ -37,7 +34,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
@@ -46,8 +42,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
         alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), saveAlarm.class);
-        intent.setAction(ACTION_ENDDAY);
-        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        alarmIntent = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         //calendar.set(Calendar.HOUR_OF_DAY, 0);
