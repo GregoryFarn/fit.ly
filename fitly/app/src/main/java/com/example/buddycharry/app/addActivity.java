@@ -3,7 +3,6 @@ package com.example.a007fa.fitly;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -41,19 +40,6 @@ public class addActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addactivity);
-
-        //String myDate = this.time;
-        //Date date = null;
-        //String myDate = "10/18/2018 19:42";
-/*        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-
-        try{
-            date = sdf.parse(myDate);
-        }catch(ParseException e){
-            e.printStackTrace();
-        }*/
-
-
 
         s_pick = (Button) findViewById(R.id.s_pick);
         e_pick = (Button) findViewById(R.id.e_pick);
@@ -97,41 +83,22 @@ public class addActivity extends AppCompatActivity
 //                String endTime = time.substring(time.indexOf('M'), time.length());
 //                startTime = startTime + "M";
 //                endTime = endTime.substring(1, endTime.length());
-
-                //workoutNameView.setText(workoutName);
-                //Date date = startCalendar.getTime();
-                //String time = Long.toString(date.getTime());
-                //startTimeView.setText(time);
-                //date = endCalendar.getTime();
-                //time = Long.toString(date.getTime());
-                //endTimeView.setText(time);
-                workout = new Workout(workoutName);
-                workout.addCalendars(startCalendar, endCalendar);
-<<<<<<< HEAD
-                //sendMessage();
-=======
-                sendMessage();
->>>>>>> bf2156450ba34910cca8291abc61882ce87fcb63
+//
+//                workoutNameView.setText(workoutName);
+//                Date date = startCalendar.getTime();
+//                String time = Long.toString(date.getTime());
+//                startTimeView.setText(time);
+//                date = endCalendar.getTime();
+//                time = Long.toString(date.getTime());
+//                endTimeView.setText(time);
+                    workout = new Workout(workoutName);
+                    workout.addCalendars(startCalendar, endCalendar);
+                    Intent intent = new Intent(addActivity.this, test.class);
+                    intent.putExtra("workout", workout);
+                    startActivity(intent);
             }
         });
     }
-
-<<<<<<< HEAD
-//    protected void sendMessage() {
-//        Intent intent = new Intent(getApplicationContext(), ActivityDashboard.class);
-//        intent.setAction("ADD ACTIVITY");
-//        intent.putExtra("Workout", workout);
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-//        Intent i = getIntent();
-//        Parcelable myParcelableObject = (Parcelable) i.getParcelableExtra("name_of_extra");
-//    }
-=======
-    protected void sendMessage() {
-        Intent intent = new Intent(this, test.class);
-        intent.putExtra("Workout", workout);
-        startActivity(intent);
-    }
->>>>>>> bf2156450ba34910cca8291abc61882ce87fcb63
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -168,3 +135,4 @@ public class addActivity extends AppCompatActivity
 //        }
     }
 }
+

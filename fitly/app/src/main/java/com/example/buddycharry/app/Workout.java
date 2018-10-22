@@ -13,6 +13,10 @@ public class Workout implements Serializable {
     private Calendar startCalendar;
     private Calendar endCalendar;
 
+    public Workout(){
+
+    }
+
     public Workout(String workoutName) {
         this.workoutName = workoutName;
     }
