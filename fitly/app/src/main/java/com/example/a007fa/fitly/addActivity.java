@@ -88,8 +88,7 @@ public class addActivity extends AppCompatActivity
 //            date = endCalendar.getTime();
 //            time = Long.toString(date.getTime());
 //            endTimeView.setText(time);
-
-
+            new Alarm().setAlarm(getApplicationContext(), (int) ((startCalendar.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,startCalendar);
             workout.add(workoutName, startCalendar, endCalendar);
             Intent intent = new Intent();
             intent.putExtra("workout", workout);
@@ -102,7 +101,7 @@ public class addActivity extends AppCompatActivity
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         yearFinal = year;
-        monthFinal = month + 1;
+        monthFinal = month;
         dayFinal = dayOfMonth;
 
 
