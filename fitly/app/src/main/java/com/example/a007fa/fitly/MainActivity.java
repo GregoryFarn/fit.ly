@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 //                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
             }
             else if(intent.getAction().equals(ACTION_BADGEPAGE)){
-                Intent intent1 = new Intent(getApplicationContext(), DisplayBadges.class);
+                Intent intent1 = new Intent(getApplicationContext(), BadgeFragment.class);
                 intent1.putExtra("badgeList",intent.getSerializableExtra("badgeList"));
                 startActivity(intent1);
             }

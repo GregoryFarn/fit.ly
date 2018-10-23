@@ -143,7 +143,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
 
             if (intent.getAction().equals(ACTION_BADGELIST)) {
-                Intent intent1 = new Intent(getApplicationContext(), Dashboard.class);
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                 intent1.setAction(ACTION_BADGEPAGE);
                 badgeWrapper b = new badgeWrapper(badges);
                 //Bundle bun = new Bundle();
