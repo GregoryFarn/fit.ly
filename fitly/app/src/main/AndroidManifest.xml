@@ -12,14 +12,25 @@
         <activity
             android:name=".Dashboard"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <receiver android:name=".Notifications"></receiver>
+        <activity
+            android:name=".DisplayScheduleActivity"
+            android:label="@string/title_activity_display_schedule" />
+        <activity android:name=".DisplayWorkoutDetailsActivity"></activity>
+        <activity android:name=".DisplayBadges">
+        </activity>
+        <service android:enabled="true" android:name=".fitlyHandler" />
+        <receiver android:name=".saveAlarm"/>
     </application>
 
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
+    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
+    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true"/>
 </manifest>

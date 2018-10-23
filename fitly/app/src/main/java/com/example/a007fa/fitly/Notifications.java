@@ -26,7 +26,7 @@ public class Notifications extends BroadcastReceiver {
 
         Bundle extras = intent.getExtras();
 
-        Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
+       // Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
            int requestKey = extras.getInt("requestKey");
 
         NotificationManager notiManager
