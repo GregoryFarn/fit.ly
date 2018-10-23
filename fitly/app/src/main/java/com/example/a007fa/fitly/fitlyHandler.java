@@ -12,10 +12,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v4.content.LocalBroadcastManager;
-
-import java.util.ArrayList;
-
+import android.os.Bundle;
 import android.os.IBinder;
+
+import java.util.Calendar;
+import java.util.ArrayList;
 
 public class fitlyHandler extends Service implements SensorEventListener {
     private SensorManager sManager;
@@ -29,6 +30,8 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_BADGE = "com.fitly.action.BADGE";
     static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
+    static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
+    static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
     ArrayList<Badge> badges;
 
     public void onCreate() {
@@ -40,8 +43,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_FITLY);
-        intentFilter.addAction(ACTION_ENDDAY);
+        intentFilter.addAction(ACTION_BADGELIST);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         /*alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
@@ -58,12 +60,18 @@ public class fitlyHandler extends Service implements SensorEventListener {
         badges = new ArrayList<>();
         populateBadges();
         startSmallBadge();
-
         sendStepMessage();
     }
 
     public void populateBadges(){
-
+        for(int i=0; i<10; i++)
+        {
+            Badge badgeTest= new Badge("small", false);
+            if(i%7==0)
+                badgeTest.setTypeOfBadge("big");
+            badgeTest.setCompleted(true);
+            badges.add(badgeTest);
+        }
     }
 
     public void startSmallBadge(){
@@ -132,6 +140,16 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 intent1.setAction(ACTION_FITLY);
                 intent1.putExtra("stepCount", steps);
                 bManager.sendBroadcast(intent);
+            }
+
+            if (intent.getAction().equals(ACTION_BADGELIST)) {
+                Intent intent1 = new Intent(getApplicationContext(), Dashboard.class);
+                intent1.setAction(ACTION_BADGEPAGE);
+                badgeWrapper b = new badgeWrapper(badges);
+                //Bundle bun = new Bundle();
+               // bun.putSerializable("badgeList",b);
+                intent1.putExtra("badgeList",b);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
             }
         }
     };

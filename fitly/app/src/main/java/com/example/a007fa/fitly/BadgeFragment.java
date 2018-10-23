@@ -1,6 +1,5 @@
 package com.example.a007fa.fitly;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
