@@ -91,9 +91,8 @@ public class addActivity extends AppCompatActivity
 //                date = endCalendar.getTime();
 //                time = Long.toString(date.getTime());
 //                endTimeView.setText(time);
-                    workout = new Workout(workoutName);
-                    workout.addCalendars(startCalendar, endCalendar);
-                    Intent intent = new Intent(addActivity.this, test.class);
+                    workout = new Workout(workoutName, startCalendar, endCalendar);
+                    Intent intent = new Intent(addActivity.this, Schedule.class);
                     intent.putExtra("workout", workout);
                     startActivity(intent);
             }
