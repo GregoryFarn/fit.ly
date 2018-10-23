@@ -30,11 +30,8 @@ public class Dashboard extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        //test for notification
-        Calendar start1 = Calendar.getInstance();
-        start1.set(2018, 9, 22, 21, 19);
-        new Alarm().setAlarm(getApplicationContext(), 0 ,start1);
-        new Alarm().setAlarm(getApplicationContext(), 1 ,start1);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
