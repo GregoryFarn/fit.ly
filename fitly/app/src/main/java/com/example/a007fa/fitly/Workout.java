@@ -13,6 +13,10 @@ public class Workout implements Parcelable {
     private String location;
     private String description = "";
 
+    public Workout() { }
+
+    public Workout(String workoutName) { this.workoutName = workoutName; }
+
     public Workout(String workoutName, Calendar startTime, Calendar endTime) {
         this.workoutName = workoutName;
         this.startTime = startTime;
@@ -32,6 +36,13 @@ public class Workout implements Parcelable {
         this.endTime = endTime;
         this.location = location;
         this.description = description;
+    }
+
+    // Alternative constructor
+    public void add(String workoutName, Calendar startTime, Calendar endTime) {
+        this.workoutName = workoutName;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     protected Workout(Parcel in) {

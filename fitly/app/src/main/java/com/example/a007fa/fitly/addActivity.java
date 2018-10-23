@@ -1,5 +1,6 @@
 package com.example.a007fa.fitly;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -34,7 +35,7 @@ public class addActivity extends AppCompatActivity
     Calendar c = Calendar.getInstance();
     View view;
 
-    Workout workout;
+    Workout workout = new Workout();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +92,12 @@ public class addActivity extends AppCompatActivity
 //                date = endCalendar.getTime();
 //                time = Long.toString(date.getTime());
 //                endTimeView.setText(time);
-                    workout = new Workout(workoutName, startCalendar, endCalendar);
-                    Intent intent = new Intent(addActivity.this, Schedule.class);
-                    intent.putExtra("workout", workout);
-                    startActivity(intent);
+
+            workout.add(workoutName, startCalendar, endCalendar);
+            Intent intent = new Intent();
+            intent.putExtra("workout", workout);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
             }
         });
     }

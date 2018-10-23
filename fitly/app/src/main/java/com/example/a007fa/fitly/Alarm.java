@@ -38,7 +38,8 @@ public class Alarm {
      //   return date.getTime() - 3600*3000;
     }*/
 
-    public static void setAlarm(Context context, int requestCode, Calendar startTime) {
+
+ public static void setAlarm(Context context, int requestCode, Calendar startTime) {
 /*
         String myDate = time;
         Date date = new Date();

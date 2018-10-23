@@ -18,10 +18,8 @@ public class Notifications extends BroadcastReceiver {
 
         Bundle extras = intent.getExtras();
 
-
-            //Log.d("T" , "MainActivity -> intent key_string-> " + extras.getString("key_string"));
-           int requestKey = extras.getInt("requestKey");
-
+       // Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
+        int requestKey = extras.getInt("requestKey");
 
         NotificationManager notiManager
                 = (NotificationManager) context.getSystemService  (context.NOTIFICATION_SERVICE);
@@ -48,5 +46,4 @@ public class Notifications extends BroadcastReceiver {
         notiManager.notify(requestKey,
                 mNotification.build());
     }
-
 }
