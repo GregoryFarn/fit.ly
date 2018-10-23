@@ -29,7 +29,7 @@ public class addActivity extends AppCompatActivity
     int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal;
     int counter = 0;
 
-    String time = "", startData = "", endData = "";
+    String time = "";
 
     Calendar startCalendar = Calendar.getInstance(), endCalendar = Calendar.getInstance();
     Calendar c = Calendar.getInstance();
@@ -47,10 +47,6 @@ public class addActivity extends AppCompatActivity
         show = (Button) findViewById(R.id.show);
 
         textData = (EditText) findViewById(R.id.workoutName);
-
-        workoutNameView = (TextView) findViewById(R.id.workoutNameView);
-        endTimeView = (TextView) findViewById(R.id.endTimeView) ;
-        startTimeView = (TextView) findViewById(R.id.startTimeView);
 
         s_pick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,19 +75,20 @@ public class addActivity extends AppCompatActivity
         show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String workoutName = textData.getText().toString();
-//                String startTime = time.substring(0, time.indexOf('M'));
-//                String endTime = time.substring(time.indexOf('M'), time.length());
-//                startTime = startTime + "M";
-//                endTime = endTime.substring(1, endTime.length());
+            String workoutName = textData.getText().toString();
+//            String startTime = time.substring(0, time.indexOf('M'));
+//            String endTime = time.substring(time.indexOf('M'), time.length());
+//            startTime = startTime + "M";
+//            endTime = endTime.substring(1, endTime.length());
 //
-//                workoutNameView.setText(workoutName);
-//                Date date = startCalendar.getTime();
-//                String time = Long.toString(date.getTime());
-//                startTimeView.setText(time);
-//                date = endCalendar.getTime();
-//                time = Long.toString(date.getTime());
-//                endTimeView.setText(time);
+//            workoutNameView.setText(workoutName);
+//            Date date = startCalendar.getTime();
+//            String time = Long.toString(date.getTime());
+//            startTimeView.setText(time);
+//            date = endCalendar.getTime();
+//            time = Long.toString(date.getTime());
+//            endTimeView.setText(time);
+
 
             workout.add(workoutName, startCalendar, endCalendar);
             Intent intent = new Intent();
@@ -122,18 +119,14 @@ public class addActivity extends AppCompatActivity
         hourFinal = hourOfDay;
         minuteFinal = minute;
 
-//        if(counter == 0){
-//            startData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
-//            counter += 1;
-//            startCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
-//        } else if (counter == 1){
-//            endData = monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal;
-//            counter += 1;
-//            endCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
-//        } else {
-//            counter = 0;
-//            startData = "";
-//            endData = "";
-//        }
+        if(counter == 0){
+            counter += 1;
+            startCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+        } else if (counter == 1){
+            counter += 1;
+            endCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+        } else {
+            counter = 0;
+        }
     }
 }
