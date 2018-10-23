@@ -2,21 +2,33 @@ package com.example.a007fa.fitly;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.support.v4.content.LocalBroadcastManager;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class Dashboard extends AppCompatActivity {
+import org.w3c.dom.Text;
+
+public class MainActivity extends AppCompatActivity {
+
+    private BottomNavigationView mainNav;
+    private FrameLayout mainFrame;
+
+    private DashboardFragment dashboardFragment;
+    private BadgeFragment badgeFragment;
+    private ProfileFragment profileFragment;
 
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
@@ -24,13 +36,12 @@ public class Dashboard extends AppCompatActivity {
     static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
 
-
     float steps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_main);
         //test for notification
         new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 20:10");
         new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 20:11");
@@ -38,37 +49,48 @@ public class Dashboard extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final Schedule sched = new Schedule();
-        sched.initTest();
+        mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
+        mainNav = (BottomNavigationView) findViewById(R.id.navigation);
 
-        ListView scheduleDisplay = findViewById(R.id.scheduleDisplay);
+        dashboardFragment = new DashboardFragment();
+        badgeFragment = new BadgeFragment();
+        profileFragment = new ProfileFragment();
 
-        DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(this,
-                R.layout.adapter_view_layout,
-                sched.getWorkouts());
+        setFragment(dashboardFragment);
 
-        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(Dashboard.this, DisplayWorkoutDetailsActivity.class);
-                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                TextView title = (TextView) findViewById(R.id.title);
+                switch(menuItem.getItemId()) {
+                    case R.id.navigation_badges:
+                        title.setText("Badges");
+                        setFragment(badgeFragment);
+                        return true;
 
-                Log.d("name", sched.getWorkouts().get(i).getWorkoutName() );
-                Log.d("location", sched.getWorkouts().get(i).getLocation());
-                startActivity(intent);
+                    case R.id.navigation_dashboard:
+                        title.setText("Dashboard");
+                        setFragment(dashboardFragment);
+                        return true;
+
+                    case R.id.navigation_profile:
+                        title.setText("Profile");
+                        setFragment(profileFragment);
+                        return true;
+
+                    default:
+                        return false;
+
+                }
             }
         });
 
-        scheduleDisplay.setAdapter(adapter);
+    }
 
-        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_FITLY);
-        intentFilter.addAction(ACTION_ENDDAY);
-        intentFilter.addAction(ACTION_BADGE);
-        bManager.registerReceiver(bReceiver, intentFilter);
-        serviceStart();
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mainFrame, fragment);
+        fragmentTransaction.commit();
     }
 
     protected void serviceStart() {
@@ -76,16 +98,6 @@ public class Dashboard extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
             startService(intent);
         }
-    }
-
-    public void goToBadges(View view) {
-        Intent intent = new Intent(this, DisplayBadges.class);
-        startActivity(intent);
-    }
-
-    public void goToSchedule(View view) {
-        Intent intent = new Intent(getApplicationContext(), DisplayScheduleActivity.class);
-        startActivity(intent);
     }
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
@@ -100,13 +112,13 @@ public class Dashboard extends AppCompatActivity {
                 ((TextView) findViewById(R.id.StepCountText)).setText("12");
             }
             else if(intent.getAction().equals(ACTION_BADGE)){
-                ((TextView) findViewById(R.id.badgeCompleted)).setText("Badge Completed");
+//                ((TextView) findViewById(R.id.badgeCompleted)).setText("Badge Completed");
             }
             else if(intent.getAction().equals(ACTION_BIGBADGE)){
-                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
+//                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
             }
             else if(intent.getAction().equals(ACTION_BADGELIST)){
-                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
+//                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
             }
         }
     };
