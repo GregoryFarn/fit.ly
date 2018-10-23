@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -21,8 +23,10 @@ public class Dashboard extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         //test for notification
-        new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 20:10");
-        new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 20:11");
+        Calendar start1 = Calendar.getInstance();
+        start1.set(2018, 9, 22, 21, 19);
+        new Alarm().setAlarm(getApplicationContext(), 0 ,start1);
+        new Alarm().setAlarm(getApplicationContext(), 1 ,start1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
