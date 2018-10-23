@@ -1,21 +1,13 @@
 package com.example.a007fa.fitly;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-
-import com.example.a007fa.fitly.Dashboard;
-import com.example.a007fa.fitly.R;
-
-import java.util.Date;
 
 public class Notifications extends BroadcastReceiver {
     @Override
@@ -39,7 +31,7 @@ public class Notifications extends BroadcastReceiver {
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 requestKey,
-                new Intent(context, Dashboard.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mNotification = new NotificationCompat.Builder(context, channelId)
                 .setContentIntent(pendingIntent)

@@ -1,11 +1,15 @@
 package com.example.a007fa.fitly;
 
+import android.os.Parcelable;
+import android.os.Parcel;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
-import android.os.Parcelable;
+import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Badge implements Parcelable {
+public class Badge implements Serializable {
 
     String typeOfBadge;
     Boolean completed;
@@ -20,8 +24,6 @@ public class Badge implements Parcelable {
         achievedDate=Calendar.getInstance(timezone);
         if(typeOfBadge.equals("small"))
             badgeMessage="You got a small badge on";
-
-
     }
     public String getBadgeMessage() {
         return badgeMessage;
@@ -61,4 +63,33 @@ public class Badge implements Parcelable {
 
         }
     }
+
+   /* public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Badge createFromParcel(Parcel in) {
+            return new Badge(in);
+        }
+
+        public Badge[] newArray(int size) {
+            return new Badge[size];
+        }
+
+    };
+
+    public Badge(Parcel in){
+        this.typeOfBadge = in.readString();
+        this.completed = in.readByte() !=0;
+        this.badgeMessage =  in.readString();
+        this.achievedDate.setTimeInMillis(in.readLong());
+    }
+
+    public void writeToParcel(Parcel dest, int flags){
+        dest.writeString(typeOfBadge);
+        dest.writeByte((byte) (completed ? 1 : 0));
+        dest.writeString(badgeMessage);
+        dest.writeLong(achievedDate.getTimeInMillis());
+    }
+
+    public int describeContents(){
+        return 0;
+    }*/
 }

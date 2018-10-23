@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Dashboard"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true">
@@ -20,14 +20,13 @@
             </intent-filter>
         </activity>
         <receiver android:name=".Notifications"></receiver>
-        <activity
-            android:name=".DisplayScheduleActivity"
-            android:label="@string/title_activity_display_schedule" />
         <activity android:name=".DisplayWorkoutDetailsActivity"></activity>
-        <activity android:name=".DisplayBadges">
-        </activity>
+
         <service android:enabled="true" android:name=".fitlyHandler" />
         <receiver android:name=".saveAlarm"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
