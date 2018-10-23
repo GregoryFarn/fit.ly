@@ -13,10 +13,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.os.Bundle;
+import android.os.IBinder;
+
 import java.util.Calendar;
 import java.util.ArrayList;
-
-import android.os.IBinder;
 
 public class fitlyHandler extends Service implements SensorEventListener {
     private SensorManager sManager;
@@ -83,20 +83,20 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
 
     protected void sendStepMessage() {
-        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setAction(ACTION_FITLY);
         intent.putExtra("stepCount", steps);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     protected void sendBadgeMessage() {
-        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setAction(ACTION_BADGE);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     protected void sendBigBadgeMessage() {
-        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setAction(ACTION_BIGBADGE);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
@@ -135,6 +135,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_ENDDAY)) {
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                intent1.setAction(ACTION_FITLY);
+                intent1.putExtra("stepCount", steps);
+                bManager.sendBroadcast(intent);
+            }
+
             if (intent.getAction().equals(ACTION_BADGELIST)) {
                 Intent intent1 = new Intent(getApplicationContext(), Dashboard.class);
                 intent1.setAction(ACTION_BADGEPAGE);
