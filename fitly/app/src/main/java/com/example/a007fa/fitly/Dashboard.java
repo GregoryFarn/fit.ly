@@ -22,6 +22,8 @@ public class Dashboard extends AppCompatActivity {
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_BADGE = "com.fitly.action.BADGE";
     static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
+    static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
+
 
     float steps;
 
@@ -101,6 +103,9 @@ public class Dashboard extends AppCompatActivity {
                 ((TextView) findViewById(R.id.badgeCompleted)).setText("Badge Completed");
             }
             else if(intent.getAction().equals(ACTION_BIGBADGE)){
+                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
+            }
+            else if(intent.getAction().equals(ACTION_BADGELIST)){
                 ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
             }
         }
