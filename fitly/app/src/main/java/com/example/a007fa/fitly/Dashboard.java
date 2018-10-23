@@ -23,7 +23,7 @@ public class Dashboard extends AppCompatActivity {
     static final String ACTION_BADGE = "com.fitly.action.BADGE";
     static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
-
+    static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
 
     float steps;
 
@@ -67,6 +67,7 @@ public class Dashboard extends AppCompatActivity {
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
         intentFilter.addAction(ACTION_BADGE);
+        intentFilter.addAction(ACTION_BADGEPAGE);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
     }
@@ -79,8 +80,9 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public void goToBadges(View view) {
-        Intent intent = new Intent(this, DisplayBadges.class);
-        startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+        intent.setAction(ACTION_BADGELIST);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     public void goToSchedule(View view) {
@@ -93,7 +95,7 @@ public class Dashboard extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_FITLY)) {
                 Bundle b = intent.getExtras();
-                ((TextView) findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,000 steps");
+                ((TextView) findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,00s0 steps");
                 steps = b.getFloat("stepCount");
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
@@ -105,8 +107,10 @@ public class Dashboard extends AppCompatActivity {
             else if(intent.getAction().equals(ACTION_BIGBADGE)){
                 ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
             }
-            else if(intent.getAction().equals(ACTION_BADGELIST)){
-                ((TextView) findViewById(R.id.badgeCompleted)).setText("Big Badge Completed");
+            else if(intent.getAction().equals(ACTION_BADGEPAGE)){
+                Intent intent1 = new Intent(getApplicationContext(), DisplayBadges.class);
+                intent1.putExtra("badgeList",intent.getSerializableExtra("badgeList"));
+                startActivity(intent1);
             }
         }
     };

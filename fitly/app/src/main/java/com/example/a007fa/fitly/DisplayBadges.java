@@ -23,11 +23,12 @@ public class DisplayBadges extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_badges);
-        final ArrayList<Badge> badgeArraylist= new ArrayList<Badge>();
+        badgeWrapper bun = (badgeWrapper) getIntent().getSerializableExtra("badgeList");
+        final ArrayList<Badge> badgeArraylist= bun.getBadges();
         ArrayList<String> testStrings= new ArrayList<String>(Arrays.asList(new String[] {"One","Two","Three","Four"}));
        // LinearLayout parent= (LinearLayout) findViewById(R.id.my_root);
 
-        for(int i=0; i<10; i++)
+       /* for(int i=0; i<10; i++)
         {
             Badge badgeTest= new Badge("small", false);
             if(i%7==0)
@@ -35,7 +36,8 @@ public class DisplayBadges extends AppCompatActivity {
             badgeTest.setCompleted(true);
             badgeArraylist.add(badgeTest);
 
-        }
+        }*/
+
         ArrayAdapter<Badge> badgeAdapter =
                 new ArrayAdapter<Badge>(this, 0, badgeArraylist) {
                     @Override
