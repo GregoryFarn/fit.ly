@@ -26,8 +26,8 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get all workout details
         String workoutName = getItem(position).getWorkoutName();
-        String startTime = getItem(position).getStartTime();
-        String endTime = getItem(position).getEndTime();
+        String startTime = getItem(position).getStartTime() + " pm";
+        String endTime = getItem(position).getEndTime() + " pm";
         String location= getItem(position).getLocation();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);

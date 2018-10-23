@@ -2,6 +2,9 @@ package com.example.a007fa.fitly;
 
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -17,23 +20,26 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DashboardFragment extends Fragment {
 
+    static final String ACTION_FITLY = "com.fitly.action.FITLY";
+    static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
 
-    public DashboardFragment() {
-        // Required empty public constructor
-    }
+    public DashboardFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        if (getArguments() != null) {
+            Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
+            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
+        }
 
         final Schedule sched = new Schedule();
         sched.initTest();
@@ -63,20 +69,17 @@ public class DashboardFragment extends Fragment {
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("fab", "in fab onclick");
                 Intent intent = new Intent(getActivity(), addActivity.class);
                 startActivity(intent);
             }
         });
 
-
-//        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(ACTION_FITLY);
-//        intentFilter.addAction(ACTION_ENDDAY);
-//        intentFilter.addAction(ACTION_BADGE);
-//        bManager.registerReceiver(bReceiver, intentFilter);
-//        serviceStart();
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_FITLY);
+        intentFilter.addAction(ACTION_ENDDAY);
+        bManager.registerReceiver(bReceiver, intentFilter);
+        serviceStart();
 
         return view;
     }
@@ -93,4 +96,33 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals(ACTION_FITLY)) {
+            Bundle b = intent.getExtras();
+            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
+        }
+        else if (intent.getAction().equals(ACTION_ENDDAY)) {
+            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText("12");
+        }
+        }
+    };
+
+    protected void serviceStart() {
+        if (!isMyServiceRunning(fitlyHandler.class)) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), fitlyHandler.class);
+            getActivity().startService(intent);
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

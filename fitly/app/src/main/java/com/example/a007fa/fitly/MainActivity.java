@@ -1,12 +1,14 @@
 package com.example.a007fa.fitly;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private BadgeFragment badgeFragment;
     private ProfileFragment profileFragment;
 
+    private LocalBroadcastManager bManager;
+
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_BADGE = "com.fitly.action.BADGE";
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
 
-    float steps;
+    private float steps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,33 +69,35 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
 
         setFragment(dashboardFragment);
+        mainNav.setSelectedItemId(R.id.navigation_dashboard);
 
         mainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                TextView title = (TextView) findViewById(R.id.title);
-                switch(menuItem.getItemId()) {
-                    case R.id.navigation_badges:
-                        title.setText("Badges");
-                        setFragment(badgeFragment);
-                        return true;
+            TextView title = (TextView) findViewById(R.id.title);
+            switch(menuItem.getItemId()) {
+                case R.id.navigation_badges:
+                    title.setText("Badges");
+                    setFragment(badgeFragment);
+                    return true;
 
-                    case R.id.navigation_dashboard:
-                        title.setText("Dashboard");
-                        setFragment(dashboardFragment);
-                        return true;
+                case R.id.navigation_dashboard:
+                    title.setText("Dashboard");
+                    setFragment(dashboardFragment);
+                    return true;
 
-                    case R.id.navigation_profile:
-                        title.setText("Profile");
-                        setFragment(profileFragment);
-                        return true;
+                case R.id.navigation_profile:
+                    title.setText("Profile");
+                    setFragment(profileFragment);
+                    return true;
 
-                    default:
-                        return false;
+                default:
+                    return false;
 
-                }
+            }
             }
         });
+
 
     }
 
@@ -113,8 +119,11 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_FITLY)) {
                 Bundle b = intent.getExtras();
-                ((TextView) findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,00s0 steps");
-                steps = b.getFloat("stepCount");
+                dashboardFragment.setArguments(b);
+//
+//                ((TextView) findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000 steps");
+//                steps = b.getFloat("stepCount");
+//                Log.d("steps", Float.toString(b.getFloat("stepCount")));
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 ((TextView) findViewById(R.id.StepCountText)).setText("12");
@@ -135,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
-    LocalBroadcastManager bManager;
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
