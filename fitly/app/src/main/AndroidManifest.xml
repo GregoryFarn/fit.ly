@@ -21,6 +21,7 @@
         </activity>
         <receiver android:name=".Notifications"></receiver>
         <activity android:name=".DisplayWorkoutDetailsActivity"></activity>
+        <activity android:name=".addActivity"></activity>
 
         <service android:enabled="true" android:name=".fitlyHandler" />
         <receiver android:name=".saveAlarm"/>

@@ -1,9 +1,12 @@
 package com.example.a007fa.fitly;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -11,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -24,7 +28,6 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +59,17 @@ public class DashboardFragment extends Fragment {
 
         scheduleDisplay.setAdapter(adapter);
 
+        FloatingActionButton activityButton = view.findViewById(R.id.addWorkoutButton);
+        activityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("fab", "in fab onclick");
+                Intent intent = new Intent(getActivity(), addActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 //        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
 //        IntentFilter intentFilter = new IntentFilter();
 //        intentFilter.addAction(ACTION_FITLY);
@@ -65,6 +79,18 @@ public class DashboardFragment extends Fragment {
 //        serviceStart();
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK) {
+                Workout workout = (Workout)getActivity().getIntent().getExtras().get("workout");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                getActivity().finish();
+            }
+        }
     }
 
 }
