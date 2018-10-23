@@ -38,9 +38,9 @@ public class Alarm {
      //   return date.getTime() - 3600*3000;
     }*/
 
-    public static void setAlarm(Context context, int requestCode, String time) {
-
-        String myDate = time;
+    public static void setAlarm(Context context, int requestCode, Calendar time) {
+/*
+       // String myDate = time;
         Date date = new Date();
         //String myDate = "10/18/2018 19:42";
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -53,6 +53,7 @@ public class Alarm {
         long second = ((date.getTime()/1000) % 60) * 1000;
         //  scheduled time - 3hrs in millisecon
         //   return date.getTime() - 3600*3000;
+*/
 
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent( context, Notifications.class);
@@ -61,10 +62,10 @@ public class Alarm {
         intent.putExtras(bundle);
         PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(date.getTime() - 3600*3000);
-       if (calendar.getTimeInMillis() > System.currentTimeMillis())
-        am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        Calendar calculatedTime = Calendar.getInstance();
+        calculatedTime.setTimeInMillis(time.getTimeInMillis() - 3600*3000);
+        if (time.getTimeInMillis() > System.currentTimeMillis())
+            am.setExact(AlarmManager.RTC_WAKEUP, calculatedTime.getTimeInMillis(), sender);
     }
 
 }
