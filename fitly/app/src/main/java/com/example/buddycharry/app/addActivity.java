@@ -1,4 +1,4 @@
-package com.example.a007fa.fitly;
+package com.example.buddycharry.app
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
