@@ -24,8 +24,6 @@ import java.util.Arrays;
  */
 public class BadgeFragment extends Fragment {
 
-    static final String ACTION_FITLY = "com.fitly.action.FITLY";
-    static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
 
@@ -60,19 +58,8 @@ public class BadgeFragment extends Fragment {
             if(intent.getAction().equals(ACTION_BADGEPAGE)){
                 // Inflate the layout for this fragment
                 
-                final ArrayList<Badge> badgeArraylist= new ArrayList<Badge>();
-                ArrayList<String> testStrings= new ArrayList<String>(Arrays.asList(new String[] {"One","Two","Three","Four"}));
-                // LinearLayout parent= (LinearLayout) findViewById(R.id.my_root);
+                final ArrayList<Badge> badgeArraylist= ((badgeWrapper)intent.getSerializableExtra("badgeList")).getBadges();
 
-       /* for(int i=0; i<10; i++)
-        {
-            Badge badgeTest= new Badge("small", false);
-            if(i%7==0)
-                badgeTest.setTypeOfBadge("big");
-            badgeTest.setCompleted(true);
-            badgeArraylist.add(badgeTest);
-
-        }*/
                 ArrayAdapter<Badge> badgeAdapter =
                         new ArrayAdapter<Badge>(getActivity(), 0, badgeArraylist) {
                             @Override
