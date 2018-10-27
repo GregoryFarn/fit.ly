@@ -85,6 +85,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
             badgeTest.setCompleted(true);
             badges.add(badgeTest);
         }
+        Badge badgesTest=new Badge("small",false);
+        badges.add(badgesTest);
+
     }
     public void populateSched(){
         sched.initTest();

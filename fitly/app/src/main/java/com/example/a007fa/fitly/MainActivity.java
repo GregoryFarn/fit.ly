@@ -46,17 +46,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //test for notification
-<<<<<<< HEAD
         Calendar start1 = Calendar.getInstance();
         start1.set(2018, 9, 22, 23, 57);
         Calendar start2 = Calendar.getInstance();
         start2.set(2018, 9, 22, 23, 58);
         new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
         new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
-=======
-        //new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 20:10");
-        //new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 20:11");
->>>>>>> NT-scheduleUpdate
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_FITLY)) {
@@ -158,11 +154,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-<<<<<<< HEAD
-=======
-*/
-    LocalBroadcastManager bManager;
->>>>>>> NT-scheduleUpdate
+
+
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
