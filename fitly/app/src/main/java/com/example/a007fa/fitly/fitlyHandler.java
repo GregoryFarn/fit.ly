@@ -24,6 +24,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private float stepsFirst;
     private float steps;
     private boolean first;
+    private Schedule userSchedule;
     private AlarmManager alarm;
     private PendingIntent alarmIntent;
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
@@ -43,14 +44,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGELIST);
         intentFilter.addAction(ACTION_BADGEPAGE);
         intentFilter.addAction(ACTION_SCHEDULELIST);
         bManager.registerReceiver(bReceiver, intentFilter);
-
+        userSchedule= new Schedule();
+        userSchedule.initTest();
         /*alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), saveAlarm.class);
         alarmIntent = PendingIntent.getService(getApplicationContext(), 0, intent, 0);

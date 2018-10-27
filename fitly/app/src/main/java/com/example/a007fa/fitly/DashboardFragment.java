@@ -38,6 +38,7 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
@@ -58,6 +59,7 @@ public class DashboardFragment extends Fragment {
         Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+
 
         return view;
     }

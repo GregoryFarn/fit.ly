@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
+    static final String ACTION_SCHEDULE= "com.fitly.action.SCHEDULE";
 
     private float steps;
 
@@ -45,12 +46,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //test for notification
+<<<<<<< HEAD
         Calendar start1 = Calendar.getInstance();
         start1.set(2018, 9, 22, 23, 57);
         Calendar start2 = Calendar.getInstance();
         start2.set(2018, 9, 22, 23, 58);
         new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
         new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
+=======
+        //new Alarm().setAlarm(getApplicationContext(), 0 ,"10/21/2018 20:10");
+        //new Alarm().setAlarm(getApplicationContext(), 1 ,"10/21/2018 20:11");
+>>>>>>> NT-scheduleUpdate
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+    /*private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_FITLY)) {
@@ -136,8 +142,27 @@ public class MainActivity extends AppCompatActivity {
                 intent1.putExtra("badgeList",intent.getSerializableExtra("badgeList"));
                 startActivity(intent1);
             }
+            else if(intent.getAction().equals(ACTION_SCHEDULE))
+            {
+                Schedule userSchedule = (Schedule) intent.getSerializableExtra("Schedule");
+                userSchedule.initTest();
+                Bundle schBundle= new Bundle();
+                schBundle.putString("test", "testing string");
+                //schBundle.putSerializable("sc", userSchedule);
+                dashboardFragment.setArguments(schBundle);
+
+                //Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
+                //intent1.putExtra("Schedule",intent.getSerializableExtra("Schedule"));
+                //startActivity(intent1);
+
+            }
         }
     };
+<<<<<<< HEAD
+=======
+*/
+    LocalBroadcastManager bManager;
+>>>>>>> NT-scheduleUpdate
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

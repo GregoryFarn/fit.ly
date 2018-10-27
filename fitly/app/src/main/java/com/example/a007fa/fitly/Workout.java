@@ -83,5 +83,6 @@ public class Workout implements Serializable {
 
     public String getDescription() { return this.description; }
 
+
 }
 
