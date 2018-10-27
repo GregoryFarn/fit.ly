@@ -38,19 +38,16 @@ public class BadgeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_badge, container, false);
-
 
         bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_BADGEPAGE);
         bManager.registerReceiver(bReceiver, intentFilter);
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_BADGELIST);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         return view;
     }
@@ -60,9 +57,11 @@ public class BadgeFragment extends Fragment {
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(ACTION_BADGEPAGE)) {
-                final ArrayList<Badge> badgeArraylist = new ArrayList<Badge>();
-                ArrayList<String> testStrings = new ArrayList<String>(Arrays.asList(new String[]{"One", "Two", "Three", "Four"}));
+            if(intent.getAction().equals(ACTION_BADGEPAGE)){
+                // Inflate the layout for this fragment
+                
+                final ArrayList<Badge> badgeArraylist= new ArrayList<Badge>();
+                ArrayList<String> testStrings= new ArrayList<String>(Arrays.asList(new String[] {"One","Two","Three","Four"}));
                 // LinearLayout parent= (LinearLayout) findViewById(R.id.my_root);
 
        /* for(int i=0; i<10; i++)
@@ -80,16 +79,16 @@ public class BadgeFragment extends Fragment {
                             public View getView(int position,
                                                 View convertView,
                                                 ViewGroup parent) {
-                                Badge currentBadge = badgeArraylist.get(position);
+                                Badge currentBadge= badgeArraylist.get(position);
                                 // Inflate only once
-                                if (convertView == null) {
+                                if(convertView == null) {
                                     convertView = getLayoutInflater()
                                             .inflate(R.layout.list_item, null, false);
                                 }
-                                TextView badgeMessage = (TextView) convertView.findViewById(R.id.message);
-                                ImageView badgeImage = (ImageView) convertView.findViewById(R.id.badge_picture);
+                                TextView badgeMessage=(TextView)convertView.findViewById(R.id.message);
+                                ImageView badgeImage=(ImageView)convertView.findViewById(R.id.badge_picture);
                                 badgeMessage.setText(currentBadge.getBadgeMessage());
-                                if (currentBadge.typeOfBadge.equals("small"))
+                                if(currentBadge.typeOfBadge.equals("small"))
                                     badgeImage.setImageResource(R.drawable.starbadge);
                                 else
                                     badgeImage.setImageResource(R.drawable.bigbadge);
@@ -100,11 +99,6 @@ public class BadgeFragment extends Fragment {
                 ListView badgeList = view.findViewById(R.id.list);
                 badgeList.setAdapter(badgeAdapter);
             }
-            else {
-
-            }
-
-
         }
     };
 
