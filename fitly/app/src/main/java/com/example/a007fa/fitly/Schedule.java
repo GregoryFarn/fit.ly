@@ -1,9 +1,10 @@
 package com.example.a007fa.fitly;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Schedule {
+public class Schedule implements Serializable {
     ArrayList<Workout> workouts;
 
     public Schedule() {

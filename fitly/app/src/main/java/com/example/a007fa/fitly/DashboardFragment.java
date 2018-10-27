@@ -35,7 +35,17 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        final Schedule sched = new Schedule();
+        final Schedule sched=new Schedule();
+        if(getArguments()!= null)
+        {
+            String test=getArguments().getString("test");
+        }
+        //final Schedule sched = (Schedule) getArguments().getSerializable("sc");
+        //System.out.print(test);
+        if(sched==null)
+        {
+            System.out.print("test");
+        }
         sched.initTest();
 
         ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
@@ -70,13 +80,14 @@ public class DashboardFragment extends Fragment {
         });
 
 
-//        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(ACTION_FITLY);
-//        intentFilter.addAction(ACTION_ENDDAY);
-//        intentFilter.addAction(ACTION_BADGE);
-//        bManager.registerReceiver(bReceiver, intentFilter);
-//        serviceStart();
+
+        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_FITLY);
+        intentFilter.addAction(ACTION_ENDDAY);
+        intentFilter.addAction(ACTION_BADGE);
+        bManager.registerReceiver(bReceiver, intentFilter);
+        serviceStart();
 
         return view;
     }

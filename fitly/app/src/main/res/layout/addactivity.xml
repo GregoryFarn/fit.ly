@@ -29,7 +29,7 @@
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:backgroundTint="@android:color/holo_blue_light"
-        android:text="@string/start"
+        android:text="startTime"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="16dp" />
 
@@ -44,7 +44,7 @@
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:backgroundTint="@android:color/holo_blue_light"
-        android:text="@string/end"
+        android:text="endTime"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="16dp" />
 

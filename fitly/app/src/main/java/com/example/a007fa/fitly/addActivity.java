@@ -48,9 +48,9 @@ public class addActivity extends AppCompatActivity
 
         textData = (EditText) findViewById(R.id.workoutName);
 
-        workoutNameView = (TextView) findViewById(R.id.workoutNameView);
+        /*workoutNameView = (TextView) findViewById(R.id.workoutNameView);
         endTimeView = (TextView) findViewById(R.id.endTimeView) ;
-        startTimeView = (TextView) findViewById(R.id.startTimeView);
+        startTimeView = (TextView) findViewById(R.id.startTimeView);*/
 
         s_pick.setOnClickListener(new View.OnClickListener() {
             @Override

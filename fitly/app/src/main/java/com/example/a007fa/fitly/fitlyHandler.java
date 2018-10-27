@@ -24,6 +24,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private float stepsFirst;
     private float steps;
     private boolean first;
+    private Schedule userSchedule;
     private AlarmManager alarm;
     private PendingIntent alarmIntent;
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
@@ -32,6 +33,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_BIGBADGE = "com.fitly.action.BIGBADGE";
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
+    static final String ACTION_SCHEDULE= "com.fitly.action.SCHEDULE";
     ArrayList<Badge> badges;
 
     public void onCreate() {
@@ -40,12 +42,12 @@ public class fitlyHandler extends Service implements SensorEventListener {
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGELIST);
         bManager.registerReceiver(bReceiver, intentFilter);
-
+        userSchedule= new Schedule();
+        userSchedule.initTest();
         /*alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), saveAlarm.class);
         alarmIntent = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
@@ -150,6 +152,16 @@ public class fitlyHandler extends Service implements SensorEventListener {
                // bun.putSerializable("badgeList",b);
                 intent1.putExtra("badgeList",b);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+            }
+            if(intent.getAction().equals(ACTION_SCHEDULE))
+            {
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                intent1.setAction(ACTION_SCHEDULE);
+                //Bundle bun = new Bundle();
+                // bun.putSerializable("badgeList",b);
+                intent1.putExtra("Schedule",userSchedule);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+
             }
         }
     };
