@@ -3,10 +3,11 @@ package com.example.a007fa.fitly;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Workout implements Parcelable {
+public class Workout implements Serializable {
     private String workoutName;
     private Calendar startTime;
     private Calendar endTime;
@@ -51,17 +52,6 @@ public class Workout implements Parcelable {
         this.description = in.readString();
     }
 
-    public static final Creator<Workout> CREATOR = new Creator<Workout>() {
-        @Override
-        public Workout createFromParcel(Parcel in) {
-            return new Workout(in);
-        }
-
-        @Override
-        public Workout[] newArray(int size) {
-            return new Workout[size];
-        }
-    };
 
     public String getStartDate() {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -93,16 +83,5 @@ public class Workout implements Parcelable {
 
     public String getDescription() { return this.description; }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(workoutName);
-        dest.writeValue(this.startTime);
-        dest.writeValue(this.endTime);
-    }
 }
 
