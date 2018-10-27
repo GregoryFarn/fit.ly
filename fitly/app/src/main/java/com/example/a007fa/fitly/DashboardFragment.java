@@ -35,12 +35,12 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        final Schedule sched=new Schedule();
+        //final Schedule sched=new Schedule();
         if(getArguments()!= null)
         {
             String test=getArguments().getString("test");
         }
-        //final Schedule sched = (Schedule) getArguments().getSerializable("sc");
+        final Schedule sched = (Schedule) getArguments().getSerializable("sc");
         //System.out.print(test);
         if(sched==null)
         {
@@ -81,13 +81,13 @@ public class DashboardFragment extends Fragment {
 
 
 
-        bManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        /*bManager = LocalBroadcastManager.getInstance(getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_ENDDAY);
         intentFilter.addAction(ACTION_BADGE);
         bManager.registerReceiver(bReceiver, intentFilter);
-        serviceStart();
+        serviceStart();*/
 
         return view;
     }
