@@ -22,7 +22,6 @@ public class addActivity extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     Button s_pick, e_pick, show;
-    TextView workoutNameView, startTimeView, endTimeView;
     EditText textData;
 
     int day, month, year, hour, minute;
@@ -31,7 +30,7 @@ public class addActivity extends AppCompatActivity
 
     String time = "";
 
-    Calendar startCalendar = Calendar.getInstance(), endCalendar = Calendar.getInstance();
+    Calendar calendarOne = Calendar.getInstance(), calendarTwo = Calendar.getInstance();
     Calendar c = Calendar.getInstance();
     View view;
 
@@ -76,24 +75,17 @@ public class addActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
             String workoutName = textData.getText().toString();
-//            String startTime = time.substring(0, time.indexOf('M'));
-//            String endTime = time.substring(time.indexOf('M'), time.length());
-//            startTime = startTime + "M";
-//            endTime = endTime.substring(1, endTime.length());
-//
-//            workoutNameView.setText(workoutName);
-//            Date date = startCalendar.getTime();
-//            String time = Long.toString(date.getTime());
-//            startTimeView.setText(time);
-//            date = endCalendar.getTime();
-//            time = Long.toString(date.getTime());
-//            endTimeView.setText(time);
-            new Alarm().setAlarm(getApplicationContext(), (int) ((startCalendar.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,startCalendar);
-            workout.add(workoutName, startCalendar, endCalendar);
-            Intent intent = new Intent();
-            intent.putExtra("workout", workout);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+                if(calendarOne.compareTo(calendarTwo) > 0) {
+                    workout.add(workoutName ,calendarTwo, calendarOne); // calendarOne is after calendarTwo in time
+                    new Alarm().setAlarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarTwo);
+                } else if (calendarOne.compareTo(calendarTwo) < 0) {
+                    workout.add(workoutName, calendarOne, calendarTwo);
+                    new Alarm().setAlarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarOne);
+                }
+                Intent intent = new Intent();
+                intent.putExtra("workout", workout);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -117,15 +109,12 @@ public class addActivity extends AppCompatActivity
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         hourFinal = hourOfDay;
         minuteFinal = minute;
-
-        if(counter == 0){
-            counter += 1;
-            startCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
-        } else if (counter == 1){
-            counter += 1;
-            endCalendar.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
-        } else {
-            counter = 0;
+        if(counter % 2 == 0){
+            calendarOne.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+            counter++;
+        } else if (counter % 2 == 1){
+            calendarTwo.set(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
+            counter++;
         }
     }
 }

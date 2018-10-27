@@ -27,43 +27,24 @@ public class DashboardFragment extends Fragment {
 
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
-
+    static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
+    static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
+    View view;
     public DashboardFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        if (getArguments() != null) {
-            Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
-            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
-        }
-
-        final Schedule sched = new Schedule();
-        sched.initTest();
-
-        ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
-
-        DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
-                R.layout.adapter_view_layout,
-                sched.getWorkouts());
-
-        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
-
-                Log.d("name", sched.getWorkouts().get(i).getWorkoutName() );
-                Log.d("location", sched.getWorkouts().get(i).getLocation());
-                startActivity(intent);
-            }
-        });
-
-        scheduleDisplay.setAdapter(adapter);
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_FITLY);
+        intentFilter.addAction(ACTION_ENDDAY);
+        intentFilter.addAction(ACTION_SCHEDULEPAGE);
+        bManager.registerReceiver(bReceiver, intentFilter);
+        serviceStart();
 
         FloatingActionButton activityButton = view.findViewById(R.id.addWorkoutButton);
         activityButton.setOnClickListener(new View.OnClickListener() {
@@ -74,12 +55,9 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_FITLY);
-        intentFilter.addAction(ACTION_ENDDAY);
-        bManager.registerReceiver(bReceiver, intentFilter);
-        serviceStart();
+        Intent intent = new Intent(getActivity(), fitlyHandler.class);
+        intent.setAction(ACTION_SCHEDULELIST);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         return view;
     }
@@ -103,8 +81,35 @@ public class DashboardFragment extends Fragment {
             Bundle b = intent.getExtras();
             ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
         }
-        else if (intent.getAction().equals(ACTION_ENDDAY)) {
-            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText("12");
+        else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
+
+            if (getArguments() != null) {
+                Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
+                ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
+            }
+
+            final Schedule sched = (Schedule)intent.getSerializableExtra("sched");
+
+            ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
+
+            DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+                    R.layout.adapter_view_layout,
+                    sched.getWorkouts());
+
+            scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+                    intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                    intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                    Log.d("name", sched.getWorkouts().get(i).getWorkoutName() );
+                    Log.d("location", sched.getWorkouts().get(i).getLocation());
+                    startActivity(intent);
+                }
+            });
+
+            scheduleDisplay.setAdapter(adapter);
         }
         }
     };
