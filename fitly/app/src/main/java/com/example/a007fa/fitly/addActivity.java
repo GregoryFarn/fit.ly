@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -29,6 +30,8 @@ public class addActivity extends AppCompatActivity
     int counter = 0;
 
     String time = "";
+
+    static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
 
     Calendar calendarOne = Calendar.getInstance(), calendarTwo = Calendar.getInstance();
     Calendar c = Calendar.getInstance();
@@ -82,9 +85,11 @@ public class addActivity extends AppCompatActivity
                     workout.add(workoutName, calendarOne, calendarTwo);
                     new Alarm().setAlarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarOne);
                 }
-                Intent intent = new Intent();
+                Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+                intent.setAction(ACTION_WORKOUT);
                 intent.putExtra("workout", workout);
-                setResult(Activity.RESULT_OK, intent);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                setResult(Activity.RESULT_OK);
                 finish();
             }
         });

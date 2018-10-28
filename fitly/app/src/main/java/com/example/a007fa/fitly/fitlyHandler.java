@@ -34,6 +34,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
+    static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
     private ArrayList<Badge> badges;
     private Schedule sched;
 
@@ -49,6 +50,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_BADGELIST);
         intentFilter.addAction(ACTION_BADGEPAGE);
         intentFilter.addAction(ACTION_SCHEDULELIST);
+        intentFilter.addAction(ACTION_WORKOUT);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         /*alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
@@ -116,6 +118,23 @@ public class fitlyHandler extends Service implements SensorEventListener {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
+    protected void sendBadgeListMessage() {
+        Intent intent1 = new Intent(getApplicationContext(), BadgeFragment.class);
+        intent1.setAction(ACTION_BADGEPAGE);
+        badgeWrapper b = new badgeWrapper(badges);
+        //Bundle bun = new Bundle();
+        // bun.putSerializable("badgeList",b);
+        intent1.putExtra("badgeList",b);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+    }
+
+    protected void sendSchedMessage() {
+        Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
+        intent1.setAction(ACTION_SCHEDULEPAGE);
+        intent1.putExtra("sched",sched);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+    }
+
     public void onSensorChanged(SensorEvent event) {
         if (first) {
             stepsFirst = event.values[0];
@@ -138,6 +157,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 badges.add(new Badge("big",true));
                 sendBigBadgeMessage();
             }
+            sendBadgeListMessage();
 
         }
 
@@ -158,19 +178,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
 
             else if (intent.getAction().equals(ACTION_BADGELIST)) {
-                Intent intent1 = new Intent(getApplicationContext(), BadgeFragment.class);
-                intent1.setAction(ACTION_BADGEPAGE);
-                badgeWrapper b = new badgeWrapper(badges);
-                //Bundle bun = new Bundle();
-               // bun.putSerializable("badgeList",b);
-                intent1.putExtra("badgeList",b);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+                sendBadgeListMessage();
             }
             else if (intent.getAction().equals(ACTION_SCHEDULELIST)) {
-                Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
-                intent1.setAction(ACTION_SCHEDULEPAGE);
-                intent1.putExtra("sched",sched);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+                sendSchedMessage();
+            }
+            else if (intent.getAction().equals(ACTION_WORKOUT)) {
+                sched.addWorkout((Workout)intent.getSerializableExtra("workout"));
+                sendSchedMessage();
             }
         }
     };
