@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 public class Badge implements Serializable {
-
     String typeOfBadge;
     Boolean completed;
     String badgeMessage;

@@ -1,0 +1,109 @@
+[
+    {
+        "username": "wenm",
+        "password": "daddyreddy",
+        "numConsecutiveDays": 0,
+
+        "schedule": {
+            "workouts": [
+                {
+                    "workoutName": "sleep",
+                    "startTime": "2018 10 28 00:00",
+                    "endTime": "2018 10 28 09:00",
+                    "location": "SAL",
+                    "description": "Sleep is important!",
+                    "calories": 3
+                },
+            ]
+        },
+            
+        "activityRecords": [
+            {
+                "date": "2018 10 28",
+                "stepCount": 0,
+                "badgeAchieved": false,
+                "completedWorkouts": [],
+                "incompleteWorkouts": [
+                    {
+                        "workoutName": "sleep",
+                        "startTime": "2018 10 28 00:00",
+                        "endTime": "2018 10 28 09:00",
+                        "location": "SAL",
+                        "description": "Sleep is important!",
+                        "calories": 3
+                    }
+                ]
+            }
+        ]   
+    },
+    {
+        "username": "nthakur",
+        "password": "feistychao",
+        "numConsecutiveDays": 69,
+
+        "schedule": {
+            "workouts": [
+                {
+                    "workoutName": "Run",
+                    "startTime": "2018 10 28 08:00",
+                    "endTime": "2018 10 28 09:00",
+                    "location": "Lorenzo Gym",
+                    "description": "Haha it's actually my code that's running",
+                    "calories": 200
+                },
+                {
+                    "workoutName": "Go to class",
+                    "startTime": "2018 10 28 10:00",
+                    "endTime": "2018 10 28 12:00",
+                    "location": "SGM 123",
+                    "description": "Gotta send the quiz to my betches",
+                    "calories": 5000
+                },
+                {
+                    "workoutName": "sleep",
+                    "start Time": "2018 10 28 00:00",
+                    "endTime": "2018 10 28 09:00",
+                    "location": "SAL",
+                    "description": "Sleep is important!",
+                    "calories": 3
+                }
+            ]
+        },
+            
+        "activityRecords": [
+            {
+                "date": "",
+                "stepCount": 0,
+                "badgeAchieved": false,
+                "completedWorkouts": [
+                    {
+                        "workoutName": "Run",
+                        "startTime": "2018 10 28 08:00",
+                        "endTime": "2018 10 28 09:00",
+                        "location": "Lorenzo Gym",
+                        "description": "Haha it's actually my code that's running",
+                        "calories": 200
+                    },
+                    {
+                        "workoutName": "Go to class",
+                        "startTime": "2018 10 28 10:00",
+                        "endTime": "2018 10 28 12:00",
+                        "location": "SGM 123",
+                        "description": "Gotta send the quiz to my betches",
+                        "calories": 5000
+                    }
+                ],
+                "incompleteWorkouts": [
+                    {
+                        "workoutName": "sleep",
+                        "start Time": "2018 10 28 00:00",
+                        "endTime": "2018 10 28 09:00",
+                        "location": "SAL",
+                        "description": "Sleep is important!",
+                        "calories": 3
+                    }
+                ]
+            }
+        ]   
+    }
+]
