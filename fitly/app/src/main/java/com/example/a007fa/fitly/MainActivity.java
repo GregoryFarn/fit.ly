@@ -58,20 +58,20 @@ public class MainActivity extends AppCompatActivity {
         // Move this class to login/signup later
         // For now, load the entire roster here and search for user
 
-        String json = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.users));
-        Log.d("json: ", json);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Users users = gson.fromJson(json, Users.class);
+//        String json = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.users));
+//        Log.d("json: ", json);
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        Users users = gson.fromJson(json, Users.class);
 
 //        Log.d("users size: ", Integer.toString(users.size()));
 
         //test for notification
-//        Calendar start1 = Calendar.getInstance();
-//        start1.set(2018, 9, 22, 23, 57);
-//        Calendar start2 = Calendar.getInstance();
-//        start2.set(2018, 9, 22, 23, 58);
-//        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
-//        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
+        Calendar start1 = Calendar.getInstance();
+        start1.set(2018, 9, 22, 23, 57);
+        Calendar start2 = Calendar.getInstance();
+        start2.set(2018, 9, 22, 23, 58);
+        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
+        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

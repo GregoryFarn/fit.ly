@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -24,23 +22,7 @@ public class Alarm {
         this.requestCode = requestCode;
         this.starTime = starTime;
     }
-/*
-    private long static calculateTime(){
 
-        String myDate = this.time;
-        Date date = new Date();
-      //String myDate = "10/18/2018 19:42";
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-
-        try{
-            date = sdf.parse(myDate);
-        }catch(ParseException e){
-            e.printStackTrace();
-        }
-        long second = ((date.getTime()/1000) % 60) * 1000;
-        //  scheduled time - 3hrs in millisecon
-     //   return date.getTime() - 3600*3000;
-    }*/
 public long calculateTime(){
     Calendar notiTime = Calendar.getInstance();
     notiTime.setTimeInMillis(this.starTime.getTimeInMillis()- 3600*3000);
