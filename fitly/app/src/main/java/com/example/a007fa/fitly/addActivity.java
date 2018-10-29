@@ -88,7 +88,7 @@ public class addActivity extends AppCompatActivity
 //            date = endCalendar.getTime();
 //            time = Long.toString(date.getTime());
 //            endTimeView.setText(time);
-            new Alarm().setAlarm(getApplicationContext(), (int) ((startCalendar.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,startCalendar);
+            new Alarm(getApplicationContext(), (int) ((startCalendar.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,startCalendar).setAlarm();
             workout.add(workoutName, startCalendar, endCalendar);
             Intent intent = new Intent();
             intent.putExtra("workout", workout);
