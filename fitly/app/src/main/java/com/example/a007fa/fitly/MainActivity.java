@@ -66,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d("users size: ", Integer.toString(users.size()));
 
         //test for notification
-        Calendar start1 = Calendar.getInstance();
-        start1.set(2018, 9, 22, 23, 57);
-        Calendar start2 = Calendar.getInstance();
-        start2.set(2018, 9, 22, 23, 58);
-        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
-        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
+//        Calendar start1 = Calendar.getInstance();
+//        start1.set(2018, 9, 22, 23, 57);
+//        Calendar start2 = Calendar.getInstance();
+//        start2.set(2018, 9, 22, 23, 58);
+//        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
+//        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
