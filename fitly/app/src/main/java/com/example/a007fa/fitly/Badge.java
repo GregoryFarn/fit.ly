@@ -71,7 +71,7 @@ public class Badge implements Serializable {
     }
 
     //is this how we want this function to work?
-    public void updateBadge(Integer steps, Integer time)
+   /* public void updateBadge(Integer steps, Integer time)
     {
 
         if(steps==1000 && time==3600)
@@ -79,6 +79,6 @@ public class Badge implements Serializable {
             completed=true;
 
         }
-    }
+    }*/
 
 }
