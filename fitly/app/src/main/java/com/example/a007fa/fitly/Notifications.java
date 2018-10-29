@@ -14,7 +14,8 @@ public class Notifications extends BroadcastReceiver {
 
     static final String ACTION_RESET = "com.fitly.action.RESET";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
-
+    static final String CONTENT_TITLE = "fit.ly";
+    static final String CONTENT_TEXT = "You've workout scheduled in 3 hours.";
     @Override
     public void onReceive(Context context, Intent intent) {
         int requestKey = this.getRequestCode(intent);
@@ -47,8 +48,8 @@ public class Notifications extends BroadcastReceiver {
             NotificationCompat.Builder mNotification = new NotificationCompat.Builder(context, channelId)
                     .setContentIntent(pendingIntent)
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle("fit.ly")
-                    .setContentText("You've workout scheduled in 3 hours.")
+                    .setContentTitle(CONTENT_TITLE)
+                    .setContentText(CONTENT_TEXT)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setAutoCancel(true)
                     .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
