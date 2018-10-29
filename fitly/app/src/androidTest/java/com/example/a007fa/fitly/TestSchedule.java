@@ -79,5 +79,7 @@ public class TestSchedule {
 
         schedule.removeWorkout(w1);
         Assert.assertEquals(schedule.getWorkouts().size(), 2);
+        Assert.assertSame(schedule.getWorkouts().get(0), w2);
+        Assert.assertSame(schedule.getWorkouts().get(1), w3);
     }
 }
