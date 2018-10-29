@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="39dp"
         android:background="@drawable/grad"
+        android:layout_marginTop="60dp"
         android:paddingBottom="15dp">
 
         <RelativeLayout
