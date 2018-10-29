@@ -18,8 +18,8 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
