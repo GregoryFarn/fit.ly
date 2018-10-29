@@ -55,22 +55,9 @@ public class Alarm {
     public boolean isAlarmSet(){
         return isAlarmSet;
     }
-
-    public static void setAlarmEndDay(Context context, int requestCode) {
 /*
-        String myDate = time;
-        Date date = new Date();
-        //String myDate = "10/18/2018 19:42";
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        try{
-            date = sdf.parse(myDate);
-        }catch(ParseException e){
-            e.printStackTrace();
-        }
-        long second = ((date.getTime()/1000) % 60) * 1000;
-        //  scheduled time - 3hrs in millisecon
-        //   return date.getTime() - 3600*3000;
-*/
+    public static void setAlarmEndDay(Context context, int requestCode) {
+
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent( context, Notifications.class);
         Bundle bundle = new Bundle();
@@ -88,5 +75,5 @@ public class Alarm {
         if (notiTime.getTimeInMillis() > System.currentTimeMillis())
             am.setRepeating(AlarmManager.RTC_WAKEUP, notiTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
     }
-
+*/
 }
