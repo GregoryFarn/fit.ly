@@ -78,7 +78,6 @@ public class addActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
             String workoutName = textData.getText().toString();
-
                 if(calendarOne.compareTo(calendarTwo) > 0) {
                     workout.add(workoutName ,calendarTwo, calendarOne); // calendarOne is after calendarTwo in time
                     new Alarm().setAlarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarTwo);
@@ -92,7 +91,6 @@ public class addActivity extends AppCompatActivity
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 setResult(Activity.RESULT_OK);
                 finish();
-
             }
         });
     }

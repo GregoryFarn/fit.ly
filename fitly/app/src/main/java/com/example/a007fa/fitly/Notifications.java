@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 public class Notifications extends BroadcastReceiver {
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -20,8 +19,7 @@ public class Notifications extends BroadcastReceiver {
         Bundle extras = intent.getExtras();
 
        // Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
-        //int requestKey = extras.getInt("requestKey");
-       int requestKey = getRequestCode(intent);
+        int requestKey = extras.getInt("requestKey");
 
         NotificationManager notiManager
                 = (NotificationManager) context.getSystemService  (context.NOTIFICATION_SERVICE);
@@ -48,15 +46,4 @@ public class Notifications extends BroadcastReceiver {
         notiManager.notify(requestKey,
                 mNotification.build());
     }
-
-    public int getRequestCode(Intent  intent){
-
-        Bundle extras = intent.getExtras();
-
-        // Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
-        int requestKey = extras.getInt("requestKey");
-
-        return requestKey;
-    }
-
 }
