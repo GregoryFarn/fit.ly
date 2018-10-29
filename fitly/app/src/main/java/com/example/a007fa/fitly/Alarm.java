@@ -65,10 +65,9 @@ public long calculateTime(){
            this.isAlarmSet = false;
 
     }
+    //
     public boolean isAlarmSet(){
         return isAlarmSet;
     }
-
-
 
 }
