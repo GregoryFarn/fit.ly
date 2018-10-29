@@ -56,15 +56,15 @@ public class Alarm {
         return isAlarmSet;
     }
 
-    public static void setAlarmEndDay(Context context, int requestCode) {
+    public static void setAlarmEndDay(Context context, int _requestCode) {
 
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent( context, Notifications.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("requestKey", requestCode);
+        bundle.putInt("requestKey", _requestCode);
         intent.putExtras(bundle);
         intent.setAction(ACTION_RESET);
-        PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(context,_requestCode, intent, 0);
 
         Calendar notiTime = Calendar.getInstance();
 
