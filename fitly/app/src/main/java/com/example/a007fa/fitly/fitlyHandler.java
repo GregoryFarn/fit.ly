@@ -12,7 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.os.Bundle;
+import android.os.SystemClock;
 import android.os.IBinder;
 
 import java.util.Calendar;
@@ -35,38 +35,25 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
+    static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
     private ArrayList<Badge> badges;
     private Schedule sched;
 
     public void onCreate() {
-        first = true;
-        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        steps = 0;
-        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGELIST);
         intentFilter.addAction(ACTION_BADGEPAGE);
         intentFilter.addAction(ACTION_SCHEDULELIST);
+        intentFilter.addAction(ACTION_WORKOUT);
+        intentFilter.addAction(ACTION_ENDDAY);
         bManager.registerReceiver(bReceiver, intentFilter);
-        userSchedule= new Schedule();
-        userSchedule.initTest();
-        /*alarm = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), saveAlarm.class);
-        alarmIntent = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        //calendar.set(Calendar.HOUR_OF_DAY, 0);
-        // alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-        //       1, alarmIntent);
-        alarm.setExact(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis() + 1000, alarmIntent);*/
 
         badges = new ArrayList<>();
         sched = new Schedule();
         populateBadges();
         populateSched();
+
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
         intent1.setAction(ACTION_SCHEDULEPAGE);
         intent1.putExtra("sched",sched);
@@ -74,10 +61,21 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
         startSmallBadge();
         sendStepMessage();
+
+        first = true;
+        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        steps = 0;
+        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+
+       // Alarm.setAlarmEndDay(getApplicationContext(), 104);
     }
 
     public void populateBadges(){
-        for(int i=0; i<10; i++)
+        for(int i=0; i<1; i++)
         {
             Badge badgeTest= new Badge("small", false);
             if(i%7==0)
@@ -120,6 +118,23 @@ public class fitlyHandler extends Service implements SensorEventListener {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
+    protected void sendBadgeListMessage() {
+        Intent intent1 = new Intent(getApplicationContext(), BadgeFragment.class);
+        intent1.setAction(ACTION_BADGEPAGE);
+        badgeWrapper b = new badgeWrapper(badges);
+        //Bundle bun = new Bundle();
+        // bun.putSerializable("badgeList",b);
+        intent1.putExtra("badgeList",b);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+    }
+
+    protected void sendSchedMessage() {
+        Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
+        intent1.setAction(ACTION_SCHEDULEPAGE);
+        intent1.putExtra("sched",sched);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+    }
+
     public void onSensorChanged(SensorEvent event) {
         if (first) {
             stepsFirst = event.values[0];
@@ -142,6 +157,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 badges.add(new Badge("big",true));
                 sendBigBadgeMessage();
             }
+            sendBadgeListMessage();
 
         }
 
@@ -154,27 +170,20 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ACTION_ENDDAY)) {
-                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                intent1.setAction(ACTION_FITLY);
-                intent1.putExtra("stepCount", steps);
-                bManager.sendBroadcast(intent);
-            }
-
-            else if (intent.getAction().equals(ACTION_BADGELIST)) {
-                Intent intent1 = new Intent(getApplicationContext(), BadgeFragment.class);
-                intent1.setAction(ACTION_BADGEPAGE);
-                badgeWrapper b = new badgeWrapper(badges);
-                //Bundle bun = new Bundle();
-               // bun.putSerializable("badgeList",b);
-                intent1.putExtra("badgeList",b);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+            if (intent.getAction().equals(ACTION_BADGELIST)) {
+                sendBadgeListMessage();
             }
             else if (intent.getAction().equals(ACTION_SCHEDULELIST)) {
-                Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
-                intent1.setAction(ACTION_SCHEDULEPAGE);
-                intent1.putExtra("sched",sched);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+                sendSchedMessage();
+            }
+            else if (intent.getAction().equals(ACTION_WORKOUT)) {
+                sched.addWorkout((Workout)intent.getSerializableExtra("workout"));
+                sendSchedMessage();
+            }
+            else if (intent.getAction().equals(ACTION_ENDDAY)) {
+                startSmallBadge();
+                sendBadgeListMessage();
+               // Alarm.setAlarmEndDay(getApplicationContext(), 104);
             }
         }
     };

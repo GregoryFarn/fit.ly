@@ -39,6 +39,15 @@ public class Workout implements Serializable {
         this.description = description;
     }
 
+
+    public Workout(String workoutName, String startTime, String endTime, String location, String description) {
+        this.workoutName = workoutName;
+//        this.startTime = startTime;
+//        this.endTime = endTime; // convert to string
+        this.location = location;
+        this.description = description;
+    }
+
     // Alternative constructor
     public void add(String workoutName, Calendar startTime, Calendar endTime) {
         this.workoutName = workoutName;

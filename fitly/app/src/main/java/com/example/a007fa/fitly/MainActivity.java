@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,8 +18,17 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+
+import com.example.a007fa.fitly.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,13 +55,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Move this class to login/signup later
+        // For now, load the entire roster here and search for user
+
+//        String json = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.users));
+//        Log.d("json: ", json);
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        Users users = gson.fromJson(json, Users.class);
+
+//        Log.d("users size: ", Integer.toString(users.size()));
+
         //test for notification
-        Calendar start1 = Calendar.getInstance();
-        start1.set(2018, 9, 22, 23, 57);
-        Calendar start2 = Calendar.getInstance();
-        start2.set(2018, 9, 22, 23, 58);
-        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
-        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
+//        Calendar start1 = Calendar.getInstance();
+//        start1.set(2018, 9, 22, 23, 57);
+//        Calendar start2 = Calendar.getInstance();
+//        start2.set(2018, 9, 22, 23, 58);
+//        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
+//        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -165,5 +186,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    public String inputStreamToString(InputStream inputStream) {
+        try {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes, 0, bytes.length);
+            String json = new String(bytes);
+            return json;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

@@ -42,7 +42,6 @@ public class DashboardFragment extends Fragment {
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
-        intentFilter.addAction(ACTION_ENDDAY);
         intentFilter.addAction(ACTION_SCHEDULEPAGE);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
@@ -113,6 +112,7 @@ public class DashboardFragment extends Fragment {
 
             scheduleDisplay.setAdapter(adapter);
         }
+
         }
     };
 
