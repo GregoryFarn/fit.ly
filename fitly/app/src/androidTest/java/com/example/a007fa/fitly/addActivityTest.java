@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 import static android.service.autofill.Validators.not;
@@ -37,6 +38,94 @@ public class addActivityTest {
 
         aActivity = aActivityTestRule.getActivity();
 
+    }
+
+    @Test
+    public void testWorkoutRetrieveName() {
+        Calendar s = Calendar.getInstance();
+        Calendar e = Calendar.getInstance();
+        int year = s.get(Calendar.YEAR);
+        int month = s.get(Calendar.MONTH);
+        int day = s.get(Calendar.DAY_OF_MONTH);
+        int hour = s.get(Calendar.HOUR_OF_DAY);
+        int minute = s.get(Calendar.MINUTE);
+        s.set(year, month, day, hour, minute);
+        e.set(year, month, day, hour, minute);
+        String workoutName = "Test";
+        Workout test = new Workout(workoutName, s, e);
+        assertEquals("Test", test.getWorkoutName());
+    }
+
+    @Test
+    public void testWorkoutRetrieveCalendarStartDate(){
+        Calendar s = Calendar.getInstance();
+        Calendar e = Calendar.getInstance();
+        int year = s.get(Calendar.YEAR);
+        int month = s.get(Calendar.MONTH); // +1 is because function get starts at 0, but function getStartData starts at 1
+        int day = s.get(Calendar.DAY_OF_MONTH);
+        int hour = s.get(Calendar.HOUR_OF_DAY);
+        int minute = s.get(Calendar.MINUTE);
+        s.set(year, month, day, hour, minute);
+        e.set(year, month, day, hour, minute);
+        String workoutName = "Test";
+        Workout test = new Workout(workoutName, s, e);
+        assertEquals(((month+1) + "/" + day + "/" + year), test.getStartDate());
+    }
+
+    @Test
+    public void testWorkoutRetrieveCalendarEndDate(){
+        Calendar s = Calendar.getInstance();
+        Calendar e = Calendar.getInstance();
+        int year = s.get(Calendar.YEAR);
+        int month = s.get(Calendar.MONTH); // +1 is because function get starts at 0, but function getStartData starts at 1
+        int day = s.get(Calendar.DAY_OF_MONTH);
+        int hour = s.get(Calendar.HOUR_OF_DAY);
+        int minute = s.get(Calendar.MINUTE);
+        s.set(year, month, day, hour, minute);
+        e.set(year, month, day, hour, minute);
+        String workoutName = "Test";
+        Workout test = new Workout(workoutName, s, e);
+        assertEquals(((month+1) + "/" + day + "/" + year), test.getEndDate());
+    }
+
+    @Test
+    public void testWorkoutRetrieveStartCalendar() {
+        Calendar s = Calendar.getInstance();
+        Calendar e = Calendar.getInstance();
+        int year = s.get(Calendar.YEAR);
+        int month = s.get(Calendar.MONTH); // +1 is because function get starts at 0, but function getStartData starts at 1
+        int day = s.get(Calendar.DAY_OF_MONTH);
+        int hour = s.get(Calendar.HOUR_OF_DAY);
+        int minute = s.get(Calendar.MINUTE);
+        s.set(year, month, day, hour, minute);
+        e.set(year, month, day, hour, minute);
+        String workoutName = "Test";
+        Workout test = new Workout(workoutName, s, e);
+        Calendar testRetrieve = test.getStartCalendar();
+        int yearTest = testRetrieve.get(Calendar.YEAR);
+        int monthTest = testRetrieve.get(Calendar.MONTH);
+        int dayTest = testRetrieve.get(Calendar.DAY_OF_MONTH);
+        assertEquals(((month+1) + "/" + day + "/" + year),((monthTest+1) + "/" + dayTest + "/" + yearTest));
+    }
+
+    @Test
+    public void testWorkoutRetrieveEndCalendar() {
+        Calendar s = Calendar.getInstance();
+        Calendar e = Calendar.getInstance();
+        int year = s.get(Calendar.YEAR);
+        int month = s.get(Calendar.MONTH); // +1 is because function get starts at 0, but function getStartData starts at 1
+        int day = s.get(Calendar.DAY_OF_MONTH);
+        int hour = s.get(Calendar.HOUR_OF_DAY);
+        int minute = s.get(Calendar.MINUTE);
+        s.set(year, month, day, hour, minute);
+        e.set(year, month, day, hour, minute);
+        String workoutName = "Test";
+        Workout test = new Workout(workoutName, s, e);
+        Calendar testRetrieve = test.getEndCalendar();
+        int yearTest = testRetrieve.get(Calendar.YEAR);
+        int monthTest = testRetrieve.get(Calendar.MONTH);
+        int dayTest = testRetrieve.get(Calendar.DAY_OF_MONTH);
+        assertEquals(((month+1) + "/" + day + "/" + year),((monthTest+1) + "/" + dayTest + "/" + yearTest));
     }
 
     @Test
