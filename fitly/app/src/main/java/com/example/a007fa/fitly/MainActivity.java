@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
         // Move this class to login/signup later
         // For now, load the entire roster here and search for user
 
-        String json = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.users));
-        Log.d("json: ", json);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Users users = gson.fromJson(json, Users.class);
+//        String json = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.users));
+//        Log.d("json: ", json);
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        Users users = gson.fromJson(json, Users.class);
 
 //        Log.d("users size: ", Integer.toString(users.size()));
 
