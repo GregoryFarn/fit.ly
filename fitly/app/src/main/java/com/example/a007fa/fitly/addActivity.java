@@ -82,6 +82,7 @@ public class addActivity extends AppCompatActivity
                 if(calendarOne.compareTo(calendarTwo) > 0) {
                     workout.add(workoutName ,calendarTwo, calendarOne); // calendarOne is after calendarTwo in time
                     new Alarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarTwo).setAlarm();
+
                 } else if (calendarOne.compareTo(calendarTwo) < 0) {
                     workout.add(workoutName, calendarOne, calendarTwo);
                     new Alarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarOne).setAlarm();

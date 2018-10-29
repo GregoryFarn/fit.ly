@@ -28,6 +28,7 @@ public long calculateTime(){
     notiTime.setTimeInMillis(this.starTime.getTimeInMillis()- 3600*3000);
 
     return notiTime.getTimeInMillis();
+
 }
 
  public void setAlarm() {
@@ -47,7 +48,7 @@ public long calculateTime(){
            this.isAlarmSet = false;
 
     }
-    //
+
     public boolean isAlarmSet(){
         return isAlarmSet;
     }

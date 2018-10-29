@@ -23,7 +23,8 @@ public class NotificationsTest {
         Notifications t1 = new Notifications();
         t1.onReceive(getInstrumentation().getTargetContext(), intent);
 
-        assertEquals(t1.getRequestCode(intent),2 );
+        assertEquals("Expected request int value 2", t1.getRequestCode(intent),2 );
+
 
     }
 

@@ -44,7 +44,6 @@ public class Notifications extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
                 .setChannelId(channelId);
-       // (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)
         notiManager.notify(requestKey,
                 mNotification.build());
     }
@@ -53,10 +52,11 @@ public class Notifications extends BroadcastReceiver {
 
         Bundle extras = intent.getExtras();
 
-        // Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
         int requestKey = extras.getInt("requestKey");
 
         return requestKey;
+
+
     }
 
 }

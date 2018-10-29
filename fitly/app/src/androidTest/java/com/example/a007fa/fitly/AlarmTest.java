@@ -28,6 +28,7 @@ public class AlarmTest {
 
         Alarm t1 = new Alarm(getInstrumentation().getTargetContext(),1, scheduledTime);
         scheduledTime.setTimeInMillis(t1.calculateTime());
+
         assertEquals("Expected date : 2018/11/26 13:00 (Notification should appear 3 hrs before scheulded time",  expectedTime.getTime(), scheduledTime.getTime());
     }
     @Test
