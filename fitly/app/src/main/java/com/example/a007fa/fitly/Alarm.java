@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v4.content.LocalBroadcastManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +41,8 @@ public class Alarm {
     }*/
 
 
+    static final String ACTION_RESET = "com.fitly.action.RESET";
+
  public static void setAlarm(Context context, int requestCode, Calendar startTime) {
 /*
         String myDate = time;
@@ -66,6 +70,40 @@ public class Alarm {
         notiTime.setTimeInMillis(startTime.getTimeInMillis()- 3600*3000);
        if (notiTime.getTimeInMillis() > System.currentTimeMillis())
         am.setExact(AlarmManager.RTC_WAKEUP, notiTime.getTimeInMillis(), sender);
+    }
+
+    public static void setAlarmEndDay(Context context, int requestCode) {
+/*
+        String myDate = time;
+        Date date = new Date();
+        //String myDate = "10/18/2018 19:42";
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+
+        try{
+            date = sdf.parse(myDate);
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        long second = ((date.getTime()/1000) % 60) * 1000;
+        //  scheduled time - 3hrs in millisecon
+        //   return date.getTime() - 3600*3000;
+*/
+        AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent( context, Notifications.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("requestKey", requestCode);
+        intent.putExtras(bundle);
+        intent.setAction(ACTION_RESET);
+        PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
+
+        Calendar notiTime = Calendar.getInstance();
+
+        notiTime.setTimeInMillis(System.currentTimeMillis());
+        notiTime.set(Calendar.HOUR_OF_DAY,23);
+        notiTime.set(Calendar.MINUTE,59);
+        //notiTime.set(Calendar.HOUR_OF_DAY,0);
+        if (notiTime.getTimeInMillis() > System.currentTimeMillis())
+            am.setRepeating(AlarmManager.RTC_WAKEUP, notiTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
     }
 
 }
