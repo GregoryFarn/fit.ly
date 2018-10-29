@@ -18,11 +18,11 @@ public class Notifications extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int requestKey = this.getRequestCode(intent);
-      /*  if (intent.getAction().equals(ACTION_RESET)) {
+        if (intent.getAction().equals(ACTION_RESET)) {
             Intent intent1 = new Intent(context, fitlyHandler.class);
             intent1.setAction(ACTION_ENDDAY);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
-        } else {*/
+        } else {
             String channelId = "channel";
             String channelName = "Channel Name";
 
@@ -56,7 +56,7 @@ public class Notifications extends BroadcastReceiver {
             // (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)
             notiManager.notify(requestKey,
                     mNotification.build());
-      //  }
+        }
     }
 
 

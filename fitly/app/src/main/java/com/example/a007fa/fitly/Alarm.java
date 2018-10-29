@@ -55,7 +55,7 @@ public class Alarm {
     public boolean isAlarmSet(){
         return isAlarmSet;
     }
-/*
+
     public static void setAlarmEndDay(Context context, int requestCode) {
 
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
@@ -71,9 +71,8 @@ public class Alarm {
         notiTime.setTimeInMillis(System.currentTimeMillis());
         notiTime.set(Calendar.HOUR_OF_DAY,23);
         notiTime.set(Calendar.MINUTE,59);
-        //notiTime.set(Calendar.HOUR_OF_DAY,0);
         if (notiTime.getTimeInMillis() > System.currentTimeMillis())
             am.setRepeating(AlarmManager.RTC_WAKEUP, notiTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
     }
-*/
+
 }

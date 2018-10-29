@@ -51,7 +51,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
         badges = new ArrayList<>();
         sched = new Schedule();
-        populateBadges();
+        //populateBadges();
         populateSched();
 
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
@@ -71,7 +71,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
 
-       // Alarm.setAlarmEndDay(getApplicationContext(), 104);
+        Alarm.setAlarmEndDay(getApplicationContext(), 104);
     }
 
     public void populateBadges(){
@@ -183,7 +183,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 startSmallBadge();
                 sendBadgeListMessage();
-               // Alarm.setAlarmEndDay(getApplicationContext(), 104);
             }
         }
     };
