@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class BadgeFragmentTest {
+public class FragmentTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
@@ -63,6 +63,55 @@ public class BadgeFragmentTest {
             Log.e("ave error ", "testBadgeDisplay: ");
         }
     }
+
+    @Test
+    public void testProfileDisplay()
+    {
+        try {
+            onView(withId(R.id.navigation_dashboard)).perform(click());
+            FragmentManager fragmentManager = mActivityRule.getActivity().getFragmentManager();
+            if(fragmentManager.findFragmentById(R.id.navigation_badges)!=null)
+            {
+                Log.d("found", "FoundtestBadgeDisplay: ");
+            }
+            else
+            {
+                Log.d("found", "DidNotFindtestBadgeDisplay: ");
+
+            }
+
+        }
+        catch(AmbiguousViewMatcherException ave)
+        {
+            Log.e("ave error ", "testBadgeDisplay: ");
+        }
+    }
+
+
+    @Test
+    public void test()
+    {
+        try {
+            onView(withId(R.id.navigation_profile)).perform(click());
+            FragmentManager fragmentManager = mActivityRule.getActivity().getFragmentManager();
+            if(fragmentManager.findFragmentById(R.id.navigation_badges)!=null)
+            {
+                Log.d("found", "FoundtestBadgeDisplay: ");
+            }
+            else
+            {
+                Log.d("found", "DidNotFindtestBadgeDisplay: ");
+
+            }
+
+        }
+        catch(AmbiguousViewMatcherException ave)
+        {
+            Log.e("ave error ", "testBadgeDisplay: ");
+        }
+    }
+
+
 
     /*@Test
     public void testBadgePage()
