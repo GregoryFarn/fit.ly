@@ -5,52 +5,54 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="39dp"
+        android:background="@drawable/grad"
+        android:paddingBottom="15dp">
+
         <RelativeLayout
-            android:id="@+id/rl1"
-            android:layout_width="match_parent"
+            android:id="@+id/userImg"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/grad"
-            android:paddingBottom="15dp">
+            android:layout_centerHorizontal="true">
 
-            <RelativeLayout
-                android:id="@+id/userImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
-
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_margin="20dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/user"
-                    />
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/userImg"
-                android:layout_centerHorizontal="true"
-                android:text="John Doe"
-                android:textSize="32dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorWhite"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/userImg"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="45dp"
-                android:fontFamily="sans-serif-light"
-                android:text="Badge Level"
-                android:textColor="@color/nav_item_colors"
-                android:textSize="14dp" />
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="20dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/user" />
 
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userImg"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-light"
+            android:text="John Doe"
+            android:textColor="@color/colorWhite"
+            android:textSize="32dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userImg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            android:fontFamily="sans-serif-light"
+            android:text="Badge Level"
+            android:textColor="@color/nav_item_colors"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll1"
@@ -93,8 +95,8 @@
                 </LinearLayout>
 
             </RelativeLayout>
-            
-            
+
+
 
         </LinearLayout>
     <RelativeLayout
@@ -125,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:text="9001"
                     android:textSize="18dp"/>
-                <view
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="15dp"
@@ -147,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:text="9001"
                     android:textSize="18dp"/>
-                <view
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="15dp"
@@ -169,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:text="9001"
                 android:textSize="18dp"/>
-            <view
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="15dp"
@@ -191,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:text="9001"
                     android:textSize="18dp"/>
-                <view
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="15dp"
