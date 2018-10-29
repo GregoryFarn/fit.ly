@@ -24,6 +24,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private float stepsFirst;
     private float steps;
     private boolean first;
+    private Schedule userSchedule;
     private AlarmManager alarm;
     private PendingIntent alarmIntent;
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
@@ -39,8 +40,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private Schedule sched;
 
     public void onCreate() {
-
-
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGELIST);
@@ -84,6 +83,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
             badgeTest.setCompleted(true);
             badges.add(badgeTest);
         }
+        Badge badgesTest=new Badge("small",false);
+        badges.add(badgesTest);
+
     }
     public void populateSched(){
         sched.initTest();

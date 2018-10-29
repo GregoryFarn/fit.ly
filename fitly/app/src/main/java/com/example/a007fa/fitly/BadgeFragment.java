@@ -75,7 +75,9 @@ public class BadgeFragment extends Fragment {
                                 TextView badgeMessage=(TextView)convertView.findViewById(R.id.message);
                                 ImageView badgeImage=(ImageView)convertView.findViewById(R.id.badge_picture);
                                 badgeMessage.setText(currentBadge.getBadgeMessage());
-                                if(currentBadge.typeOfBadge.equals("small"))
+                                if(currentBadge.completed==false)
+                                    badgeImage.setImageResource(R.drawable.greystar);
+                                else if(currentBadge.typeOfBadge.equals("small"))
                                     badgeImage.setImageResource(R.drawable.starbadge);
                                 else
                                     badgeImage.setImageResource(R.drawable.bigbadge);
