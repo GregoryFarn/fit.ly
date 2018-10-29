@@ -25,17 +25,17 @@ public class Alarm {
         this.starTime = starTime;
     }
 
-public long calculateTime(){
-    Calendar notiTime = Calendar.getInstance();
-    notiTime.setTimeInMillis(this.starTime.getTimeInMillis()- 3600*3000);
+    public long calculateTime(){
+        Calendar notiTime = Calendar.getInstance();
+        notiTime.setTimeInMillis(this.starTime.getTimeInMillis()- 3600*3000);
 
-    return notiTime.getTimeInMillis();
-}
+        return notiTime.getTimeInMillis();
+    }
 
     static final String ACTION_RESET = "com.fitly.action.RESET";
 
 
- public void setAlarm() {
+    public void setAlarm() {
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent( context, Notifications.class);
         Bundle bundle = new Bundle();
@@ -43,15 +43,15 @@ public long calculateTime(){
         intent.putExtras(bundle);
         PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
 
-       if (this.calculateTime() > System.currentTimeMillis()) {
-           am.setExact(AlarmManager.RTC_WAKEUP, this.calculateTime(), sender);
-           this.isAlarmSet = true;
-       }
-       else
-           this.isAlarmSet = false;
+        if (this.calculateTime() > System.currentTimeMillis()) {
+            am.setExact(AlarmManager.RTC_WAKEUP, this.calculateTime(), sender);
+            this.isAlarmSet = true;
+        }
+        else
+            this.isAlarmSet = false;
 
     }
-    //
+
     public boolean isAlarmSet(){
         return isAlarmSet;
     }
@@ -62,7 +62,6 @@ public long calculateTime(){
         Date date = new Date();
         //String myDate = "10/18/2018 19:42";
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-
         try{
             date = sdf.parse(myDate);
         }catch(ParseException e){

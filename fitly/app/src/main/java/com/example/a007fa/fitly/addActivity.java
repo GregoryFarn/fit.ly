@@ -80,10 +80,10 @@ public class addActivity extends AppCompatActivity
             String workoutName = textData.getText().toString();
                 if(calendarOne.compareTo(calendarTwo) > 0) {
                     workout.add(workoutName ,calendarTwo, calendarOne); // calendarOne is after calendarTwo in time
-                    new Alarm().setAlarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarTwo);
+                    new Alarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarTwo).setAlarm();
                 } else if (calendarOne.compareTo(calendarTwo) < 0) {
                     workout.add(workoutName, calendarOne, calendarTwo);
-                    new Alarm().setAlarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarOne);
+                    new Alarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarOne).setAlarm();
                 }
                 Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
                 intent.setAction(ACTION_WORKOUT);

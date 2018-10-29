@@ -17,18 +17,19 @@ public class Notifications extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(ACTION_RESET)) {
+        int requestKey = this.getRequestCode(intent);
+      /*  if (intent.getAction().equals(ACTION_RESET)) {
             Intent intent1 = new Intent(context, fitlyHandler.class);
             intent1.setAction(ACTION_ENDDAY);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
-        } else {
+        } else {*/
             String channelId = "channel";
             String channelName = "Channel Name";
 
-            Bundle extras = intent.getExtras();
+           // Bundle extras = intent.getExtras();
 
             // Log.d("JJJJJ" , "MainActivity -> intent key_string-> " + extras.getInt("requestKey"));
-            int requestKey = extras.getInt("requestKey");
+
 
             NotificationManager notiManager
                     = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
@@ -38,6 +39,7 @@ public class Notifications extends BroadcastReceiver {
                         channelId, channelName, importance);
                 notiManager.createNotificationChannel(mChannel);
             }
+
             PendingIntent pendingIntent = PendingIntent.getActivity(context,
                     requestKey,
                     new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -54,6 +56,18 @@ public class Notifications extends BroadcastReceiver {
             // (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)
             notiManager.notify(requestKey,
                     mNotification.build());
-        }
+      //  }
+    }
+
+
+    public int getRequestCode(Intent  intent){
+
+        Bundle extras = intent.getExtras();
+
+        int requestKey = extras.getInt("requestKey");
+
+        return requestKey;
+
+
     }
 }
