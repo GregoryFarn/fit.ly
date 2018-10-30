@@ -87,7 +87,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/stepsText" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/addWorkoutButton"
@@ -103,12 +103,12 @@
             app:layout_constraintBottom_toTopOf="@+id/scheduleDisplay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.86"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toBottomOf="@+id/stepsText"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/stepsText"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="12dp"
@@ -119,7 +119,7 @@
             tools:layout_editor_absoluteX="132dp" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
