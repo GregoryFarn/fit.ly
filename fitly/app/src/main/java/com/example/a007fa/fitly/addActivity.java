@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.BitSet;
 import java.util.Calendar;
@@ -47,8 +48,8 @@ public class addActivity extends AppCompatActivity
         s_pick = (Button) findViewById(R.id.s_pick);
         e_pick = (Button) findViewById(R.id.e_pick);
         show = (Button) findViewById(R.id.show);
-
         textData = (EditText) findViewById(R.id.workoutName);
+
 
         s_pick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,19 +79,48 @@ public class addActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
             String workoutName = textData.getText().toString();
-                if(calendarOne.compareTo(calendarTwo) > 0) {
-                    workout.add(workoutName ,calendarTwo, calendarOne); // calendarOne is after calendarTwo in time
-                    new Alarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarTwo).setAlarm();
-                } else if (calendarOne.compareTo(calendarTwo) < 0) {
-                    workout.add(workoutName, calendarOne, calendarTwo);
-                    new Alarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,calendarOne).setAlarm();
+                if(workoutName.equals(""))
+                {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Please enter activity name",
+                            Toast.LENGTH_SHORT);
+
+                    toast.show();
                 }
-                Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
-                intent.setAction(ACTION_WORKOUT);
-                intent.putExtra("workout", workout);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-                setResult(Activity.RESULT_OK);
-                finish();
+                else if (calendarOne.equals(calendarTwo))
+                {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Activity cannot start and end at the same time",
+                            Toast.LENGTH_SHORT);
+
+                    toast.show();
+
+
+                }
+                else if (calendarTwo.compareTo(calendarOne)<0)
+                {
+
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Start time must be after end time",
+                            Toast.LENGTH_SHORT);
+
+                    toast.show();
+                }
+                else {
+                    if (calendarOne.compareTo(calendarTwo) > 0) {
+                        workout.add(workoutName, calendarTwo, calendarOne); // calendarOne is after calendarTwo in time
+                        new Alarm(getApplicationContext(), (int) ((calendarTwo.getTimeInMillis() / 1000L) % Integer.MAX_VALUE), calendarTwo).setAlarm();
+                    } else if (calendarOne.compareTo(calendarTwo) < 0) {
+                        workout.add(workoutName, calendarOne, calendarTwo);
+                        new Alarm(getApplicationContext(), (int) ((calendarOne.getTimeInMillis() / 1000L) % Integer.MAX_VALUE), calendarOne).setAlarm();
+                    }
+                    Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
+                    intent.setAction(ACTION_WORKOUT);
+                    intent.putExtra("workout", workout);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
             }
         });
     }

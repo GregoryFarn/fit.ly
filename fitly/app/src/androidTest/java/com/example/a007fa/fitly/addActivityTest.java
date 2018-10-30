@@ -20,9 +20,13 @@ import static android.service.autofill.Validators.not;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.*;
+//import static android.support.test.espresso.contrib.PickerActions;
 
 public class addActivityTest {
 
@@ -178,6 +182,7 @@ public class addActivityTest {
         addActivity.finish();
     }
 
+
     @Test
     public void checkTextView() throws Exception {
         final EditText workoutName = aActivity.findViewById(R.id.workoutName);
@@ -193,8 +198,36 @@ public class addActivityTest {
       assertEquals(entry, workoutName.getText().toString());
     }
 
+    @Test
+    public void testWorkOutNameNotEmpty()
+    {
+        onView(withId(R.id.show)).perform(click());
+        onView(withText("Please enter activity name")).inRoot(new ToastMatcher())
+                .check(matches(withText("Please enter activity name")));
+
+    }
+
+    @Test
+    public void testSameDate()
+    {
+        onView(withId(R.id.workoutName)).perform(typeTextIntoFocusedView("Test Workout"));
+        onView(withId(R.id.show)).perform(click());
+        onView(withText("Activity cannot start and end at the same time")).inRoot(new ToastMatcher())
+                .check(matches(withText("Activity cannot start and end at the same time")));
+
+
+    }
+
+   /*public void testForEarlierStartDate()
+    {
+
+        onView(withId(R.id.e_pick)).perform(PickerActions.setDate(2017, 6, 30));
+    }*/
+
+
     @After
     public void tearDown() throws Exception {
         aActivity = null;
     }
+
 }
