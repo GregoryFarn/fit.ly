@@ -93,24 +93,25 @@ public class DashboardFragment extends Fragment {
 
             ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
-            DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
-                    R.layout.adapter_view_layout,
-                    sched.getWorkouts());
+            if(getActivity()!= null) {
+                DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+                        R.layout.adapter_view_layout,
+                        sched.getWorkouts());
 
-            scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-                    intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                    intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+                scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+                        intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                        intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
 
-                    Log.d("name", sched.getWorkouts().get(i).getWorkoutName() );
-                    Log.d("location", sched.getWorkouts().get(i).getLocation());
-                    startActivity(intent);
-                }
-            });
-
-            scheduleDisplay.setAdapter(adapter);
+                        Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
+                        Log.d("location", sched.getWorkouts().get(i).getLocation());
+                        startActivity(intent);
+                    }
+                });
+                scheduleDisplay.setAdapter(adapter);
+            }
         }
 
         }
