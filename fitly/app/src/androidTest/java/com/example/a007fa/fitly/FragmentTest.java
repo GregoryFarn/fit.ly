@@ -2,12 +2,17 @@ package com.example.a007fa.fitly;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.test.espresso.AmbiguousViewMatcherException;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,15 +27,37 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
+import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
+
 public class FragmentTest {
+    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<View>() {
+            int currentIndex = 0;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
+            }
+        };
+    }
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule mActivityRule = new ActivityTestRule(MainActivity.class, false, true);
+
 
 
 
@@ -38,99 +65,32 @@ public class FragmentTest {
     @Before
     public void init(){
         mActivityRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
+                .getFragmentManager().beginTransaction();
     }
+
+
 
     @Test
     public void testBadgeDisplay()
     {
-        try {
-            onView(withId(R.id.navigation_badges)).perform(click());
-            FragmentManager fragmentManager = mActivityRule.getActivity().getFragmentManager();
-            if(fragmentManager.findFragmentById(R.id.navigation_badges)!=null)
-            {
-                Log.d("found", "FoundtestBadgeDisplay: ");
-            }
-            else
-            {
-                Log.d("found", "DidNotFindtestBadgeDisplay: ");
+            //on success bages page will appear on the device
+            onView(allOf(withId(R.id.navigation_badges), hasFocus())).perform(click());
 
-            }
 
-        }
-        catch(AmbiguousViewMatcherException ave)
-        {
-            Log.e("ave error ", "testBadgeDisplay: ");
-        }
     }
-
-    @Test
-    public void testProfileDisplay()
-    {
-        try {
-            onView(withId(R.id.navigation_dashboard)).perform(click());
-            FragmentManager fragmentManager = mActivityRule.getActivity().getFragmentManager();
-            if(fragmentManager.findFragmentById(R.id.navigation_badges)!=null)
-            {
-                Log.d("found", "FoundtestBadgeDisplay: ");
-            }
-            else
-            {
-                Log.d("found", "DidNotFindtestBadgeDisplay: ");
-
-            }
-
-        }
-        catch(AmbiguousViewMatcherException ave)
-        {
-            Log.e("ave error ", "testBadgeDisplay: ");
-        }
-    }
-
-
-    @Test
-    public void test()
-    {
-        try {
-            onView(withId(R.id.navigation_profile)).perform(click());
-            FragmentManager fragmentManager = mActivityRule.getActivity().getFragmentManager();
-            if(fragmentManager.findFragmentById(R.id.navigation_badges)!=null)
-            {
-                Log.d("found", "FoundtestBadgeDisplay: ");
-            }
-            else
-            {
-                Log.d("found", "DidNotFindtestBadgeDisplay: ");
-
-            }
-
-        }
-        catch(AmbiguousViewMatcherException ave)
-        {
-            Log.e("ave error ", "testBadgeDisplay: ");
-        }
-    }
-
-
 
     /*@Test
-    public void testBadgePage()
+    public void testProfileDisplay()
     {
-        ArrayList<Badge> badges= new ArrayList<Badge>();
-        for(int i=0; i<10; i++)
-        {
-            Badge badgeTest= new Badge("small", false);
-            if(i%7==0)
-                badgeTest.setTypeOfBadge("big");
-            badgeTest.setCompleted(true);
-            badges.add(badgeTest);
-        }
-        Badge badgesTest=new Badge("small",false);
-        badges.add(badgesTest);
-        badgeWrapper bw= new badgeWrapper(badges);
-        Intent intent1 = new Intent();
-        intent1.putExtra("badgeList",bw);
-        mActivityRule.launchActivity(intent1);
+        //on success bages page will appear on the device
+        onView(withIndex(withId(R.id.navigation_profile),1)).perform(click());
     }*/
+
+
+
+
+
+
+
 
 }

@@ -1,3 +1,4 @@
+
 package com.example.a007fa.fitly;
 
 import android.content.Context;
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
@@ -31,3 +33,4 @@ public class ExampleInstrumentedTest {
     }
 
 }
+

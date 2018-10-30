@@ -16,6 +16,7 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
     private int mResource;
 
     public DisplayScheduleAdapter(Context context, int resource, ArrayList<Workout> objects) {
+
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
