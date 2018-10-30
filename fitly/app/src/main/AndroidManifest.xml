@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Notifications"></receiver>
+        <receiver android:name=".Notifications"
+            android:exported="true"></receiver>
         <activity android:name=".DisplayWorkoutDetailsActivity"></activity>
         <activity android:name=".addActivity"></activity>
 

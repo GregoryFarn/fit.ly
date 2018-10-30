@@ -52,7 +52,7 @@ public class Notifications extends BroadcastReceiver {
                     .setContentText(CONTENT_TEXT)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setAutoCancel(true)
-                    .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
+                   // .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
                     .setChannelId(channelId);
             // (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)
             notiManager.notify(requestKey,
