@@ -2,6 +2,7 @@ package com.example.a007fa.fitly;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.test.espresso.AmbiguousViewMatcherException;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -28,6 +29,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
@@ -74,18 +76,31 @@ public class FragmentTest {
     public void testBadgeDisplay()
     {
             //on success bages page will appear on the device
-            onView(allOf(withId(R.id.navigation_badges), hasFocus())).perform(click());
+            onView(withIndex(withId(R.id.navigation_badges),1)).perform(click());
 
 
     }
 
-    /*@Test
+    @Test
     public void testProfileDisplay()
     {
         //on success bages page will appear on the device
         onView(withIndex(withId(R.id.navigation_profile),1)).perform(click());
 
-    }*/
+    }
+
+
+
+    @Test
+    public void testDashboardDisplay()
+    {
+        //on success bages page will appear on the device
+        onView(withIndex(withId(R.id.navigation_dashboard),1)).perform(click());
+
+    }
+
+
+
 
 
 
