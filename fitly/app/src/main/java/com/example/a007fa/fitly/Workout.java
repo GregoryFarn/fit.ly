@@ -73,12 +73,12 @@ public class Workout implements Serializable {
     }
 
     public String getStartTime() {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
         return format.format(this.startTime.getTime());
     }
 
     public String getEndTime() {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
         return format.format(this.endTime.getTime());
     }
 
