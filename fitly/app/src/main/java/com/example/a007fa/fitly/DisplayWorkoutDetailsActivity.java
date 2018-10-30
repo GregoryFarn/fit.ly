@@ -23,5 +23,9 @@ public class DisplayWorkoutDetailsActivity extends AppCompatActivity {
             TextView tvLocation = findViewById(R.id.location);
             tvLocation.setText(bundle.getString("Location").trim());
         }
+        else
+        {
+
+        }
     }
 }

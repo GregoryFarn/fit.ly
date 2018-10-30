@@ -35,64 +35,22 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
-
-public class FragmentTest {
-    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-        return new TypeSafeMatcher<View>() {
-            int currentIndex = 0;
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with index: ");
-                description.appendValue(index);
-                matcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                return matcher.matches(view) && currentIndex++ == index;
-            }
-        };
-    }
+public class testDisplayActivity {
 
     @Rule
-    public ActivityTestRule mActivityRule = new ActivityTestRule(MainActivity.class, false, true);
-
-
-
-
-
-    @Before
-    public void init(){
-        //mActivityRule.getActivity().recreate();
-        mActivityRule.getActivity()
-                .getFragmentManager().beginTransaction();
-
-    }
+    public ActivityTestRule da= new ActivityTestRule(DisplayWorkoutDetailsActivity.class, false, false);
 
     @Test
-    public void testBadgeDisplay()
-    {
-            //on success bages page will appear on the device
-            onView(allOf(withId(R.id.navigation_badges), hasFocus())).perform(click());
+    public void testActivityDisplay() {
 
+        Schedule test = new Schedule();
+        test.initTest();
+        Intent it = new Intent();
+        it.putExtra("Name", test.getWorkouts().get(0).getWorkoutName());
+        it.putExtra("Location", test.getWorkouts().get(0).getLocation());
+        da.launchActivity(it);
 
+        //...
     }
-
-    /*@Test
-    public void testProfileDisplay()
-    {
-        //on success bages page will appear on the device
-        onView(withIndex(withId(R.id.navigation_profile),1)).perform(click());
-
-    }*/
-
-
-
-
-
-
-
-
 
 }
