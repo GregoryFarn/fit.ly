@@ -59,7 +59,7 @@ public class AlarmTest {
         expectedTime.set(2018,9,25,13,00);
         Alarm t4 = new Alarm(getInstrumentation().getTargetContext(),1, expectedTime);
         t4.setAlarm();
-        assertFalse("Return false, if notification time(scheduled time - 3hrs) has not passed yet.",t4.isAlarmSet());
+        assertFalse("Return false, if notification time(scheduled time - 3hrs) has passed.",t4.isAlarmSet());
     }
 
 }
