@@ -75,16 +75,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
     }
 
     public void populateBadges(){
-        for(int i=0; i<1; i++)
+        for(int i=0; i<2; i++)
         {
-            Badge badgeTest= new Badge("small", false);
+            Badge badgeTest= new Badge("small", true);
             if(i%7==0)
                 badgeTest.setTypeOfBadge("big");
             badgeTest.setCompleted(true);
             badges.add(badgeTest);
         }
-        Badge badgesTest=new Badge("small",false);
-        badges.add(badgesTest);
 
     }
     public void populateSched(){
@@ -183,7 +181,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 startSmallBadge();
                 sendBadgeListMessage();
-               // Alarm.setAlarmEndDay(getApplicationContext(), 104);
             }
         }
     };

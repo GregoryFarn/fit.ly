@@ -55,25 +55,24 @@ public class Alarm {
     public boolean isAlarmSet(){
         return isAlarmSet;
     }
-/*
-    public static void setAlarmEndDay(Context context, int requestCode) {
+
+    public static void setAlarmEndDay(Context context, int _requestCode) {
 
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent( context, Notifications.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("requestKey", requestCode);
+        bundle.putInt("requestKey", _requestCode);
         intent.putExtras(bundle);
         intent.setAction(ACTION_RESET);
-        PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(context,_requestCode, intent, 0);
 
         Calendar notiTime = Calendar.getInstance();
 
         notiTime.setTimeInMillis(System.currentTimeMillis());
         notiTime.set(Calendar.HOUR_OF_DAY,23);
         notiTime.set(Calendar.MINUTE,59);
-        //notiTime.set(Calendar.HOUR_OF_DAY,0);
         if (notiTime.getTimeInMillis() > System.currentTimeMillis())
             am.setRepeating(AlarmManager.RTC_WAKEUP, notiTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
     }
-*/
+
 }

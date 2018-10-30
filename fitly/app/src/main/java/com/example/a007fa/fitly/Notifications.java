@@ -14,11 +14,12 @@ public class Notifications extends BroadcastReceiver {
 
     static final String ACTION_RESET = "com.fitly.action.RESET";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
-
+    static final String CONTENT_TITLE = "fit.ly";
+    static final String CONTENT_TEXT = "You've workout scheduled in 3 hours.";
     @Override
     public void onReceive(Context context, Intent intent) {
         int requestKey = this.getRequestCode(intent);
-      /*  if (intent.getAction().equals(ACTION_RESET)) {
+        /*if (intent.getAction().equals(ACTION_RESET)) {
             Intent intent1 = new Intent(context, fitlyHandler.class);
             intent1.setAction(ACTION_ENDDAY);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
@@ -47,8 +48,8 @@ public class Notifications extends BroadcastReceiver {
             NotificationCompat.Builder mNotification = new NotificationCompat.Builder(context, channelId)
                     .setContentIntent(pendingIntent)
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle("fit.ly")
-                    .setContentText("You've workout scheduled in 3 hours.")
+                    .setContentTitle(CONTENT_TITLE)
+                    .setContentText(CONTENT_TEXT)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setAutoCancel(true)
                     .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
@@ -56,7 +57,7 @@ public class Notifications extends BroadcastReceiver {
             // (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)
             notiManager.notify(requestKey,
                     mNotification.build());
-      //  }
+        //}
     }
 
 

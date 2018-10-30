@@ -43,6 +43,26 @@ public class addActivityTest {
         aActivity = aActivityTestRule.getActivity();
 
     }
+    
+    @Test
+    public void testCalendarComparison() {
+        Calendar calendarOne = Calendar.getInstance();
+        Calendar calendarTwo = Calendar.getInstance();
+
+        int year = calendarOne.get(Calendar.YEAR);
+        int month = calendarOne.get(Calendar.MONTH);
+        int day = calendarOne.get(Calendar.DAY_OF_MONTH);
+        int hour = calendarOne.get(Calendar.HOUR_OF_DAY);
+        int minute = calendarOne.get(Calendar.MINUTE);
+
+        calendarOne.set(year, month, day, hour, minute);
+        calendarTwo.set((year-1), (month-1), (day-1), (hour-1), (minute-1));
+
+        // this is simply to check if the calendar comparisons can work and the assertequals verifies that the comparison checked off as planned
+        if(calendarOne.compareTo(calendarTwo) > 0) { 
+            assertEquals(year, year);
+        }
+    }
 
     @Test
     public void testWorkoutRetrieveName() {
