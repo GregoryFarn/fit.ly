@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.a007fa.fitly">
 
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,27 +21,35 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Notifications"
-            android:exported="true"></receiver>
-        <activity android:name=".DisplayWorkoutDetailsActivity"></activity>
-        <activity android:name=".addActivity"></activity>
 
-        <service android:enabled="true" android:name=".fitlyHandler" />
-        <receiver android:name=".saveAlarm"/>
+        <receiver
+            android:name=".Notifications"
+            android:exported="true" />
+
+        <activity android:name=".DisplayWorkoutDetailsActivity" />
+        <activity android:name=".addActivity" />
+
+        <service
+            android:name=".fitlyHandler"
+            android:enabled="true" />
+
+        <receiver android:name=".saveAlarm" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".LogInActivity" />
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
-    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
-    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true"/>
 </manifest>
