@@ -30,6 +30,7 @@ public class DashboardFragment extends Fragment {
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
     View view;
+    float steps;
     public DashboardFragment() { }
 
     @Override
@@ -59,7 +60,7 @@ public class DashboardFragment extends Fragment {
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
-
+        steps=0;
         return view;
     }
 
@@ -81,6 +82,7 @@ public class DashboardFragment extends Fragment {
         if (intent.getAction().equals(ACTION_FITLY)) {
             Bundle b = intent.getExtras();
             ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
+            steps = b.getFloat("stepCount");
         }
         else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 
@@ -117,6 +119,12 @@ public class DashboardFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        //((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(steps));
+
+    }
     protected void serviceStart() {
         if (!isMyServiceRunning(fitlyHandler.class)) {
             Intent intent = new Intent(getActivity().getApplicationContext(), fitlyHandler.class);
