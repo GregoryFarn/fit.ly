@@ -1,6 +1,7 @@
 package com.example.a007fa.fitly;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ActivityRecord {
     private Calendar date;
@@ -14,7 +15,7 @@ public class ActivityRecord {
         this.date = date;
         this.stepCount = 0;
         this.badgeAchieved = false;
-        this.totalCaloriesConsumed = false;
+        this.totalCaloriesConsumed = 0;
     }
 
     public void addCalories(int calories) {
