@@ -1,6 +1,7 @@
 package com.example.a007fa.fitly;
 
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -42,87 +43,28 @@ import static org.junit.Assert.*;
 
 public class NotificationsTest extends Fragment {
 
-
-  /*  @Rule
-    public ActivityTestRule<addActivity> mActivityRule = new ActivityTestRule(addActivity.class);
-
-
-    //Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(addActivity.class.getName(), null, false);
-
-
-    UiDevice mDevice;
-
-    private Notifications test = new Notifications();
-    private Context context = InstrumentationRegistry.getTargetContext();
-
-//    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-//        return new TypeSafeMatcher<View>() {
-//            int currentIndex = 0;
-//
-//            @Override
-//            public void describeTo(Description description) {
-//                description.appendText("with index: ");
-//                description.appendValue(index);
-//                matcher.describeTo(description);
-//            }
-//
-//            @Override
-//            public boolean matchesSafely(View view) {
-//                return matcher.matches(view) && currentIndex++ == index;
-//            }
-//        };
-//    }
-    @Before
-    public void init(){
-        mActivityRule.getActivity()
-                .getFragmentManager().beginTransaction();
-    }
-
-  public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-      return new TypeSafeMatcher<View>() {
-          int currentIndex = 0;
-
-          @Override
-          public void describeTo(Description description) {
-              description.appendText("with index: ");
-              description.appendValue(index);
-              matcher.describeTo(description);
-          }
-
-          @Override
-          public boolean matchesSafely(View view) {
-              return matcher.matches(view) && currentIndex++ == index;
-          }
-      };
-  }
-
     @Rule
-    public ActivityTestRule mActivityRule = new ActivityTestRule(addActivity.class, false, true);
+    public ActivityTestRule<addActivity> aActivityTestRule = new ActivityTestRule<addActivity>(addActivity.class);
 
+    private addActivity aActivity = null;
 
-
-
+    Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(addActivity.class.getName(), null, false);
 
     @Before
-    public void init(){
-        mActivityRule.getActivity()
-                .getFragmentManager().beginTransaction();
-    }
+    public void setUp() throws Exception {
+    
+        aActivity = aActivityTestRule.getActivity();
 
+    }
 
     @Test
     public void testNotification(){
         //mActivityRule.getActivity();
 
-        mActivityRule.getActivity().findViewById(R.id.show).setOnClickListener(new View.OnClickListener(){
+        aActivity.findViewById(R.id.s_pick).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-//                Notifications t1 = new Notifications();
-//                Intent intent = new Intent(InstrumentationRegistry.getTargetContext(), addActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("requestKey", 2);
-//                intent.putExtras(bundle);
-//                t1.onReceive(getInstrumentation().getTargetContext(), intent);
+
                 NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(InstrumentationRegistry.getTargetContext())
                         .setContentText("notification")
                         .setContentTitle("fitly")
@@ -133,39 +75,17 @@ public class NotificationsTest extends Fragment {
                 mNotificationManager.notify(0,mBuilder.build());
             }
         });
+        onView(withId(R.id.s_pick)).perform(click());
+        Activity addActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 5000);
 
-        onView(allOf(withId(R.id.show), hasFocus())).perform(click());
-           // onView(withId(R.id.show)).perform(click());
-//        AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
-//        Intent intent = new Intent( context, MainActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("requestKey", 3);
-//        intent.putExtras(bundle);
-//        PendingIntent sender = PendingIntent.getBroadcast(context,3, intent, 0);
-//        am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), sender);
-//       // test.onReceive(getInstrumentation().getTargetContext(), this.intent);
-//        Intent intent1 = new Intent( getInstrumentation().getTargetContext(), Notifications.class);
-//         AlarmManager am =  (AlarmManager)getInstrumentation().getContext().getSystemService(ALARM_SERVICE);
-//        // AlarmManager am =  (AlarmManager)mActivityRule.getActivity().getSystemService(ALARM_SERVICE);
-//         PendingIntent sender = PendingIntent.getBroadcast(getInstrumentation().getTargetContext(),2, this.intent, 0);
-//         am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), sender);
-////        Bundle bundle = new Bundle();
-//        bundle.putInt("requestKey", 8);
-       // resultIntent.putExtras(bundle);
-         // test.onReceive(InstrumentationRegistry.getInstrumentation().getTargetContext(), resultIntent);
+       // assertNotNull(addActivity);
 
-//        Intent resultIntent = new Intent(InstrumentationRegistry.getInstrumentation().getContext() , MainActivity.class);
-//        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        Notifications t1 = new Notifications();
-////        Bundle bundle = new Bundle();
-////        bundle.putInt("requestKey", 8);
-////        resultIntent.putExtras(bundle);
-//
-//        String channelId = "channel";
-//
+        addActivity.finish();
+        //onView(allOf(withId(R.id.show), hasFocus())).perform(click());
+
     }
 
-*/
+
 
     @Test
     public void getBundleTest(){
