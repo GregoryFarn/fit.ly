@@ -3,6 +3,7 @@ package com.example.a007fa.fitly;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,15 +25,17 @@ public class LogInActivity extends AppCompatActivity {
                 userEmail=(EditText) findViewById(R.id.input_email);
                 password=(EditText) findViewById(R.id.input_password);
                 Boolean authorized=true;
-                if(userEmail==null)
+                Log.e("onClick: ",password.getText().toString());
+                if(userEmail.getText().toString().isEmpty())
                 {
+
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Please enter an email address",
                             Toast.LENGTH_SHORT);
 
                     toast.show();
                 }
-                else if (password==null)
+                else if (password.getText().toString().equals(""))
                 {
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Please enter password",
