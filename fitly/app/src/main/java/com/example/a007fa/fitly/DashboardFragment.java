@@ -16,11 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,9 +43,10 @@ public class DashboardFragment extends Fragment {
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
 
+
     private View view;
     private final String TAG = "Dashboard fragment";
-  
+
     float steps;
     public DashboardFragment() { }
 
@@ -146,20 +150,60 @@ public class DashboardFragment extends Fragment {
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-          if (intent.getAction().equals(ACTION_FITLY)) {
-              Bundle b = intent.getExtras();
-              steps = b.getFloat("stepCount");
-              ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(steps) + "/10,0000");
-          }
-          else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
-              if (getArguments() != null) {
-                  Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
-                  ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
-              }
-          }
+        if (intent.getAction().equals(ACTION_FITLY)) {
+            Bundle b = intent.getExtras();
+            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
+            steps = b.getFloat("stepCount");
         }
-    };
+        else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 
+            if (getArguments() != null) {
+                Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
+                ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
+            }
+
+            final Schedule sched = (Schedule)intent.getSerializableExtra("sched");
+
+            ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
+
+            if(getActivity()!= null) {
+                final DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+                        R.layout.adapter_view_layout,
+                        sched.getWorkouts());
+
+                scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                           Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+                           intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                           intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                           Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
+                           Log.d("location", sched.getWorkouts().get(i).getLocation());
+
+                        final CheckBox isComplete = ((CheckBox)view.findViewById(R.id.isWorkoutComplete));
+
+
+                           startActivity(intent);
+                           setId(i);
+
+
+                    }
+
+
+
+                });
+                scheduleDisplay.setAdapter(adapter);
+
+                }
+
+            }
+        }
+
+    };
+  
     protected void serviceStart() {
         if (!isMyServiceRunning(fitlyHandler.class)) {
             Intent intent = new Intent(getActivity().getApplicationContext(), fitlyHandler.class);
