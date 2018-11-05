@@ -28,7 +28,7 @@ public class Schedule implements Serializable {
         Calendar end1 = Calendar.getInstance();
         start1.set(2018, 10, 23, 12, 00);
         end1.set(2018, 10, 23, 14, 00);
-        Workout w1 = new Workout("Morning hike", start1, end1, "Hollywood Sign");
+        Workout w1 = new Workout("fd hike", start1, end1, "Hollywood Sign");
 
         Calendar start2 = Calendar.getInstance();
         Calendar end2 = Calendar.getInstance();

@@ -16,11 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class DashboardFragment extends Fragment {
@@ -29,6 +32,7 @@ public class DashboardFragment extends Fragment {
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
+    private int id;
     View view;
     float steps;
     public DashboardFragment() { }
@@ -96,28 +100,48 @@ public class DashboardFragment extends Fragment {
             ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
             if(getActivity()!= null) {
-                DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+                final DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
                         R.layout.adapter_view_layout,
                         sched.getWorkouts());
 
                 scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-                        intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                        intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
 
-                        Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
-                        Log.d("location", sched.getWorkouts().get(i).getLocation());
-                        startActivity(intent);
+
+                           Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+                           intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                           intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                           Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
+                           Log.d("location", sched.getWorkouts().get(i).getLocation());
+
+                        final CheckBox isComplete = ((CheckBox)view.findViewById(R.id.isWorkoutComplete));
+
+
+                           startActivity(intent);
+                           setId(i);
+
+
                     }
+
+
+
                 });
                 scheduleDisplay.setAdapter(adapter);
+
+                }
+
             }
         }
 
-        }
     };
+    public void setId(int i){
+        this.id = i;
+    }
+    public int getIdValue(){
+        return this.id;
+    }
 
     @Override
     public void onStart(){

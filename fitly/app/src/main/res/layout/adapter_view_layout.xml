@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/workout"
-        android:layout_width="match_parent"
+        android:layout_width="297dp"
         android:layout_height="wrap_content"
         android:layout_weight="20"
         android:orientation="horizontal"
@@ -31,12 +31,12 @@
                 android:id="@+id/end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="5:00 pm"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:text="5:00 pm" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="80"
             android:orientation="vertical">
@@ -62,5 +62,30 @@
                 tools:layout_editor_absoluteY="37dp" />
         </LinearLayout>
 
+
+
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/checkbox"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/isWorkoutComplete"
+            style="@android:style/Widget.CompoundButton.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:duplicateParentState="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="Done?" />
+    </LinearLayout>
+
+
+
+
+
 </LinearLayout>
+

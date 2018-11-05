@@ -13,6 +13,7 @@ public class Workout implements Serializable {
     private Calendar endTime;
     private String location;
     private String description = "";
+    private boolean isCompletedWorkout = false;
 
     public Workout() { }
 
@@ -92,6 +93,12 @@ public class Workout implements Serializable {
 
     public String getDescription() { return this.description; }
 
+    public boolean isCompletedWorkout() {
+        return isCompletedWorkout;
+    }
 
+    public void setCompletedWorkout(boolean completedWorkout) {
+        isCompletedWorkout = completedWorkout;
+    }
 }
 
