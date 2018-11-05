@@ -218,11 +218,6 @@ public class addActivityTest {
 
     }
 
-   /*public void testForEarlierStartDate()
-    {
-
-        onView(withId(R.id.e_pick)).perform(PickerActions.setDate(2017, 6, 30));
-    }*/
 
 
     @After

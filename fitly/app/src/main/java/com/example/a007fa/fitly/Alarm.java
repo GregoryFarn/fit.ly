@@ -32,8 +32,10 @@ public class Alarm {
         return notiTime.getTimeInMillis();
     }
 
+    static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_RESET = "com.fitly.action.RESET";
-
+    static final String ACTION_SAVE = "com.fitly.action.SAVE";
+    static final String ACTION_ENDDAY = "com.fitly.action.ACTION_ENDDAY";
 
     public void setAlarm() {
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
@@ -56,23 +58,24 @@ public class Alarm {
         return isAlarmSet;
     }
 
-    public static void setAlarmEndDay(Context context, int _requestCode) {
+    public void setAlarmEndDay() {
 
         AlarmManager am =  (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent( context, Notifications.class);
+        Intent intent = new Intent( context, saveAlarm.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("requestKey", _requestCode);
+        bundle.putInt("requestKey", requestCode);
         intent.putExtras(bundle);
-        intent.setAction(ACTION_RESET);
-        PendingIntent sender = PendingIntent.getBroadcast(context,_requestCode, intent, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(context,requestCode, intent, 0);
 
         Calendar notiTime = Calendar.getInstance();
 
-        notiTime.setTimeInMillis(System.currentTimeMillis());
-        notiTime.set(Calendar.HOUR_OF_DAY,23);
-        notiTime.set(Calendar.MINUTE,59);
+        notiTime.setTimeInMillis(System.currentTimeMillis()+5000);
+        /*notiTime.set(Calendar.HOUR_OF_DAY,23);
+        notiTime.set(Calendar.MINUTE,59);*/
         if (notiTime.getTimeInMillis() > System.currentTimeMillis())
             am.setRepeating(AlarmManager.RTC_WAKEUP, notiTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
+
+
     }
 
 }

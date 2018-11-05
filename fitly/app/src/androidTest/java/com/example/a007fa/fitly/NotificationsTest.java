@@ -22,7 +22,7 @@ import org.hamcrest.core.AllOf;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import androidx.test.uiautomator.UiDevice;
+//import androidx.test.uiautomator.UiDevice;
 
 
 import static android.content.Context.ALARM_SERVICE;

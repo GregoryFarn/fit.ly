@@ -42,6 +42,8 @@ public class DashboardFragment extends Fragment {
 
     private View view;
     private final String TAG = "Dashboard fragment";
+  
+    float steps;
     public DashboardFragment() { }
 
     @Override
@@ -70,12 +72,24 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        FloatingActionButton calorieButton = view.findViewById(R.id.AddCaloriesButton);
+        calorieButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddCalories.class);
+                startActivity(intent);
+            }
+        });
+
         Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         displaySchedule();
 
+        steps=0;
+        sendStepMessage();
+      
         return view;
     }
 
@@ -122,43 +136,27 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    protected void sendStepMessage() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), DashboardFragment.class);
+        intent.setAction(ACTION_FITLY);
+        intent.putExtra("stepCount", steps);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
+    }
+
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ACTION_FITLY)) {
-                Bundle b = intent.getExtras();
-                ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
-            }
-            else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
-                if (getArguments() != null) {
-                    Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
-                    ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
-
-//                    final Schedule sched = (Schedule)intent.getSerializableExtra("sched");
-//
-//                    ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
-//
-//                    if(getActivity()!= null) {
-//                        DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
-//                                R.layout.adapter_view_layout,
-//                                sched.getWorkouts());
-//
-//                        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                            @Override
-//                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-//                                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-//                                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
-//
-//                                Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
-//                                Log.d("location", sched.getWorkouts().get(i).getLocation());
-//                                startActivity(intent);
-//                            }
-//                        });
-//                        scheduleDisplay.setAdapter(adapter);
-//                    }
-                }
-            }
+          if (intent.getAction().equals(ACTION_FITLY)) {
+              Bundle b = intent.getExtras();
+              steps = b.getFloat("stepCount");
+              ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(steps) + "/10,0000");
+          }
+          else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
+              if (getArguments() != null) {
+                  Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
+                  ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
+              }
+          }
         }
     };
 
