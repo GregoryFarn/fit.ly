@@ -12,7 +12,7 @@ android:layout_height="match_parent">
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/grad"
         android:paddingBottom="15dp">
 
@@ -22,7 +22,7 @@ android:layout_height="match_parent">
             android:layout_centerInParent="true"
             android:text="Add Workout"
             android:fontFamily="sans-serif-light"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>
@@ -64,6 +64,7 @@ android:layout_height="match_parent">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="15dp"
                 android:id="@+id/ll2"
                 android:layout_below="@+id/workoutName">
 
@@ -73,10 +74,17 @@ android:layout_height="match_parent">
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginStart="38dp"
+                        android:layout_marginStart="25dp"
                         android:text="Start time" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
                     <Button
                         android:id="@+id/s_pick"
+                        android:layout_marginRight="25dp"
                         android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/e_pick"
@@ -87,8 +95,11 @@ android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/show"
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:paddingLeft="110dp"
+                android:paddingRight="110dp"
                 android:layout_centerInParent="true"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="Create workout"

@@ -12,7 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/grad"
         android:paddingBottom="15dp">
 
@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:text="Add Calories"
             android:fontFamily="sans-serif-light"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>
