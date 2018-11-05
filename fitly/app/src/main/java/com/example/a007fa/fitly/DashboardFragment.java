@@ -126,7 +126,7 @@ public class DashboardFragment extends Fragment {
 
         }
     };
-    
+
     protected void serviceStart() {
         if (!isMyServiceRunning(fitlyHandler.class)) {
             Intent intent = new Intent(getActivity().getApplicationContext(), fitlyHandler.class);
