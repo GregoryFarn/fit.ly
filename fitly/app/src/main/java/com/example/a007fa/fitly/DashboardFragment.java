@@ -56,24 +56,21 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        FloatingActionButton calorieButton = view.findViewById(R.id.AddCaloriesButton);
+        calorieButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddCalories.class);
+                startActivity(intent);
+            }
+        });
+
         Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         steps=0;
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK) {
-                Workout workout = (Workout)getActivity().getIntent().getExtras().get("workout");
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                getActivity().finish();
-            }
-        }
     }
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
