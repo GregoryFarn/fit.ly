@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
@@ -30,12 +31,11 @@ public class addActivity extends AppCompatActivity
     int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal;
     int counter = 0;
 
-    String time = "";
-
     static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
 
     Calendar calendarOne = Calendar.getInstance(), calendarTwo = Calendar.getInstance();
     Calendar c = Calendar.getInstance();
+
     View view;
 
     Workout workout = new Workout();
@@ -79,31 +79,15 @@ public class addActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
             String workoutName = textData.getText().toString();
-                if(workoutName.equals(""))
-                {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Please enter activity name",
-                            Toast.LENGTH_SHORT);
-
-                    toast.show();
+                if(TextUtils.isEmpty(workoutName)) {
+                    textData.setError("The item name cannot be empty");
+                    return;
                 }
                 else if (calendarOne.equals(calendarTwo))
                 {
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Activity cannot start and end at the same time",
                             Toast.LENGTH_SHORT);
-
-                    toast.show();
-
-
-                }
-                else if (calendarTwo.compareTo(calendarOne)<0)
-                {
-
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Start time must be after end time",
-                            Toast.LENGTH_SHORT);
-
                     toast.show();
                 }
                 else {
@@ -131,8 +115,6 @@ public class addActivity extends AppCompatActivity
         monthFinal = month;
         dayFinal = dayOfMonth;
 
-
-        //Calendar c = Calendar.getInstance();
         hour = c.get(Calendar.HOUR_OF_DAY);
         minute = c.get(Calendar.MINUTE);
 

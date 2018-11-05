@@ -1,60 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:backgroundTint="@color/colorPrimary"
-    tools:backgroundTint="@color/colorPrimary"
-    tools:context=".addActivity">
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/workoutName"
+    <RelativeLayout
+        android:id="@+id/rl1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="96dp"
-        android:ems="10"
-        android:hint="Activity name"
-        android:inputType="text" />
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/grad"
+        android:paddingBottom="15dp">
 
-    <Button
-        android:id="@+id/e_pick"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="170dp"
-        android:text="Start time"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="16dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Add Workout"
+            android:fontFamily="sans-serif-light"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"/>
 
-    <Button
-        android:id="@+id/show"
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll1"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:layout_centerInParent="true"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="Create workout"
-        android:textColor="@color/colorWhite"
-        android:layout_margin="30dp"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <Button
-        android:id="@+id/s_pick"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/show"
-        android:layout_alignTop="@+id/e_pick"
-        android:text="End time"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:layout_below="@+id/rl1"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="49dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ll1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <EditText
+                android:id="@+id/workoutName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="Activity name"
+                android:inputType="text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:id="@+id/ll2"
+                android:layout_below="@+id/workoutName">
+
+                    <Button
+                        android:id="@+id/e_pick"
+                        android:layout_width="140dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="25dp"
+                        android:text="Start time"
+                        android:background="@drawable/rounded_button"/>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/s_pick"
+                        android:layout_marginRight="25dp"
+                        android:layout_width="140dp"
+                        android:layout_height="50dp"
+                        android:layout_alignTop="@+id/e_pick"
+                        android:layout_alignEnd="@+id/show"
+                        android:text="End time"
+                        android:background="@drawable/rounded_button"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/show"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:paddingLeft="110dp"
+                android:paddingRight="110dp"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Create workout"
+                android:layout_below="@id/ll2"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/rounded_button"/>
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -12,7 +12,4 @@ public class User {
 
     private Schedule schedule;
     private ArrayList<ActivityRecord> activityRecords;
-
-    private Boolean badgeAchieved;
-
 }

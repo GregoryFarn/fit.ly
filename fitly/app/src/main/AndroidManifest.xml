@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.a007fa.fitly">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
         android:required="true" />
@@ -34,11 +35,16 @@
         <activity android:name=".DisplayWorkoutDetailsActivity" />
         <activity android:name=".addActivity" />
 
+        <activity android:name=".AddCalories" />
+
+
         <service
             android:name=".fitlyHandler"
             android:enabled="true" />
 
-        <receiver android:name=".saveAlarm" />
+        <receiver
+            android:name=".saveAlarm"
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"
