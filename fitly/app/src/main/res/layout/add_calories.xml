@@ -59,11 +59,14 @@
             <Button
                 android:id="@+id/submit"
                 android:layout_width="177dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:layout_below="@+id/calories"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="0dp"
-                android:text="Calories" />
+                android:text="Calories"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/rounded_button"/>
 
         </RelativeLayout>
 

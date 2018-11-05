@@ -35,7 +35,7 @@
         <activity android:name=".addActivity" />
 
         <activity android:name=".AddCalories" />
-        
+
 
         <service
             android:name=".fitlyHandler"

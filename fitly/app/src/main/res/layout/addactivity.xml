@@ -71,11 +71,12 @@ android:layout_height="match_parent">
                     <Button
                         android:id="@+id/e_pick"
                         android:layout_width="140dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="25dp"
-                        android:text="Start time" />
+                        android:text="Start time"
+                        android:background="@drawable/rounded_button"/>
 
                     <Space
                         android:layout_width="0dp"
@@ -86,10 +87,11 @@ android:layout_height="match_parent">
                         android:id="@+id/s_pick"
                         android:layout_marginRight="25dp"
                         android:layout_width="140dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:layout_alignTop="@+id/e_pick"
                         android:layout_alignEnd="@+id/show"
-                        android:text="End time" />
+                        android:text="End time"
+                        android:background="@drawable/rounded_button"/>
 
             </LinearLayout>
 
@@ -104,7 +106,8 @@ android:layout_height="match_parent">
                 android:backgroundTint="@color/colorPrimary"
                 android:text="Create workout"
                 android:layout_below="@id/ll2"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/rounded_button"/>
 
 
 
