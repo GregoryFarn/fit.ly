@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -80,7 +81,7 @@ public class DashboardFragment extends Fragment {
 
     public void displaySchedule() {
         String key = "10282018"; // replace with a way to get today's date
-        mUserRef.child("schedule").child(key);
+//        ArrayList<Workout> workouts = mUserRef.child("schedule").child(key);
 
         final Schedule sched = new Schedule();
         sched.initTest();
@@ -132,6 +133,30 @@ public class DashboardFragment extends Fragment {
                 if (getArguments() != null) {
                     Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
                     ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
+
+//                    final Schedule sched = (Schedule)intent.getSerializableExtra("sched");
+//
+//                    ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
+//
+//                    if(getActivity()!= null) {
+//                        DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+//                                R.layout.adapter_view_layout,
+//                                sched.getWorkouts());
+//
+//                        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+//                                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+//                                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+//
+//                                Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
+//                                Log.d("location", sched.getWorkouts().get(i).getLocation());
+//                                startActivity(intent);
+//                            }
+//                        });
+//                        scheduleDisplay.setAdapter(adapter);
+//                    }
                 }
             }
         }
