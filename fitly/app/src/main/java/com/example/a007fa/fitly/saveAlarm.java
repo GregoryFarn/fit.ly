@@ -1,21 +1,29 @@
 package com.example.a007fa.fitly;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.app.Service;
 
-public class saveAlarm extends Service {
+public class saveAlarm extends BroadcastReceiver {
 
-    static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
+    static final String ACTION_FITLY = "com.fitly.action.FITLY";
 
-    public void onCreate() {
-        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        Intent intent1 = new Intent(context, fitlyHandler.class);
         intent1.setAction(ACTION_ENDDAY);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
+
     }
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+
 }

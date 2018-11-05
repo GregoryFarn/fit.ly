@@ -70,16 +70,39 @@ public class DashboardFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         steps=0;
+        sendStepMessage();
         return view;
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK) {
+                Workout workout = (Workout)getActivity().getIntent().getExtras().get("workout");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                getActivity().finish();
+            }
+        }
+    }
+
+    protected void sendStepMessage() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), DashboardFragment.class);
+        intent.setAction(ACTION_FITLY);
+        intent.putExtra("stepCount", steps);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
+    }
+
+>>>>>>> a3d863a72b186a9abf65e38d94944e3e9cc9354a
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(ACTION_FITLY)) {
             Bundle b = intent.getExtras();
-            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
             steps = b.getFloat("stepCount");
+            ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(steps) + "/10,0000");
         }
         else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 
@@ -116,12 +139,6 @@ public class DashboardFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        //((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(steps));
-
-    }
     protected void serviceStart() {
         if (!isMyServiceRunning(fitlyHandler.class)) {
             Intent intent = new Intent(getActivity().getApplicationContext(), fitlyHandler.class);
