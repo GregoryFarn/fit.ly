@@ -33,12 +33,8 @@
 
         <activity android:name=".DisplayWorkoutDetailsActivity" />
         <activity android:name=".addActivity" />
-<<<<<<< HEAD
+
         <activity android:name=".AddCalories" />
-=======
-        
-        <activity android:name=".addCalories" />
->>>>>>> b1d66efe4d4185aad4e70be295772f9c0d89cfc5
 
         <service
             android:name=".fitlyHandler"
