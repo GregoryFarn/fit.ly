@@ -1,6 +1,7 @@
 package com.example.a007fa.fitly;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,9 +18,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -29,9 +28,24 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.example.a007fa.fitly.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-
     private BottomNavigationView mainNav;
     private FrameLayout mainFrame;
 
@@ -51,29 +65,75 @@ public class MainActivity extends AppCompatActivity {
 
     private float steps;
 
+    private final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Move this class to login/signup later
-        // For now, load the entire roster here and search for user
+        // Authentication
+        // This should be moved to our login/signup activity
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String email = "wenm@usc.edu";
+        String password = "password";
 
-//        String json = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.users));
-//        Log.d("json: ", json);
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        Users users = gson.fromJson(json, Users.class);
+        // Sign up
+//        mAuth.createUserWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d(TAG, "createUserWithEmail:success");
+//                            // Navigate to MainActivity
+//                        } else {
+//                            Log.w(TAG, "createUserWithEmail:failed");
+//                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+//                                Toast.makeText(getApplicationContext(), "User is already registered.", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else if (task.getException() instanceof FirebaseAuthEmailException) {
+//                                Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_LONG).show();
+//                            }
+//                            else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
+//                                Toast.makeText(getApplicationContext(), "Password is too weak", Toast.LENGTH_LONG).show();
+//                            }
+//                            else {
+//                                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//                });
 
-//        Log.d("users size: ", Integer.toString(users.size()));
+        // Log in
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            // Navigate to MainActivity
+                        } else {
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
+                            }
+                            else if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+                                Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
 
-        //test for notification
-//        Calendar start1 = Calendar.getInstance();
-//        start1.set(2018, 9, 22, 23, 57);
-//        Calendar start2 = Calendar.getInstance();
-//        start2.set(2018, 9, 22, 23, 58);
-//        new Alarm().setAlarm(getApplicationContext(),(int) (new Date().getTime()/ 1000L) ,start1);
-//        new Alarm().setAlarm(getApplicationContext(), (int) ((start2.getTimeInMillis() / 1000L) % Integer.MAX_VALUE) ,start2);
+        // To sign out, do FirebaseAuth.getInstance().signOut();
 
+        // To set user data, do
+        // FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        // DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
+        // mUserRef.child("displayName").setValue("Mel Mel");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,31 +151,28 @@ public class MainActivity extends AppCompatActivity {
         mainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            TextView title = (TextView) findViewById(R.id.title);
-            switch(menuItem.getItemId()) {
-                case R.id.navigation_badges:
-                    title.setText("Badges");
-                    setFragment(badgeFragment);
-                    return true;
+                TextView title = (TextView) findViewById(R.id.title);
+                switch(menuItem.getItemId()) {
+                    case R.id.navigation_badges:
+                        title.setText("Badges");
+                        setFragment(badgeFragment);
+                        return true;
 
-                case R.id.navigation_dashboard:
-                    title.setText("Dashboard");
-                    setFragment(dashboardFragment);
-                    return true;
+                    case R.id.navigation_dashboard:
+                        title.setText("Dashboard");
+                        setFragment(dashboardFragment);
+                        return true;
 
-                case R.id.navigation_profile:
-                    title.setText("Profile");
-                    setFragment(profileFragment);
-                    return true;
+                    case R.id.navigation_profile:
+                        title.setText("Profile");
+                        setFragment(profileFragment);
+                        return true;
 
-                default:
-                    return false;
-
-            }
+                    default:
+                        return false;
+                }
             }
         });
-
-
     }
 
     private void setFragment(Fragment fragment) {
@@ -176,8 +233,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -186,16 +241,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
-    }
-
-    public String inputStreamToString(InputStream inputStream) {
-        try {
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes, 0, bytes.length);
-            String json = new String(bytes);
-            return json;
-        } catch (IOException e) {
-            return null;
-        }
     }
 }
