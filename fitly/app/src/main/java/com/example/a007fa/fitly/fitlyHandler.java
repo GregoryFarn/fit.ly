@@ -36,8 +36,11 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
     static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
+    static final String ACTION_CALORIES = "com.fitly.action.CALORIES";
     private ArrayList<Badge> badges;
     private Schedule sched;
+    private int caloriesBurned;
+    private int caloriesBurnedSteps;
 
     public void onCreate() {
         bManager = LocalBroadcastManager.getInstance(this);
@@ -47,6 +50,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_SCHEDULELIST);
         intentFilter.addAction(ACTION_WORKOUT);
         intentFilter.addAction(ACTION_ENDDAY);
+        intentFilter.addAction(ACTION_CALORIES);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
@@ -66,6 +70,8 @@ public class fitlyHandler extends Service implements SensorEventListener {
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         steps = 0;
+        caloriesBurned = 0;
+        caloriesBurnedSteps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         Calendar c = Calendar.getInstance();
@@ -140,6 +146,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             first = false;
         } else {
             steps = event.values[0] - stepsFirst;
+            caloriesBurnedSteps = Math.round(steps/20);
             sendStepMessage();
         }
 
@@ -184,6 +191,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 intent1.setAction(ACTION_FITLY);
                 intent1.putExtra("stepCount", (float)100.0);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+            }
+            else if (intent.getAction().equals(ACTION_CALORIES)) {
+                caloriesBurned += intent.getIntExtra("calories",0);
             }
         }
     };
