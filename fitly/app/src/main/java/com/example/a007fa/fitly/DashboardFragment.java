@@ -74,8 +74,6 @@ public class DashboardFragment extends Fragment {
         return view;
     }
 
-<<<<<<< HEAD
-=======
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == 1) {
@@ -95,7 +93,6 @@ public class DashboardFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
     }
 
->>>>>>> a3d863a72b186a9abf65e38d94944e3e9cc9354a
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
