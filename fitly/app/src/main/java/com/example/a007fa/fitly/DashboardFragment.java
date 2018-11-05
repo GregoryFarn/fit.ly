@@ -187,7 +187,7 @@ public class DashboardFragment extends Fragment {
 
 
                            startActivity(intent);
-                           setId(i);
+
 
 
                     }
