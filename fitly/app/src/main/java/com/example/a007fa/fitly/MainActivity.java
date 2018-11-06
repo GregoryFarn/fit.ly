@@ -79,54 +79,8 @@ public class MainActivity extends AppCompatActivity {
         String password = "password";
 
         // Sign up
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            Log.d(TAG, "createUserWithEmail:success");
-//                            // Navigate to MainActivity
-//                        } else {
-//                            Log.w(TAG, "createUserWithEmail:failed");
-//                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-//                                Toast.makeText(getApplicationContext(), "User is already registered.", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else if (task.getException() instanceof FirebaseAuthEmailException) {
-//                                Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_LONG).show();
-//                            }
-//                            else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
-//                                Toast.makeText(getApplicationContext(), "Password is too weak", Toast.LENGTH_LONG).show();
-//                            }
-//                            else {
-//                                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//                });
+//
 
-        // Log in
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            // Navigate to MainActivity
-                        } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
-                            }
-                            else if (task.getException() instanceof FirebaseAuthInvalidUserException) {
-                                Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
 
         // To sign out, do FirebaseAuth.getInstance().signOut();
 
