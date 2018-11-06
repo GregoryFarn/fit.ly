@@ -11,12 +11,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.support.v4.content.LocalBroadcastManager;
-import android.os.SystemClock;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 
-import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class fitlyHandler extends Service implements SensorEventListener {
     private SensorManager sManager;
@@ -37,10 +36,11 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
     static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
     static final String ACTION_CALORIES = "com.fitly.action.CALORIES";
+    static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
     private ArrayList<Badge> badges;
     private Schedule sched;
-    private int caloriesBurned;
-    private int caloriesBurnedSteps;
+    private float caloriesBurned;
+    private float caloriesBurnedSteps;
 
     public void onCreate() {
         bManager = LocalBroadcastManager.getInstance(this);
@@ -63,9 +63,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intent1.putExtra("sched",sched);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
 
-        startSmallBadge();
-        sendStepMessage();
-
         first = true;
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -73,6 +70,10 @@ public class fitlyHandler extends Service implements SensorEventListener {
         caloriesBurned = 0;
         caloriesBurnedSteps = 0;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        startSmallBadge();
+        sendStepMessage();
+        sendCalMessage();
 
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
@@ -108,6 +109,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setAction(ACTION_FITLY);
         intent.putExtra("stepCount", steps);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    protected void sendCalMessage() {
+        Intent intent = new Intent(getApplicationContext(), DashboardFragment.class);
+        intent.setAction(ACTION_CALCOUNT);
+        intent.putExtra("calCount", caloriesBurnedSteps +caloriesBurned);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
@@ -148,6 +156,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             steps = event.values[0] - stepsFirst;
             caloriesBurnedSteps = Math.round(steps/20);
             sendStepMessage();
+            sendCalMessage();
         }
 
         if(steps>= 10000 && !badges.get(badges.size()-1).completed){
@@ -166,6 +175,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             sendBadgeListMessage();
 
         }
+
 
     }
 
@@ -188,8 +198,8 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
-                intent1.setAction(ACTION_FITLY);
-                intent1.putExtra("stepCount", (float)100.0);
+                intent1.setAction(ACTION_CALCOUNT);
+                intent1.putExtra("calCount", (float)100.0);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
