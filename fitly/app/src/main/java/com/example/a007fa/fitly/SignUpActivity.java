@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -81,6 +82,17 @@ public class SignUpActivity extends AppCompatActivity {
                 name=userName.getText().toString();
                 signUp();
 
+            }
+        });
+
+        TextView logIn= (TextView) findViewById(R.id.link_login);
+        logIn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Start the logIn activity
+                Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
+                startActivity(intent);
             }
         });
 
