@@ -88,7 +88,8 @@ public class DashboardFragment extends Fragment {
         calories=0;
         sendStepMessage();
         sendCalMessage();
-      
+        sendCalMessage();
+
         return view;
     }
 
