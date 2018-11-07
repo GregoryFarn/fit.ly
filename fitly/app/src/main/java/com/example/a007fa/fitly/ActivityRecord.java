@@ -6,7 +6,7 @@ import java.util.Calendar;
 
 public class ActivityRecord  implements Serializable {
     private Calendar date;
-    private Integer stepCount;
+    private int stepCount;
     private Boolean badgeAchieved;
     private Integer totalCaloriesConsumed;
     private ArrayList<Workout> completedWorkouts = null;
@@ -58,6 +58,12 @@ public class ActivityRecord  implements Serializable {
     public void setIncompleteWorkouts(ArrayList<Workout> incompleteWorkouts) {
         this.incompleteWorkouts = incompleteWorkouts;
     }
+
+    public void setBadgeAcheived(boolean badge) {
+        this.badgeAchieved =badge;
+    }
+
+
 }
 
 

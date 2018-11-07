@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -17,18 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 
 public class DashboardFragment extends Fragment {
@@ -39,11 +32,14 @@ public class DashboardFragment extends Fragment {
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
+    static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
+
 
     private View view;
     private final String TAG = "Dashboard fragment";
-  
+
     float steps;
+    float calories;
     public DashboardFragment() { }
 
     @Override
@@ -52,14 +48,15 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
+       /* mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
-        Log.d(TAG, "mUser: " + mUser.getUid());
+        Log.d(TAG, "mUser: " + mUser.getUid());*/
 
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_SCHEDULEPAGE);
+        intentFilter.addAction(ACTION_CALCOUNT);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
 
@@ -88,8 +85,11 @@ public class DashboardFragment extends Fragment {
         displaySchedule();
 
         steps=0;
+        calories=0;
         sendStepMessage();
-      
+        sendCalMessage();
+        sendCalMessage();
+
         return view;
     }
 
@@ -143,22 +143,76 @@ public class DashboardFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
     }
 
-    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-          if (intent.getAction().equals(ACTION_FITLY)) {
-              Bundle b = intent.getExtras();
-              steps = b.getFloat("stepCount");
-              ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(steps) + "/10,0000");
-          }
-          else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
-              if (getArguments() != null) {
-                  Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
-                  ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
-              }
-          }
-        }
-    };
+    protected void sendCalMessage() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), DashboardFragment.class);
+        intent.setAction(ACTION_CALCOUNT);
+        intent.putExtra("calCount", calories);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
+    }
+
+    private BroadcastReceiver bReceiver;
+
+    {
+        bReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(ACTION_FITLY)) {
+                    Bundle b = intent.getExtras();
+                    ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
+                    steps = b.getFloat("stepCount");
+                }
+                else if (intent.getAction().equals(ACTION_CALCOUNT)) {
+                    Bundle b = intent.getExtras();
+                    ((TextView) getActivity().findViewById(R.id.CalorieCountText)).setText(Math.round(b.getFloat("calCount"))+"");
+                    calories = b.getFloat("calCount");
+                }
+                else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
+
+                    if (getArguments() != null) {
+                        Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
+                        ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
+                    }
+
+                    final Schedule sched = (Schedule) intent.getSerializableExtra("sched");
+
+                    ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
+
+                    if (getActivity() != null) {
+                        final DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+                                R.layout.adapter_view_layout,
+                                sched.getWorkouts());
+
+                        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+                                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                                Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
+                                Log.d("location", sched.getWorkouts().get(i).getLocation());
+
+                                final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
+
+
+                                startActivity(intent);
+
+
+                            }
+
+
+                        });
+                        scheduleDisplay.setAdapter(adapter);
+
+                    }
+
+                }
+            }
+
+        };
+    }
 
     protected void serviceStart() {
         if (!isMyServiceRunning(fitlyHandler.class)) {

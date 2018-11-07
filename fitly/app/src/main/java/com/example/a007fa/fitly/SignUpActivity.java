@@ -1,6 +1,7 @@
 package com.example.a007fa.fitly;
 
 import android.content.Intent;
+
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,7 +91,6 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
-
         TextView logIn= (TextView) findViewById(R.id.link_login);
         logIn.setOnClickListener(new View.OnClickListener() {
 
@@ -103,4 +103,5 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
     }
+
 }

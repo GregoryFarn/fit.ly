@@ -73,6 +73,7 @@ public class LogInActivity extends AppCompatActivity {
                 password=userPassword.getText().toString();
                 userLogIn();
                 Log.d("test on vli", "onClick: ");
+                
 
             }
         });
