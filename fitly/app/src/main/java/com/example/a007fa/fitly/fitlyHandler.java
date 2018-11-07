@@ -38,9 +38,11 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_CALORIES = "com.fitly.action.CALORIES";
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
     private ArrayList<Badge> badges;
+    private boolean badgeAcheived;
     private Schedule sched;
     private float caloriesBurned;
     private float caloriesBurnedSteps;
+    private ActivityRecord currentRec;
 
     public void onCreate() {
         bManager = LocalBroadcastManager.getInstance(this);
@@ -69,6 +71,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         steps = 0;
         caloriesBurned = 0;
         caloriesBurnedSteps = 0;
+        badgeAcheived = false;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         startSmallBadge();
@@ -78,7 +81,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
 
-
+        currentRec = new ActivityRecord(c);
         new Alarm(this, (int) ((c.getTimeInMillis() / 1000L) % Integer.MAX_VALUE), c).setAlarmEndDay();
     }
 
@@ -160,6 +163,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         }
 
         if(steps>= 10000 && !badges.get(badges.size()-1).completed){
+            badgeAcheived = true;
             badges.get(badges.size()-1).setCompleted(true);
             int count =0;
             for(int i = badges.size()-1; i>=badges.size()-6; i--){
@@ -197,10 +201,8 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 sendSchedMessage();
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
-                Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
-                intent1.setAction(ACTION_CALCOUNT);
-                intent1.putExtra("calCount", (float)100.0);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+                currentRec.setStepCount(Math.round(steps));
+                currentRec.setBadgeAcheived(badgeAcheived);
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);
