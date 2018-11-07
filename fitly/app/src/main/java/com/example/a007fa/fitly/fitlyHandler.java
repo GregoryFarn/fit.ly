@@ -13,9 +13,17 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class fitlyHandler extends Service implements SensorEventListener {
     private SensorManager sManager;
@@ -43,8 +51,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private float caloriesBurned;
     private float caloriesBurnedSteps;
     private ActivityRecord currentRec;
-
+    private FirebaseUser mUser;
+    private DatabaseReference mUserRef;
     public void onCreate() {
+
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
+        Log.d(TAG, "mUser: " + mUser.getUid());
+
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGELIST);
@@ -203,6 +217,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 currentRec.setStepCount(Math.round(steps));
                 currentRec.setBadgeAcheived(badgeAcheived);
+
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);
