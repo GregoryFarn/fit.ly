@@ -1,9 +1,10 @@
 package com.example.a007fa.fitly;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ActivityRecord {
+public class ActivityRecord  implements Serializable {
     private Calendar date;
     private Integer stepCount;
     private Boolean badgeAchieved;

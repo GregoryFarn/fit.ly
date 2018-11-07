@@ -19,7 +19,10 @@ import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -38,8 +41,11 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Success", "createUserWithEmail:success");
-                            //UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    //.setDisplayName(name).build();
+                            //add new user to database
+                             FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+                             DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
+                             User setU= new User(name,email);
+                             mUserRef.setValue(setU);
                             // Navigate to MainActivity
                             Intent openDashboard= new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(openDashboard);
