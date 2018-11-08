@@ -45,11 +45,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_WORKOUT = "com.fitly.action.WORKOUT";
     static final String ACTION_CALORIES = "com.fitly.action.CALORIES";
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
+    static final String ACTION_CONSUMED = "com.fitly.action.CONSUMED";
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
     private float caloriesBurned;
     private float caloriesBurnedSteps;
+    private float calConsumed;
     private ActivityRecord currentRec;
     private FirebaseUser mUser;
     private DatabaseReference mUserRef;
@@ -67,6 +69,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_WORKOUT);
         intentFilter.addAction(ACTION_ENDDAY);
         intentFilter.addAction(ACTION_CALORIES);
+        intentFilter.addAction(ACTION_CONSUMED);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
@@ -85,6 +88,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         steps = 0;
         caloriesBurned = 0;
         caloriesBurnedSteps = 0;
+        calConsumed = 0;
         badgeAcheived = false;
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -216,11 +220,15 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 currentRec.setStepCount(Math.round(steps));
-                currentRec.setBadgeAcheived(true);
+                currentRec.setBadgeAcheived(badgeAcheived);
+                currentRec.setTotalCalories(Math.round(calConsumed));
                 mUserRef.child("activityRecords").setValue(currentRec.toMap());
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);
+            }
+            else if (intent.getAction().equals(ACTION_CONSUMED)) {
+                calConsumed += intent.getIntExtra("calories",0);
             }
         }
     };
