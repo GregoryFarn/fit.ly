@@ -34,6 +34,8 @@ public class ActivityRecord  implements Serializable {
         result.put("stepCount", stepCount);
         result.put("badgeAchieved", badgeAchieved);
         result.put("totalCaloriesConsumed", totalCaloriesConsumed);
+        result.put("completedWorkouts", completedWorkouts);
+        result.put("incompleteWorkouts", incompleteWorkouts);
 
 
         return result;
@@ -46,7 +48,10 @@ public class ActivityRecord  implements Serializable {
     public Integer getTotalCalories() {
         return this.totalCaloriesConsumed;
     }
-    
+
+    public void setTotalCalories(int totalCaloriesConsumed) {
+         this.totalCaloriesConsumed = totalCaloriesConsumed;
+    }
     public Calendar getDate() {
         return stringToCalendar();
     }
