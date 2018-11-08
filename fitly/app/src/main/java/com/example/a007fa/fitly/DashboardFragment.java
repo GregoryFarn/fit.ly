@@ -194,7 +194,7 @@ public class DashboardFragment extends Fragment {
                                 Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
                                 Log.d("location", sched.getWorkouts().get(i).getLocation());
 
-                                final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
+                             //   final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
 
 
                                 startActivity(intent);
