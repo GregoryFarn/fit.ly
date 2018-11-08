@@ -14,8 +14,8 @@ public class ActivityRecord  implements Serializable {
     private int stepCount;
     private Boolean badgeAchieved;
     private Integer totalCaloriesConsumed;
-    private ArrayList<Workout> completedWorkouts;
-    private ArrayList<Workout> incompleteWorkouts;
+    private ArrayList<Map<String,Object>> completedWorkouts;
+    private ArrayList<Map<String,Object>> incompleteWorkouts;
     
     public ActivityRecord(Calendar date) {
         this.date = date.getTime().toString();
@@ -24,8 +24,8 @@ public class ActivityRecord  implements Serializable {
         this.totalCaloriesConsumed = 0;
         completedWorkouts = new ArrayList<>();
         incompleteWorkouts = new ArrayList<>();
-        completedWorkouts.add(new Workout("ye"));
-        incompleteWorkouts.add(new Workout("ye"));
+        completedWorkouts.add((new Workout("ye")).toMap());
+        incompleteWorkouts.add((new Workout("ye")).toMap());
     }
 
     public Map<String, Object> toMap() {
@@ -74,19 +74,19 @@ public class ActivityRecord  implements Serializable {
         this.stepCount = stepCount;
     }
 
-    public ArrayList<Workout> getCompletedWorkouts() {
+    public ArrayList<Map<String,Object>> getCompletedWorkouts() {
         return completedWorkouts;
     }
 
-    public void setCompletedWorkouts(ArrayList<Workout> completedWorkouts) {
+    public void setCompletedWorkouts(ArrayList<Map<String,Object>> completedWorkouts) {
         this.completedWorkouts = completedWorkouts;
     }
 
-    public ArrayList<Workout> getIncompleteWorkouts() {
+    public ArrayList<Map<String,Object>> getIncompleteWorkouts() {
         return incompleteWorkouts;
     }
 
-    public void setIncompleteWorkouts(ArrayList<Workout> incompleteWorkouts) {
+    public void setIncompleteWorkouts(ArrayList<Map<String,Object>> incompleteWorkouts) {
         this.incompleteWorkouts = incompleteWorkouts;
     }
 
