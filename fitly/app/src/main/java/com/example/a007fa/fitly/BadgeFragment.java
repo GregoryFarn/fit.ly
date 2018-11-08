@@ -82,7 +82,6 @@ public class BadgeFragment extends Fragment {
                                 else
                                     badgeImage.setImageResource(R.drawable.bigbadge);
                                 return convertView;
-
                             }
                         };
                 ListView badgeList = view.findViewById(R.id.list);
