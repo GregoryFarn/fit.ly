@@ -1,41 +1,52 @@
 package com.example.a007fa.fitly;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class Workout implements Serializable {
     private String workoutName;
-    private Calendar startTime;
-    private Calendar endTime;
+    private String startTime;
+    private String endTime;
     private String location;
     private String description = "";
     private boolean isCompletedWorkout = false;
 
     public Workout() { }
 
-    public Workout(String workoutName) { this.workoutName = workoutName; }
+    public Workout(String workoutName) { this.workoutName = workoutName;
+        this.startTime = "";
+        this.endTime = "";
+        this.location = "";
+        this.description = "";
+    }
 
     public Workout(String workoutName, Calendar startTime, Calendar endTime) {
         this.workoutName = workoutName;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = startTime.toString();
+        this.endTime = endTime.toString();
+        this.location = "";
+        this.description = "";
     }
 
     public Workout(String workoutName, Calendar startTime, Calendar endTime, String location) {
         this.workoutName = workoutName;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = startTime.toString();
+        this.endTime = endTime.toString();
         this.location = location;
+        this.description = "";
     }
 
     public Workout(String workoutName, Calendar startTime, Calendar endTime, String location, String description) {
         this.workoutName = workoutName;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = startTime.toString();
+        this.endTime = endTime.toString();
         this.location = location;
         this.description = description;
     }
@@ -43,17 +54,28 @@ public class Workout implements Serializable {
 
     public Workout(String workoutName, String startTime, String endTime, String location, String description) {
         this.workoutName = workoutName;
-//        this.startTime = startTime;
-//        this.endTime = endTime; // convert to string
+        this.startTime = "";
+        this.endTime = ""; // convert to string
         this.location = location;
         this.description = description;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("workoutName", workoutName);
+        result.put("startTime", startTime);
+        result.put("endTime", endTime);
+        result.put("location", location);
+        result.put("description", description);
+
+        return result;
     }
 
     // Alternative constructor
     public void add(String workoutName, Calendar startTime, Calendar endTime) {
         this.workoutName = workoutName;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = startTime.toString();
+        this.endTime = endTime.toString();
     }
 
     protected Workout(Parcel in) {
@@ -65,27 +87,27 @@ public class Workout implements Serializable {
 
     public String getStartDate() {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        return format.format(this.startTime.getTime());
+        return format.format(stringToCalendar(this.startTime).getTime());
     }
 
     public String getEndDate() {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        return format.format(this.endTime.getTime());
+        return format.format(stringToCalendar(this.endTime).getTime());
     }
 
     public String getStartTime() {
         SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
-        return format.format(this.startTime.getTime());
+        return format.format(stringToCalendar(this.startTime).getTime());
     }
 
     public String getEndTime() {
         SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
-        return format.format(this.endTime.getTime());
+        return format.format(stringToCalendar(this.endTime).getTime());
     }
 
-    public Calendar getStartCalendar() { return this.startTime; }
+    public Calendar getStartCalendar() { return stringToCalendar(this.startTime); }
 
-    public Calendar getEndCalendar() { return this.endTime; }
+    public Calendar getEndCalendar() { return stringToCalendar(this.endTime); }
 
     public String getWorkoutName() { return this.workoutName; }
 
@@ -99,6 +121,17 @@ public class Workout implements Serializable {
 
     public void setCompletedWorkout(boolean completedWorkout) {
         isCompletedWorkout = completedWorkout;
+    }
+
+    public Calendar stringToCalendar(String date){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(date));// all done
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return cal;
     }
 }
 

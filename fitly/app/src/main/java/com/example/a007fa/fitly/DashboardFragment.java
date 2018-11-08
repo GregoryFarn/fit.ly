@@ -20,8 +20,10 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class DashboardFragment extends Fragment {
@@ -48,9 +50,9 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-       /* mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
-        Log.d(TAG, "mUser: " + mUser.getUid());*/
+        Log.d(TAG, "mUser: " + mUser.getUid());
 
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
@@ -194,7 +196,7 @@ public class DashboardFragment extends Fragment {
                                 Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
                                 Log.d("location", sched.getWorkouts().get(i).getLocation());
 
-                                final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
+                             //   final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
 
 
                                 startActivity(intent);

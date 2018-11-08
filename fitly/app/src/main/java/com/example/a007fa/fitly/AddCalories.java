@@ -14,6 +14,7 @@ import android.widget.EditText;
 public class AddCalories extends AppCompatActivity {
     Button submit;
     EditText textData;
+    static final String ACTION_CONSUMED = "com.fitly.action.CONSUMED";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,6 @@ public class AddCalories extends AppCompatActivity {
 
         submit = (Button) findViewById(R.id.submit);
 
-        final String INTENT_CALORIEINTAKE = "com.app.fitly.ADDCALORIES";
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,7 +36,7 @@ public class AddCalories extends AppCompatActivity {
                 }
                 Intent intent = new Intent(getApplicationContext(), fitlyHandler.class);
                 intent.putExtra("calories", Integer.parseInt(calories) );
-                intent.setAction(INTENT_CALORIEINTAKE);
+                intent.setAction(ACTION_CONSUMED);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 setResult(Activity.RESULT_OK);
                 finish();
