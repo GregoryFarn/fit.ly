@@ -216,8 +216,8 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 currentRec.setStepCount(Math.round(steps));
-                currentRec.setBadgeAcheived(badgeAcheived);
-
+                currentRec.setBadgeAcheived(true);
+                mUserRef.child("activityRecords").setValue(currentRec.toMap());
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);

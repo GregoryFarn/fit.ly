@@ -1,22 +1,42 @@
 package com.example.a007fa.fitly;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class ActivityRecord  implements Serializable {
-    private Calendar date;
+    private String date;
     private int stepCount;
     private Boolean badgeAchieved;
     private Integer totalCaloriesConsumed;
-    private ArrayList<Workout> completedWorkouts = null;
-    private ArrayList<Workout> incompleteWorkouts = null;
+    private ArrayList<Workout> completedWorkouts;
+    private ArrayList<Workout> incompleteWorkouts;
     
     public ActivityRecord(Calendar date) {
-        this.date = date;
+        this.date = date.toString();
         this.stepCount = 0;
         this.badgeAchieved = false;
         this.totalCaloriesConsumed = 0;
+        completedWorkouts = new ArrayList<>();
+        incompleteWorkouts = new ArrayList<>();
+        completedWorkouts.add(new Workout("ye"));
+        incompleteWorkouts.add(new Workout("ye"));
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("date", date);
+        result.put("stepCount", stepCount);
+        result.put("badgeAchieved", badgeAchieved);
+        result.put("totalCaloriesConsumed", totalCaloriesConsumed);
+
+
+        return result;
     }
 
     public void addCalories(int calories) {
@@ -28,11 +48,22 @@ public class ActivityRecord  implements Serializable {
     }
     
     public Calendar getDate() {
-        return date;
+        return stringToCalendar();
+    }
+
+    public Calendar stringToCalendar(){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(date));// all done
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return cal;
     }
 
     public void setDate(Calendar date) {
-        this.date = date;
+        this.date = date.toString();
     }
 
     public Integer getStepCount() {
