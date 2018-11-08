@@ -7,27 +7,29 @@ import java.util.List;
 import java.util.Map;
 
 public class User implements Serializable {
-    private String username;
+    private String displayName;
     private String password;
     private String email;
+    private Integer age;
     private Integer numConsecutiveDays;
 
     private Schedule schedule;
     private ArrayList<ActivityRecord> activityRecords;
     User(String name, String useremail)
     {
-        username=name;
+        displayName=name;
         email=useremail;
         schedule=new Schedule();
         activityRecords= new ArrayList<ActivityRecord>();
         numConsecutiveDays=0;
+        age=0;
     }
-    public String getUsername() {
-        return username;
+    public String getdisplayName() {
+        return displayName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setdisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getPassword() {
