@@ -18,7 +18,7 @@ public class ActivityRecord  implements Serializable {
     private ArrayList<Workout> incompleteWorkouts;
     
     public ActivityRecord(Calendar date) {
-        this.date = date.toString();
+        this.date = date.getTime().toString();
         this.stepCount = 0;
         this.badgeAchieved = false;
         this.totalCaloriesConsumed = 0;
