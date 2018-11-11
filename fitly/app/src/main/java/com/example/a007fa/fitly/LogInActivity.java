@@ -71,6 +71,11 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 email=userEmail.getText().toString();
                 password=userPassword.getText().toString();
+                if(email.isEmpty() || password.isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(), "Enter email and password", Toast.LENGTH_SHORT).show();
+                }
+                else
                 userLogIn();
                 Log.d("test on vli", "onClick: ");
                 
