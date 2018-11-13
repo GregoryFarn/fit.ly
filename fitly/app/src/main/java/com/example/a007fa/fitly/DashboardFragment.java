@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -121,6 +120,7 @@ public class DashboardFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
             scheduleDisplay.setAdapter(adapter);
         }
     }
@@ -184,6 +184,7 @@ public class DashboardFragment extends Fragment {
                                 R.layout.adapter_view_layout,
                                 sched.getWorkouts());
 
+
                         scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -195,9 +196,6 @@ public class DashboardFragment extends Fragment {
 
                                 Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
                                 Log.d("location", sched.getWorkouts().get(i).getLocation());
-
-                             //   final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
-
 
                                 startActivity(intent);
 

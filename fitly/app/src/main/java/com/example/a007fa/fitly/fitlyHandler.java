@@ -82,9 +82,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intent1.putExtra("sched",sched);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
 
-        first = true;
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        first = true;
         steps = 0;
         caloriesBurned = 0;
         caloriesBurnedSteps = 0;
@@ -223,6 +223,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 currentRec.setBadgeAcheived(badgeAcheived);
                 currentRec.setTotalCalories(Math.round(calConsumed));
                 mUserRef.child("activityRecords").setValue(currentRec.toMap());
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(System.currentTimeMillis());
+                currentRec.setDate(c);
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);

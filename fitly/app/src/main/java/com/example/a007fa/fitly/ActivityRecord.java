@@ -68,7 +68,7 @@ public class ActivityRecord  implements Serializable {
     }
 
     public void setDate(Calendar date) {
-        this.date = date.toString();
+        this.date = date.getTime().toString();
     }
 
     public Integer getStepCount() {
