@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f71eb930e8aabdf1a803aa64bec50580d957553f
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,9 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import static android.content.ContentValues.TAG;
+<<<<<<< HEAD
 =======
 import android.widget.TextView;
 >>>>>>> User class
+=======
+>>>>>>> f71eb930e8aabdf1a803aa64bec50580d957553f
 
 
 /**

@@ -178,7 +178,40 @@ public class DashboardFragment extends Fragment {
                     final Schedule sched = (Schedule) intent.getSerializableExtra("sched");
 
 
+<<<<<<< HEAD
                     displaySchedule(sched);
+=======
+                    if (getActivity() != null) {
+                        final DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+                                R.layout.adapter_view_layout,
+                                sched.getWorkouts());
+
+                        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
+                                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
+                                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+
+                                Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
+                                Log.d("location", sched.getWorkouts().get(i).getLocation());
+
+                             //   final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
+
+
+                                startActivity(intent);
+
+
+                            }
+
+
+                        });
+                        scheduleDisplay.setAdapter(adapter);
+
+                    }
+>>>>>>> f71eb930e8aabdf1a803aa64bec50580d957553f
 
                 }
             }
