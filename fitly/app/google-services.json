@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "832609730544-b64c9o6slv8s9c5g5ur08a4tbe8eauk0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.a007fa.fitly",
-            "certificate_hash": "ffbd06bdfecf5bbffc74685e1e931b7c5a7f1419"
-          }
-        },
-        {
           "client_id": "832609730544-32uoj7624e3566m62dn6g730f8q5j2m8.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -3,25 +3,23 @@ package com.example.a007fa.fitly;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
 
     private Context mContext;
     private DashboardFragment dashboardFragment;
     private int mResource;
+    static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     //private ArrayList<Workout> = new ArrayAdapter<Workout>;
 
     public DisplayScheduleAdapter(Context context, int resource, ArrayList<Workout> objects) {
@@ -64,6 +62,11 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
                     isComplete.setChecked(true);
                     Log.d("isCompleted","getItem " + String.valueOf(getItem(position).isCompletedWorkout()));
                     Log.d("isCompleted", "r.id " +String.valueOf(isComplete.isChecked()));
+
+                    Intent intent1 = new Intent(mContext, fitlyHandler.class);
+                    intent1.setAction(ACTION_ENDDAY);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent1);
+                    Log.d("used", "yea");
                 }
                 else{
                     getItem(position).setCompletedWorkout(false);

@@ -1,210 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl1"
+        android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/grad"
-        android:layout_marginTop="60dp"
-        android:paddingBottom="15dp">
+        android:layout_height="350dp">
 
-        <RelativeLayout
-            android:id="@+id/userImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
-
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_margin="20dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/user" />
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/userImg"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif-light"
-            android:text="John Doe"
-            android:textColor="@color/colorWhite"
-            android:textSize="32dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/userImg"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="45dp"
-            android:fontFamily="sans-serif-light"
-            android:text="Badge Level"
-            android:textColor="@color/nav_item_colors"
-            android:textSize="14dp" />
-
-    </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/ll1"
+            android:id="@+id/profileBackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl1"
-            android:layout_gravity="center"
+            android:layout_height="400dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorDarkened"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/profileImg"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="70dp"
+                android:src="@drawable/user" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="abc"
+                android:textColor="#fff"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/goals"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="abc@usc.edu"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/goals2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="10dp"
+                android:text="Goals"
+                android:textColor="#fff"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/profile_details"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="300dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/colorPrimary"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:gravity="center">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
-
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="GOALS "
-                        android:fontFamily="sans-serif-light"
-                        android:textColor="@color/colorWhite"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ACHIEVED"
-                        android:fontFamily="sans-serif-light"
-                        android:textColor="@color/colorWhite"/>
+                        android:gravity="center_horizontal"
+                        android:text="Age"
+                        android:textSize="20sp" />
 
+                    <TextView
+                        android:id="@+id/age"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="0dp"
+                        android:text="22"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
-            </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Height"
+                        android:textSize="20sp" />
 
+                    <TextView
+                        android:id="@+id/height"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="0dp"
+                        android:text="180"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-        </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/ll1"
-        android:layout_marginTop="15dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Steps Completed"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="9001"
-                    android:textSize="18dp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@android:color/darker_gray"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Weight"
+                        android:textSize="20sp" />
 
+                    <TextView
+                        android:id="@+id/weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="0dp"
+                        android:text="170"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Steps Completed"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="9001"
-                    android:textSize="18dp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@android:color/darker_gray"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total Steps Completed"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9001"
-                android:textSize="18dp"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="15dp"
-                android:background="@android:color/darker_gray"/>
-
-
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Steps Completed"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="9001"
-                    android:textSize="18dp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@android:color/darker_gray"/>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/profileSetup"
+        android:layout_width="360dp"
+        android:layout_height="149dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/editProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/change_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:clickable="false"
+                android:paddingLeft="20dp"
+                android:text="Change Password"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/accelerometer_permission"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="0dp">
+
+            <TextView
+                android:id="@+id/email2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="Accerometer Permission"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/permission_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/setNotification"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="0dp">
+
+            <TextView
+                android:id="@+id/notification_setup"
+
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_gravity="center_vertical"
+                android:clickable="false"
+                android:paddingLeft="20dp"
+                android:text="Manage Notification Time"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/logout_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/ll2"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@color/colorPrimary"
+        android:color="@color/colorDarkened"
+        android:text="Logout"
+        android:textColor="@color/colorWhite" />
+      />
+
+</LinearLayout>

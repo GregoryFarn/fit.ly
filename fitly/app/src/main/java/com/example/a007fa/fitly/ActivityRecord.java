@@ -14,8 +14,8 @@ public class ActivityRecord  implements Serializable {
     private int stepCount;
     private Boolean badgeAchieved;
     private Integer totalCaloriesConsumed;
-    private ArrayList<Workout> completedWorkouts;
-    private ArrayList<Workout> incompleteWorkouts;
+    private ArrayList<Map<String,Object>> completedWorkouts;
+    private ArrayList<Map<String,Object>> incompleteWorkouts;
     
     public ActivityRecord(Calendar date) {
         this.date = date.getTime().toString();
@@ -24,8 +24,8 @@ public class ActivityRecord  implements Serializable {
         this.totalCaloriesConsumed = 0;
         completedWorkouts = new ArrayList<>();
         incompleteWorkouts = new ArrayList<>();
-        completedWorkouts.add(new Workout("ye"));
-        incompleteWorkouts.add(new Workout("ye"));
+        completedWorkouts.add((new Workout("ye")).toMap());
+        incompleteWorkouts.add((new Workout("ye")).toMap());
     }
 
     public Map<String, Object> toMap() {
@@ -34,6 +34,8 @@ public class ActivityRecord  implements Serializable {
         result.put("stepCount", stepCount);
         result.put("badgeAchieved", badgeAchieved);
         result.put("totalCaloriesConsumed", totalCaloriesConsumed);
+        result.put("completedWorkouts", completedWorkouts);
+        result.put("incompleteWorkouts", incompleteWorkouts);
 
 
         return result;
@@ -46,7 +48,10 @@ public class ActivityRecord  implements Serializable {
     public Integer getTotalCalories() {
         return this.totalCaloriesConsumed;
     }
-    
+
+    public void setTotalCalories(int totalCaloriesConsumed) {
+         this.totalCaloriesConsumed = totalCaloriesConsumed;
+    }
     public Calendar getDate() {
         return stringToCalendar();
     }
@@ -63,7 +68,7 @@ public class ActivityRecord  implements Serializable {
     }
 
     public void setDate(Calendar date) {
-        this.date = date.toString();
+        this.date = date.getTime().toString();
     }
 
     public Integer getStepCount() {
@@ -74,19 +79,19 @@ public class ActivityRecord  implements Serializable {
         this.stepCount = stepCount;
     }
 
-    public ArrayList<Workout> getCompletedWorkouts() {
+    public ArrayList<Map<String,Object>> getCompletedWorkouts() {
         return completedWorkouts;
     }
 
-    public void setCompletedWorkouts(ArrayList<Workout> completedWorkouts) {
+    public void setCompletedWorkouts(ArrayList<Map<String,Object>> completedWorkouts) {
         this.completedWorkouts = completedWorkouts;
     }
 
-    public ArrayList<Workout> getIncompleteWorkouts() {
+    public ArrayList<Map<String,Object>> getIncompleteWorkouts() {
         return incompleteWorkouts;
     }
 
-    public void setIncompleteWorkouts(ArrayList<Workout> incompleteWorkouts) {
+    public void setIncompleteWorkouts(ArrayList<Map<String,Object>> incompleteWorkouts) {
         this.incompleteWorkouts = incompleteWorkouts;
     }
 

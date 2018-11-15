@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -80,27 +79,19 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        Intent intent = new Intent(getActivity(), fitlyHandler.class);
-        intent.setAction(ACTION_SCHEDULELIST);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
-        displaySchedule();
 
         steps=0;
         calories=0;
         sendStepMessage();
         sendCalMessage();
-        sendCalMessage();
+        sendSchedList();
 
         return view;
     }
 
-    public void displaySchedule() {
+    public void displaySchedule(final Schedule sched) {
         String key = "10282018"; // replace with a way to get today's date
 //        ArrayList<Workout> workouts = mUserRef.child("schedule").child(key);
-
-        final Schedule sched = new Schedule();
-        sched.initTest();
 
         ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
@@ -121,6 +112,7 @@ public class DashboardFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
             scheduleDisplay.setAdapter(adapter);
         }
     }
@@ -144,6 +136,14 @@ public class DashboardFragment extends Fragment {
         intent.putExtra("stepCount", steps);
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
     }
+    protected void sendSchedList() {
+        Intent intent = new Intent(getActivity(), fitlyHandler.class);
+        intent.setAction(ACTION_SCHEDULELIST);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+
+
+    }
+
 
     protected void sendCalMessage() {
         Intent intent = new Intent(getActivity().getApplicationContext(), DashboardFragment.class);
@@ -177,38 +177,8 @@ public class DashboardFragment extends Fragment {
 
                     final Schedule sched = (Schedule) intent.getSerializableExtra("sched");
 
-                    ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
-                    if (getActivity() != null) {
-                        final DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
-                                R.layout.adapter_view_layout,
-                                sched.getWorkouts());
-
-                        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-                                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-                                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
-
-                                Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
-                                Log.d("location", sched.getWorkouts().get(i).getLocation());
-
-                                final CheckBox isComplete = ((CheckBox) view.findViewById(R.id.isWorkoutComplete));
-
-
-                                startActivity(intent);
-
-
-                            }
-
-
-                        });
-                        scheduleDisplay.setAdapter(adapter);
-
-                    }
+                    displaySchedule(sched);
 
                 }
             }
