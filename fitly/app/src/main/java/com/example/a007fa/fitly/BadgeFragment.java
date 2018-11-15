@@ -67,7 +67,7 @@ public class BadgeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_badge, container, false);
         final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("activityRecords").getRef();
         Log.d("Testing onCreate", "onDataChange: Loading data");
        /* bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
@@ -81,17 +81,26 @@ public class BadgeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                String userName= dataSnapshot.child("users").child(mUser.getUid()).child("displayName").getValue(String.class);
+                String userName= " ";//dataSnapshot.child("users").child(mUser.getUid()).child("displayName").getValue(String.class);
                 Log.d("Testing onload", "onDataChange: Loading data "+userName);
                 GenericTypeIndicator<List<ActivityRecord>> typeIndicator = new GenericTypeIndicator<List<ActivityRecord>>() {};
-                ArrayList<ActivityRecord> activityRecords=null;
-                dataSnapshot.child("users").child(mUser.getUid()).child("activityRecords").getValue(GenericTypeIndicator.class);
+                //List<ActivityRecord> activityRecords=dataSnapshot.child("users").child(mUser.getUid()).child("activityRecords").getValue(typeIndicator);
                /* if(activityRecords==null)
                 {
                     Log.d("Testing ArrayList", "onDataChange: Loading ArrayList");
 
                 }*/
                 //
+                int i=0;
+                /*if(mUserRef==null)
+                {
+                    Log.d("Snapshot Test", "onDataChange: "+i);
+                }*/
+
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    Log.d("Snapshot Test", "onDataChange: "+i);
+                    i++;
+                }
             }
 
             @Override
