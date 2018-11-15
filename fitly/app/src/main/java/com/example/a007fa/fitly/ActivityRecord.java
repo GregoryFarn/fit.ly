@@ -16,6 +16,11 @@ public class ActivityRecord  implements Serializable {
     private Integer totalCaloriesConsumed;
     private ArrayList<Map<String,Object>> completedWorkouts;
     private ArrayList<Map<String,Object>> incompleteWorkouts;
+
+    public ActivityRecord()
+    {
+
+    }
     
     public ActivityRecord(Calendar date) {
         this.date = date.getTime().toString();
