@@ -210,7 +210,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:paddingLeft="20dp"
-                android:text="Accerometer Permission"
+                android:text="Accelerometer Permission"
                 android:textStyle="bold" />
 
             <Switch

@@ -108,7 +108,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
         logOutButton(view);
         return view;
 
