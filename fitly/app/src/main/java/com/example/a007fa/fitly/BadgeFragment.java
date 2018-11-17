@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -67,7 +68,7 @@ public class BadgeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_badge, container, false);
         final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("activityRecords").getRef();
+        final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
         Log.d("Testing onCreate", "onDataChange: Loading data");
        /* bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
@@ -81,9 +82,9 @@ public class BadgeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                String userName= " ";//dataSnapshot.child("users").child(mUser.getUid()).child("displayName").getValue(String.class);
+                String userName= dataSnapshot.child("displayName").getValue(String.class);
                 Log.d("Testing onload", "onDataChange: Loading data "+userName);
-                GenericTypeIndicator<List<ActivityRecord>> typeIndicator = new GenericTypeIndicator<List<ActivityRecord>>() {};
+                //GenericTypeIndicator<List<ActivityRecord>> typeIndicator = new GenericTypeIndicator<List<ActivityRecord>>() {};
                 //List<ActivityRecord> activityRecords=dataSnapshot.child("users").child(mUser.getUid()).child("activityRecords").getValue(typeIndicator);
                /* if(activityRecords==null)
                 {
@@ -96,11 +97,15 @@ public class BadgeFragment extends Fragment {
                 {
                     Log.d("Snapshot Test", "onDataChange: "+i);
                 }*/
-
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    Log.d("Snapshot Test", "onDataChange: "+i);
+                GenericTypeIndicator<Map<String,ActivityRecord>> typeIndicator = new GenericTypeIndicator<Map<String,ActivityRecord>>() {};
+               if(dataSnapshot.child("activityRecords").getValue(typeIndicator)==null)
+                   Log.d("Snapshot Test", "onDataChange: is null");
+                String name=dataSnapshot.child("displayName").getValue(String.class);
+                //Log.d("Snapshot Test", "onDataChange: is "+ name);
+                /*for (int j=0;j<ar.size();j++) {
+                    Log.d("Snapshot Test", "onDataChange: "+j);
                     i++;
-                }
+                }*/
             }
 
             @Override
