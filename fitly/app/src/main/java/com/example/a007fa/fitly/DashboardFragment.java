@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,7 +62,7 @@ public class DashboardFragment extends Fragment {
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
 
-        FloatingActionButton activityButton = view.findViewById(R.id.addWorkoutButton);
+        Button activityButton = view.findViewById(R.id.addWorkoutButton);
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,10 +71,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-
-        sendSchedList();
-
-        FloatingActionButton calorieButton = view.findViewById(R.id.AddCaloriesButton);
+        Button calorieButton = view.findViewById(R.id.AddCaloriesButton);
         calorieButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +85,7 @@ public class DashboardFragment extends Fragment {
         calories=0;
         sendStepMessage();
         sendCalMessage();
+        sendSchedList();
 
         return view;
     }
