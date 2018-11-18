@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mainNav;
     private FrameLayout mainFrame;
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
     static final String ACTION_SCHEDULE= "com.fitly.action.SCHEDULE";
-
     private float steps;
 
     private final String TAG = "MainActivity";
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String email = "wenm@usc.edu";
         String password = "password";
-
+        serviceStart();
         // To sign out, do FirebaseAuth.getInstance().signOut();
 
         // To set user data, do
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d("steps", Float.toString(b.getFloat("stepCount")));
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
-                ((TextView) findViewById(R.id.StepCountText)).setText("12");
+//                  ((TextView) findViewById(R.id.StepCountText)).setText("12");
             }
             else if(intent.getAction().equals(ACTION_BADGE)){
 //                ((TextView) findViewById(R.id.badgeCompleted)).setText("Badge Completed");

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -34,6 +36,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private Schedule userSchedule;
     private AlarmManager alarm;
     private PendingIntent alarmIntent;
+    private boolean isAccelerometerOn;
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_BADGE = "com.fitly.action.BADGE";
@@ -46,6 +49,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_CALORIES = "com.fitly.action.CALORIES";
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
     static final String ACTION_CONSUMED = "com.fitly.action.CONSUMED";
+    static final String ACTION_PERMISSION= "com.fitly.action.PERMISSION";
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
@@ -70,6 +74,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_ENDDAY);
         intentFilter.addAction(ACTION_CALORIES);
         intentFilter.addAction(ACTION_CONSUMED);
+        intentFilter.addAction(ACTION_PERMISSION);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
@@ -232,7 +237,12 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_CONSUMED)) {
                 calConsumed += intent.getIntExtra("calories",0);
+            }else if (intent.getAction().equals(ACTION_PERMISSION)){
+                Bundle b = intent.getExtras();
+                isAccelerometerOn =b.getBoolean("permission");
+                Log.w("ABCDE: ",  Boolean.toString(isAccelerometerOn));
             }
+
         }
     };
     LocalBroadcastManager bManager;
@@ -241,4 +251,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
         bManager.unregisterReceiver(bReceiver);
         super.onDestroy();
     }
+
+
 }
