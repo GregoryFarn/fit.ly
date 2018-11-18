@@ -49,12 +49,15 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
+    private ArrayList<Workout> incomplete;
+    private ArrayList<Workout> complete;
     private float caloriesBurned;
     private float caloriesBurnedSteps;
     private float calConsumed;
     private ActivityRecord currentRec;
     private FirebaseUser mUser;
     private DatabaseReference mUserRef;
+
     public void onCreate() {
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,8 +77,12 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
         badges = new ArrayList<>();
         sched = new Schedule();
+        //incomplete = new ArrayList<>();
+        // complete = new ArrayList<>();
+
         populateBadges();
         populateSched();
+        //incomplete = new ArrayList<>(sched.getWorkouts());
 
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
         intent1.setAction(ACTION_SCHEDULEPAGE);

@@ -70,6 +70,9 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+
+        sendSchedList();
+
         FloatingActionButton calorieButton = view.findViewById(R.id.AddCaloriesButton);
         calorieButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +87,6 @@ public class DashboardFragment extends Fragment {
         calories=0;
         sendStepMessage();
         sendCalMessage();
-        sendSchedList();
 
         return view;
     }
