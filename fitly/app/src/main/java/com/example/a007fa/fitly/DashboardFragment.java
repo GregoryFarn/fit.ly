@@ -95,85 +95,7 @@ public class DashboardFragment extends Fragment {
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
-        displaySchedule();
-
-        // Initialize workouts array to display
-        String key = "10282018"; // replace with a way to get today's date
-
-        DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
-
-        workoutsRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
-//                List<Workout> wm = dataSnapshot.getValue(gti);
-//                Log.d(TAG, wm.toString());
-//
-//                if (wm == null) {
-//                    return;
-//                }
-//                if (wm != null && wm.size() != 0) {
-//                    Log.d("wm size", Integer.toString(wm.size()));
-//                    for (Workout entry : wm) {
-//                        Workout w = new Workout(entry.getWorkoutName(), entry.getStartTime(), entry.getEndTime(), entry.getLocation(), entry.getDescription());
-//                        updateWorkoutsUI(w);
-//                    }
-//                }
-//            }
-
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String s) {
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    Workout w = postSnapshot.getValue(Workout.class);
-                    updateWorkoutsUI(w);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-//        workoutsRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
-//                List<Workout> wm = dataSnapshot.getValue(gti);
-//                Log.d(TAG, wm.toString());
-//
-//                if (wm == null) {
-//                    return;
-//                }
-//                if (wm != null && wm.size() != 0) {
-//                    Log.d("wm size", Integer.toString(wm.size()));
-//                    for (Workout entry : wm) {
-//                        Workout w = new Workout(entry.getWorkoutName(), entry.getStartTime(), entry.getEndTime(), entry.getLocation(), entry.getDescription());
-//                        updateWorkoutsUI(w);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                Log.w(TAG, "Failed to read value.", error.toException());
-//            }
-//        });
+        workouts = new ArrayList<Workout>();
 
 
 
@@ -266,38 +188,41 @@ public class DashboardFragment extends Fragment {
                         ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
                     }
 
-                    final Schedule sched = (Schedule) intent.getSerializableExtra("sched");
+                    displaySchedule();
 
-                    ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
+                    // Initialize workouts array to display
+                    String key = "10282018"; // replace with a way to get today's date
 
-                    if (getActivity() != null) {
-                        final DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
-                                R.layout.adapter_view_layout,
-                                sched.getWorkouts());
+                    DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
+                    workoutsRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
+                            List<Workout> wm = dataSnapshot.getValue(gti);
+                            Log.d(TAG, wm.toString());
 
-
-                        scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-                                Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-                                intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                                intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
-
-                                Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
-                                Log.d("location", sched.getWorkouts().get(i).getLocation());
-
-                                startActivity(intent);
+                            if (wm == null) {
+                                return;
                             }
-                        });
-                        scheduleDisplay.setAdapter(adapter);
+                            if (wm != null && wm.size() != 0) {
+                                Log.d("wm size", Integer.toString(wm.size()));
+                                for (Workout entry : wm) {
+                                    Workout w = new Workout(entry.getWorkoutName(), entry.getStart(), entry.getEnd(), entry.getLocation(), entry.getDescription());
+                                    updateWorkoutsUI(w);
+                                    Log.d("Entry " + w.getWorkoutName(), entry.getStart() + " to " + entry.getEnd());
+                                    Log.d("Workout " + w.getWorkoutName(), w.getStart() + " to " + w.getEnd());
+                                }
+                            }
+                        }
 
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            Log.w(TAG, "Failed to read value.", error.toException());
+                        }
+                    });
 
                 }
             }
-
         };
     }
 
