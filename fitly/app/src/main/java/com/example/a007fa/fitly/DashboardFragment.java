@@ -208,7 +208,7 @@ public class DashboardFragment extends Fragment {
                 else if (intent.getAction().equals(ACTION_EAT)) {
                     Bundle b = intent.getExtras();
                     ((TextView) getActivity().findViewById(R.id.CalorieConsumedCountText)).setText(Math.round(b.getFloat("calCount"))+"");
-                    caloriesConsumed = b.getFloat("calCount");
+                    caloriesConsumed = b.getInt("calCount");
                 }
                 else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -104,6 +105,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         caloriesBurnedSteps = 0;
         calConsumed = 0;
         badgeAcheived = false;
+
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         startSmallBadge();
@@ -190,6 +192,16 @@ public class fitlyHandler extends Service implements SensorEventListener {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
     }
 
+    protected void changeSensor(boolean perm){
+        if(perm){
+            sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        else{
+            sManager.unregisterListener(this);
+        }
+        Toast.makeText(getApplicationContext(), "Changed Pedometer Permissions", Toast.LENGTH_SHORT).show();
+    }
+
     public void onSensorChanged(SensorEvent event) {
         if (first) {
             stepsFirst = event.values[0];
@@ -261,6 +273,8 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 Bundle b = intent.getExtras();
                 isAccelerometerOn =b.getBoolean("permission");
                 Log.w("ABCDE: ",  Boolean.toString(isAccelerometerOn));
+
+                changeSensor(isAccelerometerOn);
             }
             else if (intent.getAction().equals(ACTION_DONE)){
                 Bundle b = intent.getExtras();
