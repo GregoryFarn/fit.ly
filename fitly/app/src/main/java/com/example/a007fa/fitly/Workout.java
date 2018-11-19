@@ -5,6 +5,7 @@ import android.os.Parcel;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -68,6 +69,14 @@ public class Workout implements Serializable {
         result.put("location", location);
         result.put("description", description);
 
+        return result;
+    }
+
+    static public ArrayList<Map<String, Object>> listToMap(ArrayList<Workout> list) {
+        ArrayList<Map<String, Object>> result = new ArrayList<>();
+        for(Workout x : list) {
+            result.add(x.toMap());
+        }
         return result;
     }
 

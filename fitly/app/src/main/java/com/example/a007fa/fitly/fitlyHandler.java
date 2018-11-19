@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -236,6 +235,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 currentRec.setStepCount(Math.round(steps));
                 currentRec.setBadgeAcheived(badgeAcheived);
                 currentRec.setTotalCalories(Math.round(calConsumed));
+                currentRec.setCompletedWorkouts(Workout.listToMap(complete));
+                currentRec.setIncompleteWorkouts(Workout.listToMap(incomplete));
+
                 mUserRef.child("activityRecords").setValue(currentRec.toMap());
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(System.currentTimeMillis());
@@ -255,8 +257,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 Bundle b = intent.getExtras();
                 Workout w =(Workout)b.getSerializable("workout");
                 for(Workout x: incomplete){
-
+                    if(x.getStartTime().equals(w.getStartTime())){
+                        complete.add(x);
+                        incomplete.remove(x);
+                        sched.removeWorkout(x);
+                        break;
+                    }
                 }
+                sendSchedMessage();
             }
 
         }
