@@ -1,6 +1,7 @@
 package com.example.a007fa.fitly;
 
 import android.os.Parcel;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -56,7 +57,7 @@ public class Workout implements Serializable {
     public Workout(String workoutName, String start, String end, String location, String description) {
         this.workoutName = workoutName;
         this.start = start;
-        this.end = end; // convert to string
+        this.end = end;
         this.location = location;
         this.description = description;
     }
@@ -85,7 +86,6 @@ public class Workout implements Serializable {
         this.description = in.readString();
     }
 
-
     public String getStartDate() {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         return format.format(stringToCalendar(this.start).getTime());
@@ -96,15 +96,19 @@ public class Workout implements Serializable {
         return format.format(stringToCalendar(this.end).getTime());
     }
 
-    public String getStart() {
+    public String getStartTime() {
         SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
         return format.format(stringToCalendar(this.start).getTime());
     }
 
-    public String getEnd() {
+    public String getEndTime() {
         SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
         return format.format(stringToCalendar(this.end).getTime());
     }
+
+    public String getStart() { return this.start; }
+
+    public String getEnd() { return this.end; }
 
     public Calendar getStartCalendar() { return stringToCalendar(this.start); }
 
