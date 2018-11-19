@@ -75,9 +75,6 @@ public class DashboardFragment extends Fragment {
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
         Log.d(TAG, "mUser: " + mUser.getUid());
 
-
-
-
         DatabaseReference dbrTotalCaloriesConsumed = mUserRef.child("activityRecords").child("totalCaloriesConsumed");
         final int[] totalCaloriesConsumed = new int[1];
         dbrTotalCaloriesConsumed.addValueEventListener(new ValueEventListener() {
@@ -124,6 +121,7 @@ public class DashboardFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         workouts = new ArrayList<Workout>();
+        displaySchedule();
 
         steps=0;
         calories=0;
@@ -141,10 +139,7 @@ public class DashboardFragment extends Fragment {
     }
 
 
-    public void displaySchedule(final Schedule sched) {
-        String key = "10282018"; // replace with a way to get today's date
-//        ArrayList<Workout> workouts = mUserRef.child("schedule").child(key);
-
+    public void displaySchedule() {
         ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
         if(getActivity()!= null) {
@@ -179,7 +174,7 @@ public class DashboardFragment extends Fragment {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK) {
                 Workout workout = (Workout)getActivity().getIntent().getExtras().get("workout");
-                addWorkout(workout);
+                updateWorkoutsUI(workout);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 getActivity().finish();
@@ -197,8 +192,6 @@ public class DashboardFragment extends Fragment {
         Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
-
     }
 
 
@@ -236,8 +229,6 @@ public class DashboardFragment extends Fragment {
                         Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
                         ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
                     }
-                  
-                    displaySchedule();
 
                     // Initialize workouts array to display
                     String key = "10282018"; // replace with a way to get today's date
@@ -290,9 +281,4 @@ public class DashboardFragment extends Fragment {
         }
         return false;
     }
-
-    public void addWorkout(Workout workout) {
-
-    }
-
 }

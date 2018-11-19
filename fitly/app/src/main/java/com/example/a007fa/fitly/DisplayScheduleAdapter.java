@@ -34,7 +34,7 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
         String workoutName = getItem(position).getWorkoutName();
         String startTime = getItem(position).getStartTime();
         String endTime = getItem(position).getEndTime();
-        String location= getItem(position).getLocation();
+        String location = getItem(position).getLocation();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -53,28 +53,27 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
         isComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (((CheckBox) v).isChecked()) {
-                //tvName.setText("fdf");
-                getItem(position).setCompletedWorkout(true);
-                isComplete.setChecked(true);
-                Log.d("isCompleted","getItem " + String.valueOf(getItem(position).isCompletedWorkout()));
-                Log.d("isCompleted", "r.id " +String.valueOf(isComplete.isChecked()));
+                if (((CheckBox) v).isChecked()) {
+                    //tvName.setText("fdf");
+                    getItem(position).setCompletedWorkout(true);
+                    isComplete.setChecked(true);
+                    Log.d("isCompleted", "getItem " + String.valueOf(getItem(position).isCompletedWorkout()));
+                    Log.d("isCompleted", "r.id " + String.valueOf(isComplete.isChecked()));
 
-                Intent intent1 = new Intent(mContext, fitlyHandler.class);
-                intent1.setAction(ACTION_DONE);
-                intent1.putExtra("workout", getItem(position));
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent1);
-                Toast.makeText(mContext, getItem(position).getWorkoutName() + " marked as done", Toast.LENGTH_SHORT).show();
-                Log.d("used", "yea");
-            }
-            else{
-                getItem(position).setCompletedWorkout(false);
-                isComplete.setChecked(false);
-                Log.d("isCompleted","getItem " + String.valueOf(getItem(position).isCompletedWorkout()));
-                Log.d("isCompleted", "r.id " +String.valueOf(isComplete.isChecked()));
+                    Intent intent1 = new Intent(mContext, fitlyHandler.class);
+                    intent1.setAction(ACTION_DONE);
+                    intent1.putExtra("workout", getItem(position));
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent1);
+                    Toast.makeText(mContext, getItem(position).getWorkoutName() + " marked as done", Toast.LENGTH_SHORT).show();
+                    Log.d("used", "yea");
+                } else {
+                    getItem(position).setCompletedWorkout(false);
+                    isComplete.setChecked(false);
+                    Log.d("isCompleted", "getItem " + String.valueOf(getItem(position).isCompletedWorkout()));
+                    Log.d("isCompleted", "r.id " + String.valueOf(isComplete.isChecked()));
+                }
             }
         });
-
         return convertView;
     }
 }
