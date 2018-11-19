@@ -16,14 +16,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DashboardFragment extends Fragment {
@@ -54,6 +64,23 @@ public class DashboardFragment extends Fragment {
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
         Log.d(TAG, "mUser: " + mUser.getUid());
 
+
+
+
+        DatabaseReference dbrTotalCaloriesConsumed = mUserRef.child("activityRecords").child("totalCaloriesConsumed");
+        final int[] totalCaloriesConsumed = new int[1];
+        dbrTotalCaloriesConsumed.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setTotalCaloriesConsumedText(Integer.toString(dataSnapshot.getValue(int.class)));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
@@ -80,7 +107,6 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-
         steps=0;
         calories=0;
         sendStepMessage();
@@ -89,6 +115,12 @@ public class DashboardFragment extends Fragment {
 
         return view;
     }
+
+    public void setTotalCaloriesConsumedText(String text){
+        TextView textView = (TextView) getView().findViewById(R.id.CalorieConsumedCountText);
+        textView.setText(text);
+    }
+
 
     public void displaySchedule(final Schedule sched) {
         String key = "10282018"; // replace with a way to get today's date
