@@ -50,6 +50,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
     static final String ACTION_CONSUMED = "com.fitly.action.CONSUMED";
     static final String ACTION_PERMISSION= "com.fitly.action.PERMISSION";
+    static final String ACTION_DONE = "com.fitly.action.DONE";
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
@@ -78,16 +79,17 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_CALORIES);
         intentFilter.addAction(ACTION_CONSUMED);
         intentFilter.addAction(ACTION_PERMISSION);
+        intentFilter.addAction(ACTION_DONE);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
         sched = new Schedule();
-        //incomplete = new ArrayList<>();
-        // complete = new ArrayList<>();
+        incomplete = new ArrayList<>();
+         complete = new ArrayList<>();
 
         populateBadges();
         populateSched();
-        //incomplete = new ArrayList<>(sched.getWorkouts());
+        incomplete = new ArrayList<>(sched.getWorkouts());
 
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
         intent1.setAction(ACTION_SCHEDULEPAGE);
@@ -248,6 +250,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 Bundle b = intent.getExtras();
                 isAccelerometerOn =b.getBoolean("permission");
                 Log.w("ABCDE: ",  Boolean.toString(isAccelerometerOn));
+            }
+            else if (intent.getAction().equals(ACTION_DONE)){
+                Bundle b = intent.getExtras();
+                Workout w =(Workout)b.getSerializable("workout");
+                for(Workout x: incomplete){
+
+                }
             }
 
         }

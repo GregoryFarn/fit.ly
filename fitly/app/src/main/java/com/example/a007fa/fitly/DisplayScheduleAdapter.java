@@ -19,7 +19,7 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
     private Context mContext;
     private DashboardFragment dashboardFragment;
     private int mResource;
-    static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
+    static final String ACTION_DONE = "com.fitly.action.DONE";
     //private ArrayList<Workout> = new ArrayAdapter<Workout>;
 
     public DisplayScheduleAdapter(Context context, int resource, ArrayList<Workout> objects) {
@@ -64,7 +64,8 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
                     Log.d("isCompleted", "r.id " +String.valueOf(isComplete.isChecked()));
 
                     Intent intent1 = new Intent(mContext, fitlyHandler.class);
-                    intent1.setAction(ACTION_ENDDAY);
+                    intent1.setAction(ACTION_DONE);
+                    intent1.putExtra("workout",getItem(position));
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent1);
                     Log.d("used", "yea");
                 }
