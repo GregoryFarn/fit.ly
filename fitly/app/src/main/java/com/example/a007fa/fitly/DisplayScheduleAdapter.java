@@ -11,13 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
     private Context mContext;
     private int mResource;
-    static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
+    static final String ACTION_DONE = "com.fitly.action.DONE";
+    //private ArrayList<Workout> = new ArrayAdapter<Workout>;
 
     public DisplayScheduleAdapter(Context context, int resource, ArrayList<Workout> objects) {
         super(context, resource, objects);
@@ -59,8 +61,10 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
                 Log.d("isCompleted", "r.id " +String.valueOf(isComplete.isChecked()));
 
                 Intent intent1 = new Intent(mContext, fitlyHandler.class);
-                intent1.setAction(ACTION_ENDDAY);
+                intent1.setAction(ACTION_DONE);
+                intent1.putExtra("workout", getItem(position));
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent1);
+                Toast.makeText(mContext, getItem(position).getWorkoutName() + " marked as done", Toast.LENGTH_SHORT).show();
                 Log.d("used", "yea");
             }
             else{
@@ -68,7 +72,6 @@ public class DisplayScheduleAdapter extends ArrayAdapter<Workout> {
                 isComplete.setChecked(false);
                 Log.d("isCompleted","getItem " + String.valueOf(getItem(position).isCompletedWorkout()));
                 Log.d("isCompleted", "r.id " +String.valueOf(isComplete.isChecked()));
-            }
             }
         });
 

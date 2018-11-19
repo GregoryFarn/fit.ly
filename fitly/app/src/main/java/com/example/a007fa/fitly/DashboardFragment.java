@@ -16,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,7 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
+import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardFragment extends Fragment {
     private FirebaseUser mUser;
@@ -47,12 +55,14 @@ public class DashboardFragment extends Fragment {
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
+    static final String ACTION_EAT = "com.fitly.action.EAT";
 
     private View view;
     private final String TAG = "Dashboard fragment";
 
     float steps;
     float calories;
+    float caloriesConsumed;
     public DashboardFragment() { }
 
     @Override
@@ -65,15 +75,33 @@ public class DashboardFragment extends Fragment {
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
         Log.d(TAG, "mUser: " + mUser.getUid());
 
+
+
+
+        DatabaseReference dbrTotalCaloriesConsumed = mUserRef.child("activityRecords").child("totalCaloriesConsumed");
+        final int[] totalCaloriesConsumed = new int[1];
+        dbrTotalCaloriesConsumed.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setTotalCaloriesConsumedText(Integer.toString(dataSnapshot.getValue(int.class)));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_SCHEDULEPAGE);
         intentFilter.addAction(ACTION_CALCOUNT);
+        intentFilter.addAction(ACTION_EAT);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
 
-        FloatingActionButton activityButton = view.findViewById(R.id.addWorkoutButton);
+        Button activityButton = view.findViewById(R.id.addWorkoutButton);
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +110,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        FloatingActionButton calorieButton = view.findViewById(R.id.AddCaloriesButton);
+        Button calorieButton = view.findViewById(R.id.AddCaloriesButton);
         calorieButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,18 +125,26 @@ public class DashboardFragment extends Fragment {
 
         workouts = new ArrayList<Workout>();
 
-
-
         steps=0;
         calories=0;
+        caloriesConsumed =0;
         sendStepMessage();
         sendCalMessage();
-        sendCalMessage();
+        sendSchedList();
 
         return view;
     }
 
-    public void displaySchedule() {
+    public void setTotalCaloriesConsumedText(String text){
+        TextView textView = (TextView) getView().findViewById(R.id.CalorieConsumedCountText);
+        textView.setText(text);
+    }
+
+
+    public void displaySchedule(final Schedule sched) {
+        String key = "10282018"; // replace with a way to get today's date
+//        ArrayList<Workout> workouts = mUserRef.child("schedule").child(key);
+
         ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
         if(getActivity()!= null) {
@@ -157,6 +193,14 @@ public class DashboardFragment extends Fragment {
         intent.putExtra("stepCount", steps);
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
     }
+    protected void sendSchedList() {
+        Intent intent = new Intent(getActivity(), fitlyHandler.class);
+        intent.setAction(ACTION_SCHEDULELIST);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+
+
+    }
+
 
     protected void sendCalMessage() {
         Intent intent = new Intent(getActivity().getApplicationContext(), DashboardFragment.class);
@@ -181,13 +225,18 @@ public class DashboardFragment extends Fragment {
                     ((TextView) getActivity().findViewById(R.id.CalorieCountText)).setText(Math.round(b.getFloat("calCount"))+"");
                     calories = b.getFloat("calCount");
                 }
+                else if (intent.getAction().equals(ACTION_EAT)) {
+                    Bundle b = intent.getExtras();
+                    ((TextView) getActivity().findViewById(R.id.CalorieConsumedCountText)).setText(Math.round(b.getFloat("calCount"))+"");
+                    caloriesConsumed = b.getInt("calCount");
+                }
                 else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 
                     if (getArguments() != null) {
                         Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
                         ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
                     }
-
+                  
                     displaySchedule();
 
                     // Initialize workouts array to display
@@ -220,7 +269,6 @@ public class DashboardFragment extends Fragment {
                             Log.w(TAG, "Failed to read value.", error.toException());
                         }
                     });
-
                 }
             }
         };
