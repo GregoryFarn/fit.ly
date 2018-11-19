@@ -45,6 +45,7 @@ public class DashboardFragment extends Fragment {
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
+    static final String ACTION_EAT = "com.fitly.action.EAT";
 
 
     private View view;
@@ -52,6 +53,7 @@ public class DashboardFragment extends Fragment {
 
     float steps;
     float calories;
+    float caloriesConsumed;
     public DashboardFragment() { }
 
     @Override
@@ -86,6 +88,7 @@ public class DashboardFragment extends Fragment {
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_SCHEDULEPAGE);
         intentFilter.addAction(ACTION_CALCOUNT);
+        intentFilter.addAction(ACTION_EAT);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
 
@@ -109,6 +112,7 @@ public class DashboardFragment extends Fragment {
 
         steps=0;
         calories=0;
+        caloriesConsumed =0;
         sendStepMessage();
         sendCalMessage();
         sendSchedList();
@@ -200,6 +204,11 @@ public class DashboardFragment extends Fragment {
                     Bundle b = intent.getExtras();
                     ((TextView) getActivity().findViewById(R.id.CalorieCountText)).setText(Math.round(b.getFloat("calCount"))+"");
                     calories = b.getFloat("calCount");
+                }
+                else if (intent.getAction().equals(ACTION_EAT)) {
+                    Bundle b = intent.getExtras();
+                    ((TextView) getActivity().findViewById(R.id.CalorieConsumedCountText)).setText(Math.round(b.getFloat("calCount"))+"");
+                    caloriesConsumed = b.getFloat("calCount");
                 }
                 else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 

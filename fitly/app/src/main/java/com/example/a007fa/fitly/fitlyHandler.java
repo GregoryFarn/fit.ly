@@ -50,6 +50,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_CONSUMED = "com.fitly.action.CONSUMED";
     static final String ACTION_PERMISSION= "com.fitly.action.PERMISSION";
     static final String ACTION_DONE = "com.fitly.action.DONE";
+    static final String ACTION_EAT = "com.fitly.action.EAT";
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
@@ -153,6 +154,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
+    protected void sendEatMessage() {
+        Intent intent = new Intent(getApplicationContext(), DashboardFragment.class);
+        intent.setAction(ACTION_EAT);
+        intent.putExtra("calCount", calConsumed);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
     protected void sendBadgeMessage() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setAction(ACTION_BADGE);
@@ -248,6 +256,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_CONSUMED)) {
                 calConsumed += intent.getIntExtra("calories",0);
+                sendEatMessage();
             }else if (intent.getAction().equals(ACTION_PERMISSION)){
                 Bundle b = intent.getExtras();
                 isAccelerometerOn =b.getBoolean("permission");
@@ -273,7 +282,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     public void onDestroy() {
         bManager.unregisterReceiver(bReceiver);
-        super.onDestroy();
+            super.onDestroy();
     }
 
 

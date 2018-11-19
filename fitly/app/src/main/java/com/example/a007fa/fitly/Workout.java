@@ -30,24 +30,24 @@ public class Workout implements Serializable {
 
     public Workout(String workoutName, Calendar startTime, Calendar endTime) {
         this.workoutName = workoutName;
-        this.startTime = startTime.toString();
-        this.endTime = endTime.toString();
+        this.startTime = startTime.getTime().toString();
+        this.endTime = endTime.getTime().toString();
         this.location = "";
         this.description = "";
     }
 
     public Workout(String workoutName, Calendar startTime, Calendar endTime, String location) {
         this.workoutName = workoutName;
-        this.startTime = startTime.toString();
-        this.endTime = endTime.toString();
+        this.startTime = startTime.getTime().toString();
+        this.endTime = endTime.getTime().toString();
         this.location = location;
         this.description = "";
     }
 
     public Workout(String workoutName, Calendar startTime, Calendar endTime, String location, String description) {
         this.workoutName = workoutName;
-        this.startTime = startTime.toString();
-        this.endTime = endTime.toString();
+        this.startTime = startTime.getTime().toString();
+        this.endTime = endTime.getTime().toString();
         this.location = location;
         this.description = description;
     }
@@ -83,8 +83,8 @@ public class Workout implements Serializable {
     // Alternative constructor
     public void add(String workoutName, Calendar startTime, Calendar endTime) {
         this.workoutName = workoutName;
-        this.startTime = startTime.toString();
-        this.endTime = endTime.toString();
+        this.startTime = startTime.getTime().toString();
+        this.endTime = endTime.getTime().toString();
     }
 
     protected Workout(Parcel in) {
