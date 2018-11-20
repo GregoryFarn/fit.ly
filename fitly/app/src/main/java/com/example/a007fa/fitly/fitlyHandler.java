@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,15 +50,20 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
     static final String ACTION_CONSUMED = "com.fitly.action.CONSUMED";
     static final String ACTION_PERMISSION= "com.fitly.action.PERMISSION";
+    static final String ACTION_DONE = "com.fitly.action.DONE";
+    static final String ACTION_EAT = "com.fitly.action.EAT";
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
+    private ArrayList<Workout> incomplete;
+    private ArrayList<Workout> complete;
     private float caloriesBurned;
     private float caloriesBurnedSteps;
     private float calConsumed;
     private ActivityRecord currentRec;
     private FirebaseUser mUser;
     private DatabaseReference mUserRef;
+
     public void onCreate() {
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -75,12 +80,17 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_CALORIES);
         intentFilter.addAction(ACTION_CONSUMED);
         intentFilter.addAction(ACTION_PERMISSION);
+        intentFilter.addAction(ACTION_DONE);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
         sched = new Schedule();
+        incomplete = new ArrayList<>();
+         complete = new ArrayList<>();
+
         populateBadges();
         populateSched();
+        incomplete = new ArrayList<>(sched.getWorkouts());
 
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
         intent1.setAction(ACTION_SCHEDULEPAGE);
@@ -95,6 +105,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         caloriesBurnedSteps = 0;
         calConsumed = 0;
         badgeAcheived = false;
+
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         startSmallBadge();
@@ -145,6 +156,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
+    protected void sendEatMessage() {
+        Intent intent = new Intent(getApplicationContext(), DashboardFragment.class);
+        intent.setAction(ACTION_EAT);
+        intent.putExtra("calCount", calConsumed);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
     protected void sendBadgeMessage() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setAction(ACTION_BADGE);
@@ -172,6 +190,16 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intent1.setAction(ACTION_SCHEDULEPAGE);
         intent1.putExtra("sched",sched);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
+    }
+
+    protected void changeSensor(boolean perm){
+        if(perm){
+            sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        else{
+            sManager.unregisterListener(this);
+        }
+        Toast.makeText(getApplicationContext(), "Changed Pedometer Permissions", Toast.LENGTH_SHORT).show();
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -227,6 +255,9 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 currentRec.setStepCount(Math.round(steps));
                 currentRec.setBadgeAcheived(badgeAcheived);
                 currentRec.setTotalCalories(Math.round(calConsumed));
+                currentRec.setCompletedWorkouts(Workout.listToMap(complete));
+                currentRec.setIncompleteWorkouts(Workout.listToMap(incomplete));
+
                 mUserRef.child("activityRecords").setValue(currentRec.toMap());
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(System.currentTimeMillis());
@@ -237,10 +268,27 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_CONSUMED)) {
                 calConsumed += intent.getIntExtra("calories",0);
+                sendEatMessage();
             }else if (intent.getAction().equals(ACTION_PERMISSION)){
                 Bundle b = intent.getExtras();
                 isAccelerometerOn =b.getBoolean("permission");
-                Log.w("accelerometer check: ",  Boolean.toString(isAccelerometerOn));
+
+                Log.w("ABCDE: ",  Boolean.toString(isAccelerometerOn));
+
+                changeSensor(isAccelerometerOn);
+            }
+            else if (intent.getAction().equals(ACTION_DONE)){
+                Bundle b = intent.getExtras();
+                Workout w =(Workout)b.getSerializable("workout");
+                for(Workout x: incomplete){
+                    if(x.getStartTime().equals(w.getStartTime())){
+                        complete.add(x);
+                        incomplete.remove(x);
+                        sched.removeWorkout(x);
+                        break;
+                    }
+                }
+                sendSchedMessage();
             }
 
         }
@@ -249,7 +297,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     public void onDestroy() {
         bManager.unregisterReceiver(bReceiver);
-        super.onDestroy();
+            super.onDestroy();
     }
 
 

@@ -16,32 +16,53 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardFragment extends Fragment {
     private FirebaseUser mUser;
     private DatabaseReference mUserRef;
+
+    private ArrayList<Workout> workouts;
+    private DisplayScheduleAdapter adapter;
 
     static final String ACTION_FITLY = "com.fitly.action.FITLY";
     static final String ACTION_ENDDAY = "com.fitly.action.ENDDAY";
     static final String ACTION_SCHEDULELIST = "com.fitly.action.SCHEDULELIST";
     static final String ACTION_SCHEDULEPAGE = "com.fitly.action.SCHEDULEPAGE";
     static final String ACTION_CALCOUNT = "com.fitly.action.CALCOUNT";
-
+    static final String ACTION_EAT = "com.fitly.action.EAT";
 
     private View view;
     private final String TAG = "Dashboard fragment";
 
     float steps;
     float calories;
+    float caloriesConsumed;
     public DashboardFragment() { }
 
     @Override
@@ -54,11 +75,26 @@ public class DashboardFragment extends Fragment {
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
         Log.d(TAG, "mUser: " + mUser.getUid());
 
+        DatabaseReference dbrTotalCaloriesConsumed = mUserRef.child("activityRecords").child("totalCaloriesConsumed");
+        final int[] totalCaloriesConsumed = new int[1];
+        dbrTotalCaloriesConsumed.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setTotalCaloriesConsumedText(Integer.toString(dataSnapshot.getValue(int.class)));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_FITLY);
         intentFilter.addAction(ACTION_SCHEDULEPAGE);
         intentFilter.addAction(ACTION_CALCOUNT);
+        intentFilter.addAction(ACTION_EAT);
         bManager.registerReceiver(bReceiver, intentFilter);
         serviceStart();
 
@@ -80,9 +116,16 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        Intent intent = new Intent(getActivity(), fitlyHandler.class);
+        intent.setAction(ACTION_SCHEDULELIST);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+
+        workouts = new ArrayList<Workout>();
+        displaySchedule();
 
         steps=0;
         calories=0;
+        caloriesConsumed =0;
         sendStepMessage();
         sendCalMessage();
         sendSchedList();
@@ -90,26 +133,29 @@ public class DashboardFragment extends Fragment {
         return view;
     }
 
-    public void displaySchedule(final Schedule sched) {
-        String key = "10282018"; // replace with a way to get today's date
-//        ArrayList<Workout> workouts = mUserRef.child("schedule").child(key);
+    public void setTotalCaloriesConsumedText(String text){
+        TextView textView = (TextView) getView().findViewById(R.id.CalorieConsumedCountText);
+        textView.setText(text);
+    }
 
+
+    public void displaySchedule() {
         ListView scheduleDisplay = (ListView) view.findViewById(R.id.scheduleDisplay);
 
         if(getActivity()!= null) {
-            DisplayScheduleAdapter adapter = new DisplayScheduleAdapter(getActivity(),
+            adapter = new DisplayScheduleAdapter(getActivity(),
                     R.layout.adapter_view_layout,
-                    sched.getWorkouts());
+                    workouts);
 
             scheduleDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Intent intent = new Intent(getActivity(), DisplayWorkoutDetailsActivity.class);
-                    intent.putExtra("Name", sched.getWorkouts().get(i).getWorkoutName());
-                    intent.putExtra("Location", sched.getWorkouts().get(i).getLocation());
+                    intent.putExtra("Name", workouts.get(i).getWorkoutName());
+                    intent.putExtra("Location", workouts.get(i).getLocation());
 
-                    Log.d("name", sched.getWorkouts().get(i).getWorkoutName());
-                    Log.d("location", sched.getWorkouts().get(i).getLocation());
+                    Log.d("name", workouts.get(i).getWorkoutName());
+                    Log.d("location", workouts.get(i).getLocation());
                     startActivity(intent);
                 }
             });
@@ -118,12 +164,17 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    public void updateWorkoutsUI(Workout w) {
+        workouts.add(w);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK) {
                 Workout workout = (Workout)getActivity().getIntent().getExtras().get("workout");
-                addWorkout(workout);
+                updateWorkoutsUI(workout);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 getActivity().finish();
@@ -141,8 +192,6 @@ public class DashboardFragment extends Fragment {
         Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_SCHEDULELIST);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
-
     }
 
 
@@ -169,6 +218,11 @@ public class DashboardFragment extends Fragment {
                     ((TextView) getActivity().findViewById(R.id.CalorieCountText)).setText(Math.round(b.getFloat("calCount"))+"");
                     calories = b.getFloat("calCount");
                 }
+                else if (intent.getAction().equals(ACTION_EAT)) {
+                    Bundle b = intent.getExtras();
+                    ((TextView) getActivity().findViewById(R.id.CalorieConsumedCountText)).setText(Math.round(b.getFloat("calCount"))+"");
+                    caloriesConsumed = b.getInt("calCount");
+                }
                 else if (intent.getAction().equals(ACTION_SCHEDULEPAGE)) {
 
                     if (getArguments() != null) {
@@ -176,14 +230,38 @@ public class DashboardFragment extends Fragment {
                         ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
                     }
 
-                    final Schedule sched = (Schedule) intent.getSerializableExtra("sched");
+                    // Initialize workouts array to display
+                    String key = "10282018"; // replace with a way to get today's date
 
+                    DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
+                    workoutsRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
+                            List<Workout> wm = dataSnapshot.getValue(gti);
+                            Log.d(TAG, wm.toString());
 
-                    displaySchedule(sched);
+                            if (wm == null) {
+                                return;
+                            }
+                            if (wm != null && wm.size() != 0) {
+                                Log.d("wm size", Integer.toString(wm.size()));
+                                for (Workout entry : wm) {
+                                    Workout w = new Workout(entry.getWorkoutName(), entry.getStart(), entry.getEnd(), entry.getLocation(), entry.getDescription());
+                                    updateWorkoutsUI(w);
+                                    Log.d("Entry " + w.getWorkoutName(), entry.getStart() + " to " + entry.getEnd());
+                                    Log.d("Workout " + w.getWorkoutName(), w.getStart() + " to " + w.getEnd());
+                                }
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            Log.w(TAG, "Failed to read value.", error.toException());
+                        }
+                    });
                 }
             }
-
         };
     }
 
@@ -203,13 +281,4 @@ public class DashboardFragment extends Fragment {
         }
         return false;
     }
-
-//    public Schedule getSchedule() {
-//
-//    }
-
-    public void addWorkout(Workout workout) {
-
-    }
-
 }
