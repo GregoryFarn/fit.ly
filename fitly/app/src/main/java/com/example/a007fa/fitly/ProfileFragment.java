@@ -117,7 +117,6 @@ public class ProfileFragment extends Fragment {
              else{
                  heightView.setText("");
              }
-//
 //             Log.d(TAG,"profileName:" + email);
 //             Log.d(TAG,"profileName:" + age);
 //             Log.d(TAG,"profileName: " +  name);
@@ -128,6 +127,7 @@ public class ProfileFragment extends Fragment {
              }
          });
         setAccelerometerOn(view);
+        changePass(view);
         logOutButton(view);
         return view;
     }
@@ -166,6 +166,7 @@ public class ProfileFragment extends Fragment {
         changePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // getActivity().finish();
                 Intent intent = new Intent(getActivity(), ChangePassActivity.class);
                 startActivity(intent);
             }

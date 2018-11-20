@@ -272,6 +272,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }else if (intent.getAction().equals(ACTION_PERMISSION)){
                 Bundle b = intent.getExtras();
                 isAccelerometerOn =b.getBoolean("permission");
+
                 Log.w("ABCDE: ",  Boolean.toString(isAccelerometerOn));
 
                 changeSensor(isAccelerometerOn);
