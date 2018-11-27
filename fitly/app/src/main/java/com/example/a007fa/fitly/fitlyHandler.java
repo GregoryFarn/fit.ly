@@ -19,8 +19,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -106,7 +109,20 @@ public class fitlyHandler extends Service implements SensorEventListener {
         calConsumed = 0;
         badgeAcheived = false;
 
-        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        DatabaseReference pedometerRef = mUserRef.child("pedometerOn");
+        pedometerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    changeSensor(dataSnapshot.getValue(boolean.class));
+                    
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
         startSmallBadge();
         sendStepMessage();
@@ -195,11 +211,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
     protected void changeSensor(boolean perm){
         if(perm){
             sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            Toast.makeText(getApplicationContext(), "Pedometer On", Toast.LENGTH_SHORT).show();
         }
         else{
             sManager.unregisterListener(this);
+            Toast.makeText(getApplicationContext(), "Pedometer Off", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(getApplicationContext(), "Changed Pedometer Permissions", Toast.LENGTH_SHORT).show();
+        mUserRef.child("pedometerOn").setValue(perm);
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -234,6 +252,20 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     }
 
+    public void updateDatabase(){
+        currentRec.setStepCount(Math.round(steps));
+        currentRec.setBadgeAcheived(badgeAcheived);
+        currentRec.setTotalCalories(Math.round(calConsumed));
+        currentRec.setCompletedWorkouts(Workout.listToMap(complete));
+        currentRec.setIncompleteWorkouts(Workout.listToMap(incomplete));
+
+        mUserRef.child("activityRecords").setValue(currentRec.toMap());
+
+    }
+
+    public void resetCurrentRec(){
+
+    }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -252,16 +284,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 sendSchedMessage();
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
-                currentRec.setStepCount(Math.round(steps));
-                currentRec.setBadgeAcheived(badgeAcheived);
-                currentRec.setTotalCalories(Math.round(calConsumed));
-                currentRec.setCompletedWorkouts(Workout.listToMap(complete));
-                currentRec.setIncompleteWorkouts(Workout.listToMap(incomplete));
-
-                mUserRef.child("activityRecords").setValue(currentRec.toMap());
-                Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(System.currentTimeMillis());
-                currentRec.setDate(c);
+                updateDatabase();
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);

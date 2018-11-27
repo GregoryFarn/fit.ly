@@ -1,7 +1,6 @@
 package com.example.a007fa.fitly;
 
 import android.os.Parcel;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -32,24 +31,24 @@ public class Workout implements Serializable {
 
     public Workout(String workoutName, Calendar start, Calendar end) {
         this.workoutName = workoutName;
-        this.start = start.toString();
-        this.end = end.toString();
+        this.start = start.getTime().toString();
+        this.end = end.getTime().toString();
         this.location = "";
         this.description = "";
     }
 
     public Workout(String workoutName, Calendar start, Calendar end, String location) {
         this.workoutName = workoutName;
-        this.start = start.toString();
-        this.end = end.toString();
+        this.start = start.getTime().toString();
+        this.end = end.getTime().toString();
         this.location = location;
         this.description = "";
     }
 
     public Workout(String workoutName, Calendar start, Calendar end, String location, String description) {
         this.workoutName = workoutName;
-        this.start = start.toString();
-        this.end = end.toString();
+        this.start = start.getTime().toString();
+        this.end = end.getTime().toString();
         this.location = location;
         this.description = description;
     }
