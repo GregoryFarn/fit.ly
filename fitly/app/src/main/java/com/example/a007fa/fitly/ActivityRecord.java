@@ -16,7 +16,12 @@ public class ActivityRecord  implements Serializable {
     private Integer totalCaloriesConsumed;
     private ArrayList<Map<String,Object>> completedWorkouts;
     private ArrayList<Map<String,Object>> incompleteWorkouts;
-    
+
+    public  ActivityRecord()
+    {
+
+    }
+
     public ActivityRecord(Calendar date) {
         this.date = date.getTime().toString();
         this.stepCount = 0;
@@ -39,6 +44,13 @@ public class ActivityRecord  implements Serializable {
 
 
         return result;
+    }
+
+    public void fromMap(Map<String, Object> putValue)
+    {
+        //this.stepCount = (Integer) putValue.get("stepCount");
+        this.badgeAchieved= (Boolean)  putValue.get("badgeAchieved");
+
     }
 
     public void addCalories(int calories) {

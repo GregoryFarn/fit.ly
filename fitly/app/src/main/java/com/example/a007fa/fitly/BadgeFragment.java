@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -32,6 +45,87 @@ public class BadgeFragment extends Fragment {
     }
 
     View view;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_badge, container, false);
+        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
+        Log.d("Testing onCreate", "onDataChange: Loading data");
+       /* bManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_BADGEPAGE);
+        bManager.registerReceiver(bReceiver, intentFilter);
+        Intent intent = new Intent(getActivity(), fitlyHandler.class);
+        intent.setAction(ACTION_BADGELIST);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);*/
+        mUserRef.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                String userName= dataSnapshot.child("displayName").getValue(String.class);
+                Log.d("Testing onload", "onDataChange: Loading data "+userName);
+                //GenericTypeIndicator<List<ActivityRecord>> typeIndicator = new GenericTypeIndicator<List<ActivityRecord>>() {};
+                //List<ActivityRecord> activityRecords=dataSnapshot.child("users").child(mUser.getUid()).child("activityRecords").getValue(typeIndicator);
+               /* if(activityRecords==null)
+                {
+                    Log.d("Testing ArrayList", "onDataChange: Loading ArrayList");
+                }*/
+                //
+                int i=0;
+                /*if(mUserRef==null)
+                {
+                    Log.d("Snapshot Test", "onDataChange: "+i);
+                }*/
+                GenericTypeIndicator<Map<String,Object>> typeIndicator = new GenericTypeIndicator<Map<String,Object>>() {};
+                GenericTypeIndicator<ArrayList<Object>> type= new GenericTypeIndicator<ArrayList<Object>>();
+                if(dataSnapshot.child("activityRecords").getValue(type)==null);
+                { Log.d("Snapshot Test", "onDataChange: is null"); }
+                /*else if ( dataSnapshot.child("activityRecords").getValue(typeIndicator) instanceof Map) {
+                    Log.d("Snapshot Test", "onDataChange: is not null");
+                    ActivityRecord ar= new ActivityRecord();
+                    ar.fromMap(dataSnapshot.child("activityRecords").getValue(typeIndicator));
+                    Log.d("Map", "Map received");
+
+
+                }*/
+                else if (dataSnapshot.child("activityRecords").getValue(type) instanceof ArrayList)
+                {
+                    Log.d("List reveiced ", "onListChange: list");
+                }
+                else
+                {
+                    Log.d("Not workinggggg", "?????");
+                }
+                String name=dataSnapshot.child("displayName").getValue(String.class);
+                //Log.d("Snapshot Test", "onDataChange: is "+ name);
+                /*for (int j=0;j<ar.size();j++) {
+                    Log.d("Snapshot Test", "onDataChange: "+j);
+                    i++;
+                }*/
+                //else if()
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.d("Not loading", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+
+        return view;
+    }
+
+
+
+
+
+
+
+
+    /*-----------------------------------------------------View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +182,6 @@ public class BadgeFragment extends Fragment {
                 badgeList.setAdapter(badgeAdapter);
             }
         }
-    };
+    };*/
 
 }
