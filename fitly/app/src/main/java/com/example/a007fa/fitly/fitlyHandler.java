@@ -115,7 +115,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                     changeSensor(dataSnapshot.getValue(boolean.class));
-                    
+
             }
 
             @Override
