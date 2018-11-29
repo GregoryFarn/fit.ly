@@ -17,19 +17,10 @@ public class ActivityRecord  implements Serializable {
     private ArrayList<Map<String,Object>> completedWorkouts;
     private ArrayList<Map<String,Object>> incompleteWorkouts;
 
-<<<<<<< HEAD
     public  ActivityRecord()
     {
 
     }
-
-=======
-    public ActivityRecord()
-    {
-
-    }
-    
->>>>>>> d422a445759cf3c59df30b7d815a1643c88f50fd
     public ActivityRecord(Calendar date) {
         this.date = date.getTime().toString();
         this.stepCount = 0;
