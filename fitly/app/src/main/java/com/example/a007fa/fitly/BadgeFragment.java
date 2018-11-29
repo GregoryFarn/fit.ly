@@ -45,8 +45,25 @@ public class BadgeFragment extends Fragment {
     View view;
     public BadgeFragment() {
         // Required empty public constructor
+        /*mUserRef.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                ActivityRecord post = dataSnapshot.getValue(ActivityRecord.class);
+                Log.d("Testing onload", "onDataChange: Loading data");
+                //
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.d("Not loading", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });*/
     }
 
+<<<<<<< HEAD
     public void displaySchedule()
     {
         ArrayAdapter<Badge> badgeAdapter =
@@ -174,25 +191,72 @@ public class BadgeFragment extends Fragment {
 
 
     /*-----------------------------------------------------View view;
+=======
+
+    View view;
+>>>>>>> d422a445759cf3c59df30b7d815a1643c88f50fd
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_badge, container, false);
-
-        bManager = LocalBroadcastManager.getInstance(getActivity());
+        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
+        Log.d("Testing onCreate", "onDataChange: Loading data");
+       /* bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGEPAGE);
         bManager.registerReceiver(bReceiver, intentFilter);
 
         Intent intent = new Intent(getActivity(), fitlyHandler.class);
         intent.setAction(ACTION_BADGELIST);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);*/
+        mUserRef.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                String userName= dataSnapshot.child("displayName").getValue(String.class);
+                Log.d("Testing onload", "onDataChange: Loading data "+userName);
+                //GenericTypeIndicator<List<ActivityRecord>> typeIndicator = new GenericTypeIndicator<List<ActivityRecord>>() {};
+                //List<ActivityRecord> activityRecords=dataSnapshot.child("users").child(mUser.getUid()).child("activityRecords").getValue(typeIndicator);
+               /* if(activityRecords==null)
+                {
+                    Log.d("Testing ArrayList", "onDataChange: Loading ArrayList");
+
+                }*/
+                //
+                int i=0;
+                /*if(mUserRef==null)
+                {
+                    Log.d("Snapshot Test", "onDataChange: "+i);
+                }*/
+                GenericTypeIndicator<Map<String,ActivityRecord>> typeIndicator = new GenericTypeIndicator<Map<String,ActivityRecord>>() {};
+               if(dataSnapshot.child("activityRecords").getValue(typeIndicator)==null)
+                   Log.d("Snapshot Test", "onDataChange: is null");
+                String name=dataSnapshot.child("displayName").getValue(String.class);
+                //Log.d("Snapshot Test", "onDataChange: is "+ name);
+                /*for (int j=0;j<ar.size();j++) {
+                    Log.d("Snapshot Test", "onDataChange: "+j);
+                    i++;
+                }*/
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.d("Not loading", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
 
         return view;
     }
 
+<<<<<<< HEAD
 
+=======
+    /*
+>>>>>>> d422a445759cf3c59df30b7d815a1643c88f50fd
     LocalBroadcastManager bManager;
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
