@@ -39,19 +39,51 @@ public class BadgeFragment extends Fragment {
 
     static final String ACTION_BADGEPAGE = "com.fitly.action.BADGEPAGE";
     static final String ACTION_BADGELIST = "com.fitly.action.BADGELIST";
-
+    FirebaseUser mUser;
+    DatabaseReference mUserRef;
+    ArrayList<Badge> badgeArraylist= new ArrayList<Badge>();
+    View view;
     public BadgeFragment() {
         // Required empty public constructor
     }
 
-    View view;
+    public void displaySchedule()
+    {
+        ArrayAdapter<Badge> badgeAdapter =
+                new ArrayAdapter<Badge>(getActivity(), 0, badgeArraylist) {
+                    @Override
+                    public View getView(int position,
+                                        View convertView,
+                                        ViewGroup parent) {
+                        Badge currentBadge= badgeArraylist.get(position);
+                        // Inflate only once
+                        if(convertView == null) {
+                            convertView = getLayoutInflater()
+                                    .inflate(R.layout.list_item, null, false);
+                        }
+                        TextView badgeMessage=(TextView)convertView.findViewById(R.id.message);
+                        ImageView badgeImage=(ImageView)convertView.findViewById(R.id.badge_picture);
+                        badgeMessage.setText(currentBadge.getBadgeMessage());
+                        if(currentBadge.completed==false)
+                            badgeImage.setImageResource(R.drawable.greystar);
+                        else if(currentBadge.typeOfBadge.equals("small"))
+                            badgeImage.setImageResource(R.drawable.starbadge);
+                        else
+                            badgeImage.setImageResource(R.drawable.bigbadge);
+                        return convertView;
+                    }
+                };
+        ListView badgeList = view.findViewById(R.id.list);
+        badgeList.setAdapter(badgeAdapter);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_badge, container, false);
-        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
         Log.d("Testing onCreate", "onDataChange: Loading data");
        /* bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
@@ -74,14 +106,36 @@ public class BadgeFragment extends Fragment {
                 }*/
                 //
                 int i=0;
-                /*if(mUserRef==null)
-                {
-                    Log.d("Snapshot Test", "onDataChange: "+i);
-                }*/
                 GenericTypeIndicator<Map<String,Object>> typeIndicator = new GenericTypeIndicator<Map<String,Object>>() {};
-                GenericTypeIndicator<ArrayList<Object>> type= new GenericTypeIndicator<ArrayList<Object>>();
-                if(dataSnapshot.child("activityRecords").getValue(type)==null);
-                { Log.d("Snapshot Test", "onDataChange: is null"); }
+                GenericTypeIndicator<List<Object>> type= new GenericTypeIndicator<List<Object>>() {};
+                List<Object> ar=  dataSnapshot.child("activityRecords").getValue(type);
+                if (ar != null && ar.size() != 0) {
+
+                    for (DataSnapshot entry : dataSnapshot.child("activityRecords").getChildren()) {
+                        Boolean badgeStatus= entry.child("badgeAchieved").getValue(Boolean.class);
+                        if(badgeStatus==false)
+                        {
+                            Badge B= new Badge();
+                            B.setCompleted(false);
+                            badgeArraylist.add(B);
+                        }
+                        else
+                        {
+                            Badge BC= new Badge();
+                            BC.setCompleted(true);
+                            String date= entry.child("date").getValue(String.class);
+                            BC.addDateToMessage(date);
+                            badgeArraylist.add(BC);
+
+                        }
+                        //updateWorkoutsUI(B);
+                        displaySchedule();
+                    }
+                }
+
+
+                /*if(dataSnapshot.child("activityRecords").getValue(type) == null);
+                { Log.d("Snapshot Test", "onDataChange: is null"); }*/
                 /*else if ( dataSnapshot.child("activityRecords").getValue(typeIndicator) instanceof Map) {
                     Log.d("Snapshot Test", "onDataChange: is not null");
                     ActivityRecord ar= new ActivityRecord();
@@ -90,21 +144,15 @@ public class BadgeFragment extends Fragment {
 
 
                 }*/
-                else if (dataSnapshot.child("activityRecords").getValue(type) instanceof ArrayList)
+                /*if (dataSnapshot.child("activityRecords").getValue(type) instanceof ArrayList)
                 {
                     Log.d("List reveiced ", "onListChange: list");
                 }
                 else
                 {
                     Log.d("Not workinggggg", "?????");
-                }
-                String name=dataSnapshot.child("displayName").getValue(String.class);
-                //Log.d("Snapshot Test", "onDataChange: is "+ name);
-                /*for (int j=0;j<ar.size();j++) {
-                    Log.d("Snapshot Test", "onDataChange: "+j);
-                    i++;
                 }*/
-                //else if()
+
             }
 
             @Override
@@ -143,6 +191,7 @@ public class BadgeFragment extends Fragment {
 
         return view;
     }
+
 
     LocalBroadcastManager bManager;
 

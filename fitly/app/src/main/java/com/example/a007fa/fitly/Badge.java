@@ -39,6 +39,12 @@ public class Badge implements Serializable {
     public void setBadgeMessage(String badgeMessage) {
         badgeMessage = badgeMessage;
     }
+
+    public void addDateToMessage(String d)
+    {
+        badgeMessage+=" "+d;
+    }
+
     public String getTypeOfBadge() {
         return typeOfBadge;
     }
@@ -56,7 +62,7 @@ public class Badge implements Serializable {
         if(typeOfBadge.equals("small") && this.completed==true )
         {
             SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
-            badgeMessage="You got a small badge on "+format.format(achievedDate.getTime());
+            badgeMessage="You got a small badge on ";
         }
         else
         {
