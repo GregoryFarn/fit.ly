@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -121,9 +122,9 @@ public class BadgeFragment extends Fragment {
                 }*/
                 //
                 int i=0;
-                GenericTypeIndicator<Map<String,Object>> typeIndicator = new GenericTypeIndicator<Map<String,Object>>() {};
+                GenericTypeIndicator<HashMap<String,Object>> typeIndicator = new GenericTypeIndicator<HashMap<String,Object>>() {};
                 GenericTypeIndicator<List<Object>> type= new GenericTypeIndicator<List<Object>>() {};
-                List<Object> ar=  dataSnapshot.child("activityRecords").getValue(type);
+                HashMap<String,Object> ar=  dataSnapshot.child("activityRecords").getValue(typeIndicator);
                 if (ar != null && ar.size() != 0) {
 
                     for (DataSnapshot entry : dataSnapshot.child("activityRecords").getChildren()) {
