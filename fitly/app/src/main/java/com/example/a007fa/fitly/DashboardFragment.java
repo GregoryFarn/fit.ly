@@ -80,7 +80,7 @@ public class DashboardFragment extends Fragment {
         dbrTotalCaloriesConsumed.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                setTotalCaloriesConsumedText(Integer.toString(dataSnapshot.getValue(int.class)));
+                //setTotalCaloriesConsumedText(Integer.toString(dataSnapshot.getValue(int.class)));
             }
 
             @Override

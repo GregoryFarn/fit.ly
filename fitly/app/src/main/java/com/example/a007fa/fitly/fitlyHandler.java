@@ -115,7 +115,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                     changeSensor(dataSnapshot.getValue(boolean.class));
-                    
+
             }
 
             @Override
@@ -258,8 +258,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         currentRec.setTotalCalories(Math.round(calConsumed));
         currentRec.setCompletedWorkouts(Workout.listToMap(complete));
         currentRec.setIncompleteWorkouts(Workout.listToMap(incomplete));
-
-        mUserRef.child("activityRecords").setValue(currentRec.toMap());
+        mUserRef.child("activityRecords").push().setValue(currentRec.toMap());
 
     }
 
