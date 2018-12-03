@@ -40,8 +40,6 @@ public class ActivityRecord  implements Serializable {
         result.put("totalCaloriesConsumed", totalCaloriesConsumed);
         result.put("completedWorkouts", completedWorkouts);
         result.put("incompleteWorkouts", incompleteWorkouts);
-
-
         return result;
     }
 
