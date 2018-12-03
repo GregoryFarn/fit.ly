@@ -75,12 +75,18 @@ public class DashboardFragment extends Fragment {
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
         Log.d(TAG, "mUser: " + mUser.getUid());
 
-        DatabaseReference dbrTotalCaloriesConsumed = mUserRef.child("activityRecords").child("totalCaloriesConsumed");
+        DatabaseReference dbrTotalCaloriesConsumed = mUserRef.child("activityRecords");
         final int[] totalCaloriesConsumed = new int[1];
         dbrTotalCaloriesConsumed.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //setTotalCaloriesConsumedText(Integer.toString(dataSnapshot.getValue(int.class)));
+                int totalCaloriesConsumed = 0;
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if(ds.child("totalCaloriesConsumed").getValue() != null){
+                        totalCaloriesConsumed = Integer.valueOf(ds.child("totalCaloriesConsumed").getValue(Integer.class));
+                    }
+                }
+                setTotalCaloriesConsumedText(Integer.toString(totalCaloriesConsumed));
             }
 
             @Override
