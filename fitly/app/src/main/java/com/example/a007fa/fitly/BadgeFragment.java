@@ -125,10 +125,14 @@ public class BadgeFragment extends Fragment {
                 GenericTypeIndicator<HashMap<String,Object>> typeIndicator = new GenericTypeIndicator<HashMap<String,Object>>() {};
                 GenericTypeIndicator<List<Object>> type= new GenericTypeIndicator<List<Object>>() {};
                 HashMap<String,Object> ar=  dataSnapshot.child("activityRecords").getValue(typeIndicator);
+                Integer numConsecutiveDays= dataSnapshot.child("numConsecutiveDays").getValue(Integer.class);
                 if (ar != null && ar.size() != 0) {
 
                     for (DataSnapshot entry : dataSnapshot.child("activityRecords").getChildren()) {
                         Boolean badgeStatus= entry.child("badgeAchieved").getValue(Boolean.class);
+                        String date= entry.child("date").getValue(String.class);
+                        //small badges
+
                         if(badgeStatus==false)
                         {
                             Badge B= new Badge();
@@ -139,12 +143,21 @@ public class BadgeFragment extends Fragment {
                         {
                             Badge BC= new Badge();
                             BC.setCompleted(true);
-                            String date= entry.child("date").getValue(String.class);
                             BC.addDateToMessage(date);
                             badgeArraylist.add(BC);
 
                         }
-                        //updateWorkoutsUI(B);
+
+                        //Big Badges
+                        if(numConsecutiveDays==7)
+                        {
+                            Log.d("Big Badge Statement ", "onDataChange: big badge achieved");
+                            Badge bigBadge= new Badge();
+                            bigBadge.setTypeOfBadge("big");
+                            bigBadge.setCompleted(true);
+                            bigBadge.addDateToMessage(date);
+                            badgeArraylist.add(bigBadge);
+                        }
                         displaySchedule();
                     }
                 }
