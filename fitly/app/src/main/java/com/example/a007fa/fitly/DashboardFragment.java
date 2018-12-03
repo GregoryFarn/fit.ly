@@ -43,6 +43,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class DashboardFragment extends Fragment {
     private FirebaseUser mUser;
     private DatabaseReference mUserRef;
@@ -122,10 +124,6 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        Intent intent = new Intent(getActivity(), fitlyHandler.class);
-        intent.setAction(ACTION_SCHEDULELIST);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
         workouts = new ArrayList<Workout>();
         displaySchedule();
 
@@ -171,8 +169,19 @@ public class DashboardFragment extends Fragment {
     }
 
     public void updateWorkoutsUI(Workout w) {
-        workouts.add(w);
-        adapter.notifyDataSetChanged();
+        boolean alreadyIn = false;
+        for(Workout x :workouts){
+            if(w.equals(x)){
+                alreadyIn = true;
+            }
+        }
+        if(alreadyIn){
+
+        }
+        else {
+            workouts.add(w);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -195,8 +204,8 @@ public class DashboardFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext().getApplicationContext()).sendBroadcast(intent);
     }
     protected void sendSchedList() {
-        Intent intent = new Intent(getActivity(), fitlyHandler.class);
-        intent.setAction(ACTION_SCHEDULELIST);
+        Intent intent = new Intent(getActivity(), DashboardFragment.class);
+        intent.setAction(ACTION_SCHEDULEPAGE);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
 
@@ -235,10 +244,8 @@ public class DashboardFragment extends Fragment {
                         Log.d("steps", Float.toString(getArguments().getFloat("stepCount")));
                         ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(getArguments().getFloat("stepCount")) + "/10,000 steps");
                     }
-
                     // Initialize workouts array to display
                     String key = "10282018"; // replace with a way to get today's date
-
                     DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
                     workoutsRef.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -266,6 +273,12 @@ public class DashboardFragment extends Fragment {
                             Log.w(TAG, "Failed to read value.", error.toException());
                         }
                     });
+                    /*Bundle b = intent.getExtras();
+
+                   for(Workout w : ((Schedule)b.getSerializable("sched")).getWorkouts()){
+                        updateWorkoutsUI(w);
+                   }*/
+
                 }
             }
         };
