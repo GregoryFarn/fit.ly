@@ -72,7 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("Success", "createUserWithEmail:success");
                             //add new user to database
-
                             FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
                             DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
                             User setU= new User(name,email);
@@ -85,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
                             mUserRef.child("notificationsOn").setValue(notificationsAllowed);
                             mUserRef.child("pedometerOn").setValue(pedometerAllowed);
                             mUserRef.child("numConsecutiveDays").setValue(0);
-
+                          
                             // Navigate to MainActivity
                             Intent openDashboard= new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(openDashboard);
@@ -142,14 +141,14 @@ public class SignUpActivity extends AppCompatActivity {
         ArrayAdapter<String> heightArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, height_choices);
         heightArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
         height_spinner.setAdapter(heightArrayAdapter);
-//
+
         Button signUp = (Button) findViewById(R.id.btn_signup);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 password=userPassword.getText().toString();
                 confirmedPassword = userConfirmedPassword.getText().toString();
-//
+
                 if (!fieldsEmpty(name, email, password, confirmedPassword)) {
                     if (checkPasswordsMatch(password, confirmedPassword)) {
                         email=userEmail.getText().toString();
@@ -198,7 +197,7 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.d("pedometer", Boolean.toString(pedometerAllowed));
                         Log.d("Notifications", Boolean.toString(notificationsAllowed));
 
-                signUp();
+                        signUp();
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show();

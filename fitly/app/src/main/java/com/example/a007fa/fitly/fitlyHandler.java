@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,10 +24,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -68,7 +71,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private DatabaseReference mUserRef;
 
     public void onCreate() {
-
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
         Log.d(TAG, "mUser: " + mUser.getUid());
@@ -87,12 +89,13 @@ public class fitlyHandler extends Service implements SensorEventListener {
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
-        sched = new Schedule();
         incomplete = new ArrayList<>();
-         complete = new ArrayList<>();
+        complete = new ArrayList<>();
+        sched = new Schedule();
 
         populateBadges();
         populateSched();
+
         incomplete = new ArrayList<>(sched.getWorkouts());
 
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
@@ -113,7 +116,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
         pedometerRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                     changeSensor(dataSnapshot.getValue(boolean.class));
 
             }
@@ -147,7 +149,36 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     }
     public void populateSched(){
-        sched.initTest();
+
+        // Initialize workouts array to display
+        String key = "10282018"; // replace with a way to get today's date
+        DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
+        workoutsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
+                List<Workout> wm = dataSnapshot.getValue(gti);
+                Log.d(TAG, wm.toString());
+
+                if (wm == null) {
+                    return;
+                }
+                if (wm != null && wm.size() != 0) {
+                    Log.d("wm size", Integer.toString(wm.size()));
+                    for (Workout entry : wm) {
+                        Workout w = new Workout(entry.getWorkoutName(), entry.getStart(), entry.getEnd(), entry.getLocation(), entry.getDescription());
+                        sched.addWorkout(w);
+                        Log.d("Entry " + w.getWorkoutName(), entry.getStart() + " to " + entry.getEnd());
+                        Log.d("Workout " + w.getWorkoutName(), w.getStart() + " to " + w.getEnd());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 
     public void startSmallBadge(){
@@ -203,8 +234,10 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     protected void sendSchedMessage() {
         Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
+        Bundle b = new Bundle();
         intent1.setAction(ACTION_SCHEDULEPAGE);
-        intent1.putExtra("sched",sched);
+        b.putSerializable("sched",sched);
+        intent1.putExtras(b);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
     }
 
@@ -302,7 +335,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             else if (intent.getAction().equals(ACTION_DONE)){
                 Bundle b = intent.getExtras();
                 Workout w =(Workout)b.getSerializable("workout");
-                for(Workout x: incomplete){
+                for(Workout x: incomplete) {
                     if(x.getStartTime().equals(w.getStartTime())){
                         complete.add(x);
                         incomplete.remove(x);
@@ -310,7 +343,11 @@ public class fitlyHandler extends Service implements SensorEventListener {
                         break;
                     }
                 }
-                sendSchedMessage();
+
+                Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
+                intent1.setAction(ACTION_SCHEDULEPAGE);
+                intent1.putExtra("workout", w);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
             }
 
         }

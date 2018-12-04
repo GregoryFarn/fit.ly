@@ -88,6 +88,16 @@ public class Workout implements Serializable {
         this.end = end.toString();
     }
 
+    public boolean equals(Workout o) {
+        if(o.getWorkoutName().equals(workoutName))
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     protected Workout(Parcel in) {
         this.workoutName = in.readString();
         this.location = in.readString();

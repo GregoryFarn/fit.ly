@@ -69,7 +69,7 @@ public class Badge implements Serializable {
             if(this.completed==true)
             {
                 SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
-                badgeMessage="You got a big badge on "+format.format(achievedDate.getTime());
+                badgeMessage="You got a big badge on ";
             }
 
         }
