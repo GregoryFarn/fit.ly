@@ -116,7 +116,6 @@ public class fitlyHandler extends Service implements SensorEventListener {
         pedometerRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                     changeSensor(dataSnapshot.getValue(boolean.class));
 
             }
@@ -336,7 +335,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             else if (intent.getAction().equals(ACTION_DONE)){
                 Bundle b = intent.getExtras();
                 Workout w =(Workout)b.getSerializable("workout");
-                for(Workout x: incomplete){
+                for(Workout x: incomplete) {
                     if(x.getStartTime().equals(w.getStartTime())){
                         complete.add(x);
                         incomplete.remove(x);
@@ -344,7 +343,11 @@ public class fitlyHandler extends Service implements SensorEventListener {
                         break;
                     }
                 }
-                sendSchedMessage();
+
+                Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
+                intent1.setAction(ACTION_SCHEDULEPAGE);
+                intent1.putExtra("workout", w);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
             }
 
         }

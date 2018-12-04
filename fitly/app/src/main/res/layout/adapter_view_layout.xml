@@ -77,7 +77,7 @@
                 android:duplicateParentState="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:text="Done?" />
+                android:text="Done" />
         </LinearLayout>
 
     </LinearLayout>
