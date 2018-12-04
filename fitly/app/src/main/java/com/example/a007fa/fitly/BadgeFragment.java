@@ -132,8 +132,7 @@ public class BadgeFragment extends Fragment {
                         Boolean badgeStatus= entry.child("badgeAchieved").getValue(Boolean.class);
                         String date= entry.child("date").getValue(String.class);
                         //small badges
-
-                        if(badgeStatus==false)
+                        if(badgeStatus != null && badgeStatus==false)
                         {
                             Badge B= new Badge();
                             B.setCompleted(false);
