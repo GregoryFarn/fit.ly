@@ -16,7 +16,18 @@ public class Schedule implements Serializable {
     }
 
     public void addWorkout(Workout w) {
-        this.workouts.add(w);
+        /*boolean alreadyIn = false;
+        for(Workout x :workouts){
+            if(w.equals(x)){
+                alreadyIn = true;
+            }
+        }
+        if(alreadyIn){
+
+        }
+        else {*/
+            workouts.add(w);
+        //}
     }
 
     public void removeWorkout(Workout w) {

@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment {
     private int age;
     private int height;
     private int weight;
-    private boolean isPermissionOn;
+    private boolean isPermissionOn = true;
     private String email;
     private TextView changePass;
     private TextView notificanationManage;
@@ -64,6 +64,7 @@ public class ProfileFragment extends Fragment {
     private TextView weightView;
     private TextView nameDisplay;
     private TextView emailDiplay;
+    private TextView activityView;
     private Switch permissionSwitch;
     private FirebaseUser mUser;
     static final String ACTION_PERMISSION= "com.fitly.action.PERMISSION";
@@ -117,6 +118,9 @@ public class ProfileFragment extends Fragment {
              else{
                  heightView.setText("");
              }
+//             if(snapshot.child("pedometerOn").getValue() != null){
+//                 isPermissionOn = (Boolean)snapshot.child("pedometerOn").getValue();
+//             }
 //             Log.d(TAG,"profileName:" + email);
 //             Log.d(TAG,"profileName:" + age);
 //             Log.d(TAG,"profileName: " +  name);
@@ -126,10 +130,12 @@ public class ProfileFragment extends Fragment {
              Log.d(TAG,"profileName: " +  "error");
              }
          });
-        setAccelerometerOn(view);
-        changePass(view);
-        logOutButton(view);
-        return view;
+
+         viewActivityRecord(view);
+         setAccelerometerOn(view);
+         changePass(view);
+         logOutButton(view);
+         return view;
     }
 
     public void setAccelerometerOn(View view){
@@ -147,20 +153,20 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-    public void setNotification(View view){
-        notificanationManage = view.findViewById(R.id.edit_noti);
-        notificanationManage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Dialog dialog = new Dialog(getActivity());
-                dialog.setContentView(R.layout.notification_dialog);
-                dialog.setTitle("hi");
-                dialog.show();
-
-            }
-        });
-    }
+//    public void setNotification(View view){
+//        notificanationManage = view.findViewById(R.id.edit_noti);
+//        notificanationManage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Dialog dialog = new Dialog(getActivity());
+//                dialog.setContentView(R.layout.notification_dialog);
+//                dialog.setTitle("hi");
+//                dialog.show();
+//
+//            }
+//        });
+//    }
     public void changePass(View view){
         changePass = view.findViewById(R.id.change_password);
         changePass.setOnClickListener(new View.OnClickListener() {
@@ -173,9 +179,19 @@ public class ProfileFragment extends Fragment {
         });
 
     }
+    public void viewActivityRecord(View view) {
+        activityView = view.findViewById(R.id.view_activity);
+        activityView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // getActivity().finish();
+                Intent intent = new Intent(getActivity(), DisplyActivityRecord.class);
+                startActivity(intent);
+            }
+        });
+    }
 
-
-    public void logOutButton(View view){
+        public void logOutButton(View view){
         Button logoutButton= (Button) view.findViewById(R.id.logout_btn);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,81 +222,4 @@ public class ProfileFragment extends Fragment {
         System.exit(0);
     }
 
-//    private void setupFirebaseListener(){
-//        Log.d(TAG, "setupFirebaseListner: seeting up the auth");
-//        mAuthUser = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                mUser = firebaseAuth.getCurrentUser();
-//                if(mUser != null){
-//                    DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
-//
-////                    view = inflater.inflate(R.layout.fragment_profile, container, false);
-//                    mUserRef.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot snapshot) {
-//                            name = (String)snapshot.child("displayName").getValue();
-//                            email = (String)snapshot.child("email").getValue();
-//
-//
-//                            nameDisplay = view.findViewById(R.id.user_name);
-//                            nameDisplay.setText(name);
-//
-//                            emailDiplay = view.findViewById(R.id.user_email);
-//                            emailDiplay.setText(email);
-//                            ageView = view.findViewById(R.id.user_age);
-//                            Log.d(TAG,"profileName:" + email);
-//                            Log.d(TAG,"profileName: " +  name);
-//                        }
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//                            Log.d(TAG,"profileName: " +  "error");
-//                        }
-//                    });
-//
-//                    changePass = view.findViewById(R.id.change_password);
-//                    changePass.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(getActivity(), ChangePassActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//
-//                    nofiManage = view.findViewById(R.id.edit_noti);
-//                    nofiManage.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            Dialog dialog = new Dialog(getActivity());
-//
-//                            dialog.setContentView(R.layout.notification_dialog);
-//                            dialog.setTitle("hi");
-//                            dialog.show();
-//
-//                        }
-//                    });
-//
-//                }else{
-//                    Intent intent = new Intent(getActivity(), LogInActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                    startActivity(intent);
-//
-//                }
-//            }
-//        };
-//    }
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseAuth.getInstance().addAuthStateListener(mAuthUser);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if(mAuthUser != null){
-//            FirebaseAuth.getInstance().removeAuthStateListener(mAuthUser);
-//        }
-//    }
 }
