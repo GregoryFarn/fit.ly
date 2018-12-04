@@ -41,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText userHeight;
     EditText userAge;
     EditText userWeight;
-    boolean accelerometerAllowed;
+    boolean pedometerAllowed;
     boolean notificationsAllowed;
     String email=" ";
     String password=" ";
@@ -66,23 +66,29 @@ public class SignUpActivity extends AppCompatActivity {
     public void signUp()
     {
         mAuth.createUserWithEmailAndPassword(email, password)
-               .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Success", "createUserWithEmail:success");
                             //add new user to database
-                             FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-                             DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
-                             User setU= new User(name,email);
-                             mUserRef.setValue(setU);
+                            FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+                            DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
+                            User setU= new User(name,email);
+                            mUserRef.setValue(setU);
 
-                             // add other details
-
-
+                            // add other details
+                            mUserRef.child("age").setValue(age);
+                            mUserRef.child("height").setValue(height);
+                            mUserRef.child("weight").setValue(weight);
+                            mUserRef.child("notificationsOn").setValue(notificationsAllowed);
+                            mUserRef.child("pedometerOn").setValue(pedometerAllowed);
+                            mUserRef.child("numConsecutiveDays").setValue(0);
+                          
                             // Navigate to MainActivity
                             Intent openDashboard= new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(openDashboard);
+
                         } else {
                             Log.w("Failure", "createUserWithEmail:failed");
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
@@ -95,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Password is too weak", Toast.LENGTH_LONG).show();
                             }
                             else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_LONG).show();
                             }
                             else {
                                 Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -173,14 +179,13 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d("feet", Integer.toString(feet));
                             Log.d("inches", Integer.toString(inches));
 
-
                             height = (int) Math.ceil(((feet * 12) + inches) * 2.54); // convert to cm
                         }
                         else {
                             height = 175;
                         }
 
-                        accelerometerAllowed = ((CheckBox) findViewById(R.id.check_accelerometer_permission)).isChecked();
+                        pedometerAllowed = ((CheckBox) findViewById(R.id.check_pedometer_permission)).isChecked();
                         notificationsAllowed = ((CheckBox) findViewById(R.id.check_notifications_permission)).isChecked();
 
                         Log.d("Name", name);
@@ -189,7 +194,7 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.d("Age", Integer.toString(age));
                         Log.d("Weight", Integer.toString(weight));
                         Log.d("Height", Integer.toString(height));
-                        Log.d("Accelerometer", Boolean.toString(accelerometerAllowed));
+                        Log.d("pedometer", Boolean.toString(pedometerAllowed));
                         Log.d("Notifications", Boolean.toString(notificationsAllowed));
 
                         signUp();
