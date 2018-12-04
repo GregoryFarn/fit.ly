@@ -75,7 +75,7 @@ public class BadgeFragment extends Fragment {
                         // Inflate only once
                         if(convertView == null) {
                             convertView = getLayoutInflater()
-                                    .inflate(R.layout.list_item, null, false);
+                                    .inflate(R.layout.list_activity, null, false);
                         }
                         TextView badgeMessage=(TextView)convertView.findViewById(R.id.message);
                         ImageView badgeImage=(ImageView)convertView.findViewById(R.id.badge_picture);
