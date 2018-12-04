@@ -162,16 +162,16 @@ public class DashboardFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
                 List<Workout> wm = dataSnapshot.getValue(gti);
-                Log.d(TAG, wm.toString());
 
                 if (wm == null) {
                     return;
                 }
                 if (wm != null && wm.size() != 0) {
+                    Log.d(TAG, wm.toString());
                     Log.d("wm size", Integer.toString(wm.size()));
                     for (Workout entry : wm) {
                         Workout w = new Workout(entry.getWorkoutName(), entry.getStart(), entry.getEnd(), entry.getLocation(), entry.getDescription());
-                        addWorkoutsUI(w);
+//                        addWorkoutsUI(w);
                         Log.d("Entry " + w.getWorkoutName(), entry.getStart() + " to " + entry.getEnd());
                         Log.d("Workout " + w.getWorkoutName(), w.getStart() + " to " + w.getEnd());
                     }
@@ -245,7 +245,7 @@ public class DashboardFragment extends Fragment {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK) {
                 Workout workout = (Workout)getActivity().getIntent().getExtras().get("workout");
-                addWorkoutsUI(workout);
+//                addWorkoutsUI(workout);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 getActivity().finish();
