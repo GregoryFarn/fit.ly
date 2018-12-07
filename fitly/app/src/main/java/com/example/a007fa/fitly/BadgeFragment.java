@@ -1,5 +1,6 @@
 package com.example.a007fa.fitly;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,7 @@ public class BadgeFragment extends Fragment {
     FirebaseUser mUser;
     DatabaseReference mUserRef;
     ArrayList<Badge> badgeArraylist= new ArrayList<Badge>();
+    Activity currentActivity= null;
     View view;
     public BadgeFragment() {
         // Required empty public constructor
@@ -66,7 +68,7 @@ public class BadgeFragment extends Fragment {
     public void displaySchedule()
     {
         ArrayAdapter<Badge> badgeAdapter =
-                new ArrayAdapter<Badge>(getActivity(), 0, badgeArraylist) {
+                new ArrayAdapter<Badge>(currentActivity, 0, badgeArraylist) {
                     @Override
                     public View getView(int position,
                                         View convertView,
@@ -101,6 +103,7 @@ public class BadgeFragment extends Fragment {
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
         Log.d("Testing onCreate", "onDataChange: Loading data");
+        currentActivity=getActivity();
        /* bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_BADGEPAGE);
