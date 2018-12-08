@@ -46,6 +46,7 @@ public class BadgeFragment extends Fragment {
     ArrayList<Badge> badgeArraylist= new ArrayList<Badge>();
     Activity currentActivity= null;
     View view;
+    Activity currActivity;
     public BadgeFragment() {
         // Required empty public constructor
         /*mUserRef.addValueEventListener(new ValueEventListener(){
@@ -102,6 +103,7 @@ public class BadgeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_badge, container, false);
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).getRef();
+        currActivity=getActivity();
         Log.d("Testing onCreate", "onDataChange: Loading data");
         currentActivity=getActivity();
        /* bManager = LocalBroadcastManager.getInstance(getActivity());
@@ -128,12 +130,13 @@ public class BadgeFragment extends Fragment {
                 GenericTypeIndicator<HashMap<String,Object>> typeIndicator = new GenericTypeIndicator<HashMap<String,Object>>() {};
                 GenericTypeIndicator<List<Object>> type= new GenericTypeIndicator<List<Object>>() {};
                 HashMap<String,Object> ar=  dataSnapshot.child("activityRecords").getValue(typeIndicator);
-                Integer numConsecutiveDays= dataSnapshot.child("numConsecutiveDays").getValue(Integer.class);
+                Integer numConsecutiveDays;
                 if (ar != null && ar.size() != 0) {
 
                     for (DataSnapshot entry : dataSnapshot.child("activityRecords").getChildren()) {
                         Boolean badgeStatus= entry.child("badgeAchieved").getValue(Boolean.class);
                         String date= entry.child("date").getValue(String.class);
+                        numConsecutiveDays= entry.child("numConsecutiveDays").getValue(Integer.class);
                         //small badges
                         if(badgeStatus != null && badgeStatus==false)
                         {
@@ -151,7 +154,7 @@ public class BadgeFragment extends Fragment {
                         }
 
                         //Big Badges
-                        if(numConsecutiveDays==7)
+                        if(numConsecutiveDays!= null && numConsecutiveDays==7)
                         {
                             Log.d("Big Badge Statement ", "onDataChange: big badge achieved");
                             Badge bigBadge= new Badge();
