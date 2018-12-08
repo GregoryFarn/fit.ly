@@ -141,6 +141,7 @@ public class DashboardFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                steps = (float)(((Number)dataSnapshot.getValue()).doubleValue());
                ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Integer.toString(Math.round(steps)) + "/10,0000");
+                ((TextView) getActivity().findViewById(R.id.CalorieCountText)).setText(Math.round(steps/20)+"");
 
             }
 
@@ -302,9 +303,9 @@ public class DashboardFragment extends Fragment {
                     steps = b.getFloat("stepCount");*/
                 }
                 else if (intent.getAction().equals(ACTION_CALCOUNT)) {
-                    Bundle b = intent.getExtras();
+                   /* Bundle b = intent.getExtras();
                     ((TextView) getActivity().findViewById(R.id.CalorieCountText)).setText(Math.round(b.getFloat("calCount"))+"");
-                    calories = b.getFloat("calCount");
+                    calories = b.getFloat("calCount");*/
                 }
                 else if (intent.getAction().equals(ACTION_EAT)) {
                     Bundle b = intent.getExtras();
