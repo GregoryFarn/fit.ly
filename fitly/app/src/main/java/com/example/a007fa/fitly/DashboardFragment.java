@@ -179,11 +179,12 @@ public class DashboardFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<HashMap<String, Workout>> gti = new GenericTypeIndicator<HashMap<String, Workout>>() {};
                 HashMap<String,Workout> mw = dataSnapshot.getValue(gti);
-                List<Workout> wm = new ArrayList<Workout>(mw.values());
-
-                if (wm == null) {
+                if (mw == null) {
                     return;
                 }
+                List<Workout> wm = new ArrayList<Workout>(mw.values());
+
+
                 if (wm != null && wm.size() != 0) {
                     Log.d(TAG, wm.toString());
                     Log.d("wm size", Integer.toString(wm.size()));
