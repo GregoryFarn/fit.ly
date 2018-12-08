@@ -25,6 +25,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -57,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
         // Authentication
         // This should be moved to our login/signup activity
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
+        String key = "10282018"; // replace with a way to get today's date
+
+        mUserRef.child("schedule").child(key).removeValue();
+        mUserRef.child("schedule").child(key).push().setValue(new Workout("yes"));
+
+
         String email = "wenm@usc.edu";
         String password = "password";
         serviceStart();

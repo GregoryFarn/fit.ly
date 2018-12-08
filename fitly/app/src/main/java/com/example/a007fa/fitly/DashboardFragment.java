@@ -33,6 +33,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -160,9 +161,9 @@ public class DashboardFragment extends Fragment {
         workoutsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
-                List<Workout> wm = dataSnapshot.getValue(gti);
-
+                GenericTypeIndicator<HashMap<String, Workout>> gti = new GenericTypeIndicator<HashMap<String, Workout>>() {};
+                HashMap<String,Workout> mw = dataSnapshot.getValue(gti);
+                List<Workout> wm = new ArrayList<Workout>(mw.values());
                 if (wm == null) {
                     return;
                 }
@@ -171,7 +172,7 @@ public class DashboardFragment extends Fragment {
                     Log.d("wm size", Integer.toString(wm.size()));
                     for (Workout entry : wm) {
                         Workout w = new Workout(entry.getWorkoutName(), entry.getStart(), entry.getEnd(), entry.getLocation(), entry.getDescription());
-//                        addWorkoutsUI(w);
+                        updateWorkoutsUI(w);
                         Log.d("Entry " + w.getWorkoutName(), entry.getStart() + " to " + entry.getEnd());
                         Log.d("Workout " + w.getWorkoutName(), w.getStart() + " to " + w.getEnd());
                     }

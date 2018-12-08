@@ -2,6 +2,8 @@ package com.example.a007fa.fitly;
 
 import android.os.Parcel;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,8 +86,8 @@ public class Workout implements Serializable {
     // Alternative constructor
     public void add(String workoutName, Calendar start, Calendar end) {
         this.workoutName = workoutName;
-        this.start = start.toString();
-        this.end = end.toString();
+        this.start = start.getTime().toString();
+        this.end = end.getTime().toString();
     }
 
     public boolean equals(Workout o) {
@@ -126,17 +128,29 @@ public class Workout implements Serializable {
 
     public String getStart() { return this.start; }
 
+    public void  setStart(String start) { this.start = start; }
+
     public String getEnd() { return this.end; }
 
+    public void  setEnd(String end) { this.end = end; }
+
+    @Exclude
     public Calendar getStartCalendar() { return stringToCalendar(this.start); }
 
+    @Exclude
     public Calendar getEndCalendar() { return stringToCalendar(this.end); }
 
     public String getWorkoutName() { return this.workoutName; }
 
+    public void  setWorkoutName(String workoutName) { this.workoutName = workoutName; }
+
     public String getLocation() { return this.location; }
 
+    public void  setLocation(String location) { this.location = location; }
+
     public String getDescription() { return this.description; }
+
+    public void  setDescription(String description) { this.description = description; }
 
     public boolean isCompletedWorkout() {
         return isCompletedWorkout;
@@ -146,6 +160,7 @@ public class Workout implements Serializable {
         isCompletedWorkout = completedWorkout;
     }
 
+    @Exclude
     public Calendar stringToCalendar(String date){
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);

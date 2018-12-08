@@ -69,7 +69,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private ActivityRecord currentRec;
     private FirebaseUser mUser;
     private DatabaseReference mUserRef;
-
+    public  List<Workout> out;
     public void onCreate() {
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(mUser.getUid());
@@ -92,7 +92,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         incomplete = new ArrayList<>();
         complete = new ArrayList<>();
         sched = new Schedule();
-
+        out= new ArrayList<>();
         populateBadges();
         populateSched();
 
@@ -149,7 +149,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
 
     }
     public void populateSched(){
-
+/*
         // Initialize workouts array to display
         String key = "10282018"; // replace with a way to get today's date
         DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
@@ -178,7 +178,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
             public void onCancelled(DatabaseError error) {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
-        });
+        });*/
     }
 
     public void startSmallBadge(){
@@ -313,7 +313,26 @@ public class fitlyHandler extends Service implements SensorEventListener {
             }
             else if (intent.getAction().equals(ACTION_WORKOUT)) {
                 sched.addWorkout((Workout)intent.getSerializableExtra("workout"));
-                sendSchedMessage();
+
+                final Workout nw = (Workout)intent.getSerializableExtra("workout");
+                final String key = "10282018"; // replace with a way to get today's date
+                DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
+                workoutsRef.push().setValue(nw);
+                /*workoutsRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
+                        List<Workout> wm = dataSnapshot.getValue(gti);
+                        out.addAll(wm);
+                        out.add(nw);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });*/
+
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 updateDatabase();
