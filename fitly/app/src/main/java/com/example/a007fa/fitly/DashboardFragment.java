@@ -133,7 +133,22 @@ public class DashboardFragment extends Fragment {
         workouts = new ArrayList<Workout>();
         displaySchedule();
 
-        steps=0;
+        String key = "10282018"; // replace with a way to get today's date
+
+        DatabaseReference workoutsRef = mUserRef.child("steps").child(key);
+        workoutsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               steps = (float)(((Number)dataSnapshot.getValue()).doubleValue());
+               ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Integer.toString(Math.round(steps)) + "/10,0000");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
         calories=0;
         caloriesConsumed =0;
         sendStepMessage();
@@ -164,6 +179,7 @@ public class DashboardFragment extends Fragment {
                 GenericTypeIndicator<HashMap<String, Workout>> gti = new GenericTypeIndicator<HashMap<String, Workout>>() {};
                 HashMap<String,Workout> mw = dataSnapshot.getValue(gti);
                 List<Workout> wm = new ArrayList<Workout>(mw.values());
+
                 if (wm == null) {
                     return;
                 }
@@ -281,9 +297,9 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(ACTION_FITLY)) {
-                    Bundle b = intent.getExtras();
+                  /*  Bundle b = intent.getExtras();
                     ((TextView) getActivity().findViewById(R.id.StepCountText)).setText(Math.round(b.getFloat("stepCount")) + "/10,0000");
-                    steps = b.getFloat("stepCount");
+                    steps = b.getFloat("stepCount");*/
                 }
                 else if (intent.getAction().equals(ACTION_CALCOUNT)) {
                     Bundle b = intent.getExtras();

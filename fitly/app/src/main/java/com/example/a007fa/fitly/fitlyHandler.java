@@ -38,6 +38,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     private Sensor stepSensor;
     private float stepsFirst;
     private float steps;
+    private float stepsTemp;
     private boolean first;
     private Schedule userSchedule;
     private AlarmManager alarm;
@@ -58,6 +59,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
     static final String ACTION_PERMISSION= "com.fitly.action.PERMISSION";
     static final String ACTION_DONE = "com.fitly.action.DONE";
     static final String ACTION_EAT = "com.fitly.action.EAT";
+    static final String ACTION_STOP = "com.fitly.action.STOP";
     private ArrayList<Badge> badges;
     private boolean badgeAcheived;
     private Schedule sched;
@@ -86,6 +88,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
         intentFilter.addAction(ACTION_CONSUMED);
         intentFilter.addAction(ACTION_PERMISSION);
         intentFilter.addAction(ACTION_DONE);
+        intentFilter.addAction("ACTION_STOP");
         bManager.registerReceiver(bReceiver, intentFilter);
 
         badges = new ArrayList<>();
@@ -106,11 +109,26 @@ public class fitlyHandler extends Service implements SensorEventListener {
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         first = true;
-        steps = 0;
+        steps=0;
         caloriesBurned = 0;
         caloriesBurnedSteps = 0;
         calConsumed = 0;
         badgeAcheived = false;
+
+        String key = "10282018"; // replace with a way to get today's date
+
+        DatabaseReference stepsRef = mUserRef.child("steps").child(key);
+        stepsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                stepsTemp = (float)(((Number)dataSnapshot.getValue()).doubleValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
         DatabaseReference pedometerRef = mUserRef.child("pedometerOn");
         pedometerRef.addValueEventListener(new ValueEventListener() {
@@ -260,8 +278,12 @@ public class fitlyHandler extends Service implements SensorEventListener {
         } else {
             steps = event.values[0] - stepsFirst;
             caloriesBurnedSteps = Math.round(steps/20);
-            sendStepMessage();
+
+
+            //sendStepMessage();
+            mUserRef.child("steps").child("10282018").setValue(stepsTemp+1);
             sendCalMessage();
+
         }
 
         if(steps>= 10000 && !badges.get(badges.size()-1).completed){
@@ -318,24 +340,14 @@ public class fitlyHandler extends Service implements SensorEventListener {
                 final String key = "10282018"; // replace with a way to get today's date
                 DatabaseReference workoutsRef = mUserRef.child("schedule").child(key);
                 workoutsRef.push().setValue(nw);
-                /*workoutsRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        GenericTypeIndicator<List<Workout>> gti = new GenericTypeIndicator<List<Workout>>() {};
-                        List<Workout> wm = dataSnapshot.getValue(gti);
-                        out.addAll(wm);
-                        out.add(nw);
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });*/
 
             }
             else if (intent.getAction().equals(ACTION_ENDDAY)) {
                 updateDatabase();
+            }
+            else if (intent.getAction().equals(ACTION_STOP)) {
+                stopSelf();
             }
             else if (intent.getAction().equals(ACTION_CALORIES)) {
                 caloriesBurned += intent.getIntExtra("calories",0);
@@ -362,6 +374,7 @@ public class fitlyHandler extends Service implements SensorEventListener {
                         break;
                     }
                 }
+                mUserRef.child("completed").child("102818").push().setValue(w);
 
                 Intent intent1 = new Intent(getApplicationContext(), DashboardFragment.class);
                 intent1.setAction(ACTION_SCHEDULEPAGE);
