@@ -160,7 +160,7 @@ public class DashboardFragment extends Fragment {
     }
 
     public void setTotalCaloriesConsumedText(String text){
-        TextView textView = (TextView) getView().findViewById(R.id.CalorieConsumedCountText);
+        TextView textView = (TextView) view.findViewById(R.id.CalorieConsumedCountText);
         textView.setText(text);
     }
 
